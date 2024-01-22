@@ -59,6 +59,8 @@ create table posts
     user_id    int                                    not null,
     created_on timestamp  default current_timestamp() not null on update current_timestamp(),
     is_deleted tinyint(1) default 0                   null,
+    likes      int                                    not null,
+    dislikes   int                                    not null,
     constraint posts_users_user_id_fk
         foreign key (user_id) references users (user_id)
 );
@@ -72,6 +74,8 @@ create table comments
     post_id    int                                    not null,
     user_id    int                                    not null,
     created_on timestamp  default current_timestamp() not null on update current_timestamp(),
+    likes      int                                    not null,
+    dislikes   int                                    not null,
     constraint comments_posts_post_id_fk
         foreign key (post_id) references posts (post_id),
     constraint comments_users_user_id_fk
