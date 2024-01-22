@@ -9,6 +9,4 @@ public class WebForumApplication {
 		SpringApplication.run(WebForumApplication.class, args);
 	}
 
-
-	//Test Ilia.
 }
