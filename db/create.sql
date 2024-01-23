@@ -18,7 +18,7 @@ create table users
     user_id    int auto_increment
         primary key,
     user_email varchar(50)          null,
-    password   varchar(100)         not null,
+    password   varchar(50)          not null,
     first_name varchar(32)          not null,
     last_name  varchar(32)          not null,
     is_deleted tinyint(1) default 0 not null,
@@ -84,25 +84,55 @@ create table comments
 
 create table comments_users_dislikes
 (
-    comment_id  int        not null,
-    user_id     int        not null,
-    is_disliked tinyint(1) not null,
+    comment_id int not null,
+    user_id    int not null,
     constraint comments_users_dislikes_comments_comment_id_fk
         foreign key (comment_id) references comments (comment_id),
     constraint comments_users_dislikes_users_user_id_fk
         foreign key (user_id) references users (user_id)
 );
 
+create definer = web_forum_admin@`%` trigger decrease_comment_dislikes
+    after delete
+    on comments_users_dislikes
+    for each row
+    UPDATE comments
+    SET dislikes = dislikes - 1
+    WHERE comment_id = OLD.comment_id;
+
+create definer = web_forum_admin@`%` trigger increase_comment_dislikes
+    after insert
+    on comments_users_dislikes
+    for each row
+    UPDATE comments
+    SET dislikes = dislikes + 1
+    WHERE comment_id = NEW.comment_id;
+
 create table comments_users_likes
 (
-    comment_id int        not null,
-    user_id    int        not null,
-    is_liked   tinyint(1) not null,
+    comment_id int not null,
+    user_id    int not null,
     constraint comments_users_likes_comments_comment_id_fk
         foreign key (comment_id) references comments (comment_id),
     constraint comments_users_likes_users_user_id_fk
         foreign key (user_id) references users (user_id)
 );
+
+create definer = web_forum_admin@`%` trigger decrease_comment_likes
+    after delete
+    on comments_users_likes
+    for each row
+    UPDATE comments
+    SET likes = likes - 1
+    WHERE comment_id = OLD.comment_id;
+
+create definer = web_forum_admin@`%` trigger increase_comment_likes
+    after insert
+    on comments_users_likes
+    for each row
+    UPDATE comments
+    SET likes = likes + 1
+    WHERE comment_id = NEW.comment_id;
 
 create table posts_comments
 (
@@ -126,25 +156,55 @@ create table posts_tags
 
 create table posts_users_dislikes
 (
-    post_id     int        not null,
-    user_id     int        not null,
-    is_disliked tinyint(1) not null,
+    post_id int not null,
+    user_id int not null,
     constraint posts_users_dislikes_posts_post_id_fk
         foreign key (post_id) references posts (post_id),
     constraint posts_users_dislikes_users_user_id_fk
         foreign key (user_id) references users (user_id)
 );
 
+create definer = web_forum_admin@`%` trigger decrease_post_dislikes
+    after delete
+    on posts_users_dislikes
+    for each row
+    UPDATE posts
+    SET dislikes = dislikes - 1
+    WHERE post_id = OLD.post_id;
+
+create definer = web_forum_admin@`%` trigger increase_post_dislikes
+    after insert
+    on posts_users_dislikes
+    for each row
+    UPDATE posts
+    SET dislikes = dislikes + 1
+    WHERE post_id = NEW.post_id;
+
 create table posts_users_likes
 (
-    post_id  int        null,
-    user_id  int        not null,
-    is_liked tinyint(1) not null,
+    post_id int null,
+    user_id int not null,
     constraint posts_users_likes_posts_post_id_fk
         foreign key (post_id) references posts (post_id),
     constraint posts_users_likes_users_user_id_fk
         foreign key (user_id) references users (user_id)
 );
+
+create definer = web_forum_admin@`%` trigger decrease_post_likes
+    after delete
+    on posts_users_likes
+    for each row
+    UPDATE posts
+    SET likes = likes - 1
+    WHERE post_id = OLD.post_id;
+
+create definer = web_forum_admin@`%` trigger increase_post_likes
+    after insert
+    on posts_users_likes
+    for each row
+    UPDATE posts
+    SET likes = likes + 1
+    WHERE post_id = NEW.post_id;
 
 create table users_roles
 (
