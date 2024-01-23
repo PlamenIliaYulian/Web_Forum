@@ -6,6 +6,7 @@ import com.PlamenIliaYulian.Web_Forum.models.User;
 import java.util.List;
 
 public interface CommentService {
+
     /*TODO Plamen*/
     Comment getCommentById(int id);
     /*TODO Iliya*/

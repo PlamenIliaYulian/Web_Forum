@@ -66,4 +66,9 @@ public class PostRepositoryImpl implements PostRepository {
     public Post removeTagToPost(Post post) {
         return null;
     }
+
+    @Override
+    public Post addCommentToPost(Post postToComment) {
+        return null;
+    }
 }

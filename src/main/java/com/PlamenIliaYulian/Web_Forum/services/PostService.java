@@ -1,5 +1,6 @@
 package com.PlamenIliaYulian.Web_Forum.services;
 
+import com.PlamenIliaYulian.Web_Forum.models.Comment;
 import com.PlamenIliaYulian.Web_Forum.models.Post;
 import com.PlamenIliaYulian.Web_Forum.models.Tag;
 import com.PlamenIliaYulian.Web_Forum.models.User;
@@ -28,4 +29,6 @@ public interface PostService {
     Post addTagToPost(Post post, Tag tag);
     /*TODO July*/
     Post removeTagToPost(Post post, Tag tag);
+    /*TODO Plamen*/
+    Post addCommentToPost (Post postToComment, Comment commentToBeAdded, User userWhoComments);
 }

@@ -30,13 +30,6 @@ public class Comment {
     @Column(name = "created_on")
     private LocalDateTime createdOn;
 
-    /*TODO Hide posts when publishing comments because of recursion.
-    * Will publish comments with their posts separately with Response Object.*/
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post originalPost;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User createdBy;
@@ -90,14 +83,6 @@ public class Comment {
 
     public void setCreatedOn(LocalDateTime createdOn) {
         this.createdOn = createdOn;
-    }
-
-    public Post getOriginalPost() {
-        return originalPost;
-    }
-
-    public void setOriginalPost(Post originalPost) {
-        this.originalPost = originalPost;
     }
 
     public User getCreatedBy() {

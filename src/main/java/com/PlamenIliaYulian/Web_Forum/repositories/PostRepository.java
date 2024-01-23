@@ -1,5 +1,6 @@
 package com.PlamenIliaYulian.Web_Forum.repositories;
 
+import com.PlamenIliaYulian.Web_Forum.models.Comment;
 import com.PlamenIliaYulian.Web_Forum.models.Post;
 
 import java.util.List;
@@ -26,6 +27,6 @@ public interface PostRepository {
     Post addTagToPost(Post post);
 
     Post removeTagToPost(Post post);
-
+    Post addCommentToPost (Post postToComment);
 
 }

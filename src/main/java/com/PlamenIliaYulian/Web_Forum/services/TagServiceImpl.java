@@ -1,7 +1,10 @@
 package com.PlamenIliaYulian.Web_Forum.services;
 
 import com.PlamenIliaYulian.Web_Forum.models.Tag;
+import org.springframework.stereotype.Service;
 
+
+@Service
 public class TagServiceImpl implements TagService{
     @Override
     public Tag getTagByName(String name) {
@@ -17,7 +20,6 @@ public class TagServiceImpl implements TagService{
     public void deleteTag(Tag tag) {
 
     }
-
     @Override
     public Tag updateTag(Tag tag) {
         return null;
