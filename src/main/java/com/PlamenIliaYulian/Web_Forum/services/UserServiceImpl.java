@@ -1,15 +1,25 @@
 package com.PlamenIliaYulian.Web_Forum.services;
 
 import com.PlamenIliaYulian.Web_Forum.models.User;
+import com.PlamenIliaYulian.Web_Forum.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    private final UserRepository userRepository;
+
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @Override
     public User createUser(User user) {
-        return null;
+        return userRepository.createUser(user);
     }
 
     @Override
@@ -38,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByEmail(String email, User userIsAdmin) {
-        return null;
+        return userRepository.getUserByEmail(email);
     }
 
     @Override

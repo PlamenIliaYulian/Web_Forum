@@ -8,6 +8,7 @@ public class WebForumApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(WebForumApplication.class, args);
+
 	}
 
 

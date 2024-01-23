@@ -38,7 +38,7 @@ public class Post {
     private User createdBy;
 
     @OneToMany
-    @JoinTable(name = "comments",
+    @JoinTable(name = "posts_comments",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "comment_id"))
     private Set<Comment> relatedComments;

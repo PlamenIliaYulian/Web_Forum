@@ -1,12 +1,19 @@
 package com.PlamenIliaYulian.Web_Forum.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Objects;
 import java.util.Set;
 
+
+
 @Entity
 @Table(name = "users")
+/* https://www.baeldung.com/jpa-mapping-single-entity-to-multiple-tables
+ https://docs.oracle.com/javaee%2F7%2Fapi%2F%2F/javax/persistence/SecondaryTable.html*/
+@SecondaryTable(name = "phone_numbers", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
+@SecondaryTable(name = "avatars", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
 public class User {
 
     @Id
@@ -35,9 +42,8 @@ public class User {
     @Column(name = "is_blocked")
     private boolean isBlocked;
 
-    @JoinTable(name = "avatars",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "avatar_id"))
+    @Lob
+    @Column(name = "avatar", table = "avatars")
     private byte[] avatar;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -46,9 +52,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    @JoinTable(name = "phone_numbers",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "phone_number"))
+
+    @Column(name = "phone_number", table = "phone_numbers")
     private String phoneNumber;
 
     public User() {
