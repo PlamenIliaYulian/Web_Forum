@@ -2,6 +2,7 @@ package com.PlamenIliaYulian.Web_Forum.helpers;
 
 import com.PlamenIliaYulian.Web_Forum.exceptions.AuthenticationException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
+import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
