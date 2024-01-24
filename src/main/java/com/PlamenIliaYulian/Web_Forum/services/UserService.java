@@ -12,31 +12,39 @@ public interface UserService {
     /*TODO Ilia*/
     void deleteUser(User userToBeDeleted, User userIsAuthorized);
 
-    /*TODO July*/
+    /*TODO July - DONE*/
     User updateUser(User userToBeUpdated, User userIsAuthorized);
 
     /*TODO Plamen*/
     /*TODO implement User FilterOptions*/
     List<User> getAllUsers();
+
     /*TODO Ilia*/
     User getUserByFirstName(String firstName, User userIsAdmin);
-    /*TODO July*/
+
+    /*TODO July - DONE*/
     User getUserByUsername(String username);
+
     /*TODO Plamen*/
     User getUserByEmail(String email, User userIsAdmin);
+
     /*TODO Ilia*/
     User getUserById(int id);
-    /*TODO July*/
+
+    /*TODO July - DONE*/
     User updateToAdmin(User toBeUpdated, User userIsAdmin);
+
     /*TODO Plamen*/
     User blockUser(User toBeBlocked, User userIsAdmin);
+
     /*TODO Ilia*/
     User unBlockUser(User toBeUnblocked, User userIsAdmin);
-    /*TODO July*/
+
+    /*TODO July - DONE*/
     User addAvatar(User userToBeUpdated, byte[] avatar, User userIsAuthorized);
+
     /*TODO Plamen*/
     User addPhoneNumber(User userToBeUpdated, String phoneNumber, User userIsAuthorized);
-
 
 
 }

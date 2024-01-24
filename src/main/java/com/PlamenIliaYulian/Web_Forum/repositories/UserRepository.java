@@ -23,7 +23,7 @@ public interface UserRepository {
     User blockUser(User toBeBlocked);
     User unBlockUser(User toBeUnblocked);
 
-    User addAvatar(User userToBeUpdated, byte[] avatar);
+    User addAvatar(User userToBeUpdated);
     User addPhoneNumber(User userToBeUpdated, String phoneNumber);
 
 

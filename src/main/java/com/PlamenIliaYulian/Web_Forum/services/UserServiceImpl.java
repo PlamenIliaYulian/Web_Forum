@@ -1,15 +1,20 @@
 package com.PlamenIliaYulian.Web_Forum.services;
 
+import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
+import com.PlamenIliaYulian.Web_Forum.models.Role;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
+    public static final String UNAUTHORIZED_OPERATION = "Unauthorized operation.";
     private final UserRepository userRepository;
 
     @Autowired
@@ -28,7 +33,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(User userToBeUpdated, User userIsAuthorized) {
-        return null;
+        if (!isAdminOrSameUser(userToBeUpdated, userIsAuthorized)) {
+            throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
+        }
+        return userRepository.updateUser(userToBeUpdated);
     }
 
     @Override
@@ -43,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByUsername(String username) {
-        return null;
+        return userRepository.getUserByUsername(username);
     }
 
     @Override
@@ -58,7 +66,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateToAdmin(User toBeUpdated, User userIsAdmin) {
-        return null;
+        if (!isAdmin(userIsAdmin)) {
+            throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
+        }
+        Set<Role> rolesOfTheUserToBeUpdated = toBeUpdated.getRoles();
+        rolesOfTheUserToBeUpdated.add(new Role(1, "ROLE_ADMIN"));
+        return userRepository.updateToAdmin(toBeUpdated);
     }
 
     @Override
@@ -73,7 +86,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addAvatar(User userToBeUpdated, byte[] avatar, User userIsAuthorized) {
-        return null;
+        if (!isSameUser(userToBeUpdated, userIsAuthorized)) {
+            throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
+        }
+        userToBeUpdated.setAvatar(avatar);
+        return userRepository.addAvatar(userToBeUpdated);
     }
 
     @Override
@@ -81,6 +98,29 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    private boolean isAdminOrSameUser(User userToBeUpdated, User userIsAuthorized) {
+        if (!userToBeUpdated.equals(userIsAuthorized)) {
+            List<Role> rolesOfAuthorizedUser = userIsAuthorized.getRoles().stream().toList();
+            for (Role currentRoleToBeChecked : rolesOfAuthorizedUser) {
+                if (currentRoleToBeChecked.getName().equals("ROLE_ADMIN")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
+    private boolean isAdmin(User userIsAuthorized) {
+        List<Role> rolesOfAuthorizedUser = userIsAuthorized.getRoles().stream().toList();
+        for (Role currentRoleToBeChecked : rolesOfAuthorizedUser) {
+            if (currentRoleToBeChecked.getName().equals("ROLE_ADMIN")) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    private boolean isSameUser(User userToBeUpdated, User userIsAuthorized) {
+        return userToBeUpdated.equals(userIsAuthorized);
+    }
 }

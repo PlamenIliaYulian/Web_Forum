@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
 @Repository
-public class UserRepositoryImpl implements UserRepository{
+public class UserRepositoryImpl implements UserRepository {
 
     private final SessionFactory sessionFactory;
+
     @Autowired
     public UserRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
@@ -30,7 +32,12 @@ public class UserRepositoryImpl implements UserRepository{
 
     @Override
     public User updateUser(User user) {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.merge(user);
+            session.getTransaction().commit();
+            return user;
+        }
     }
 
     @Override
@@ -45,16 +52,24 @@ public class UserRepositoryImpl implements UserRepository{
 
     @Override
     public User getUserByUsername(String username) {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            Query<User> query = session.createQuery("FROM User WHERE userName = :username AND isDeleted = false ", User.class);
+            query.setParameter("username", username);
+            List<User> result = query.list();
+            if (result.isEmpty()) {
+                throw new EntityNotFoundException("User", "username", username);
+            }
+            return result.get(0);
+        }
     }
 
     @Override
     public User getUserByEmail(String email) {
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Query<User> query = session.createQuery("from User where email = :email and isDeleted = false ", User.class);
             query.setParameter("email", email);
             List<User> result = query.list();
-            if(result.isEmpty()){
+            if (result.isEmpty()) {
                 throw new EntityNotFoundException("User", "email", email);
             }
             return result.get(0);
@@ -68,7 +83,7 @@ public class UserRepositoryImpl implements UserRepository{
 
     @Override
     public User updateToAdmin(User toBeUpdated) {
-        return null;
+        return updateUser(toBeUpdated);
     }
 
     @Override
@@ -82,8 +97,8 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override
-    public User addAvatar(User userToBeUpdated, byte[] avatar) {
-        return null;
+    public User addAvatar(User userToBeUpdated) {
+        return updateUser(userToBeUpdated);
     }
 
     @Override
