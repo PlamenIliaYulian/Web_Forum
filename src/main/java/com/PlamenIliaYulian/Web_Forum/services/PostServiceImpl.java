@@ -99,6 +99,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public Post removeCommentFromPost(Post postToComment, int commentId, User authorizedUser) {
+        Comment comment = commentService.getCommentById(commentId);
+        return null;
+    }
+
+    @Override
     public List<Comment> getAllCommentsRelatedToPost(Post postWithComments) {
         return null;
     }

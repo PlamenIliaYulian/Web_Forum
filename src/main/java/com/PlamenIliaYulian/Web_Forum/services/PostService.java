@@ -43,4 +43,6 @@ public interface PostService {
     Post addCommentToPost(Post postToComment, Comment commentToBeAdded, User userWhoComments);
 
     List<Comment> getAllCommentsRelatedToPost(Post postWithComments);
+
+    Post removeCommentFromPost(Post postToComment, int commentId, User authorizedUser);
 }

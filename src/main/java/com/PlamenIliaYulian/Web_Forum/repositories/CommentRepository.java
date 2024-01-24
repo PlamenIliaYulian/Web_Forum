@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface CommentRepository {
 
-
-
     Comment getCommentById(int id);
     Comment getCommentByContent(String content);
     Comment createComment(Comment comment);
@@ -19,6 +17,5 @@ public interface CommentRepository {
     List<Comment> getAllComments();
     Comment likeComment(Comment comment);
     Comment dislikeComment(Comment comment);
-
 
 }

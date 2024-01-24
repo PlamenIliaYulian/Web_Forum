@@ -120,6 +120,16 @@ public class PostRestController {
         return postService.addCommentToPost(postToComment, commentToAdd, authorizedUser);
     }
 
+    @PutMapping("/{title}/comments/{commentId}")
+    public Post removeCommentToPost(@RequestHeader HttpHeaders headers,
+                                    @PathVariable String title,
+                                    @PathVariable int commentId) {
+        User authorizedUser = authenticationHelper.tryGetUser(headers);
+        Post postToComment = postService.getPostByTitle(title);
+
+        return postService.removeCommentFromPost(postToComment, commentId, authorizedUser);
+    }
+
     @GetMapping("/{title}/comments")
     public List<Comment> getAllCommentsRelatedToPost(@RequestHeader HttpHeaders headers,
                                                      @PathVariable String title) {
