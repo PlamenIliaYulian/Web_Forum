@@ -1,4 +1,4 @@
-package com.PlamenIliaYulian.Web_Forum.helpers;
+package com.PlamenIliaYulian.Web_Forum.helpers.contracts;
 
 import com.PlamenIliaYulian.Web_Forum.models.*;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.*;

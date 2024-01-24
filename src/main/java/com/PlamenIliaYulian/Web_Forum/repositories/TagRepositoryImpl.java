@@ -1,10 +1,13 @@
 package com.PlamenIliaYulian.Web_Forum.repositories;
 
 import com.PlamenIliaYulian.Web_Forum.models.Tag;
+import com.PlamenIliaYulian.Web_Forum.repositories.contracts.TagRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.Set;
 
 @Repository
 public class TagRepositoryImpl implements TagRepository {
@@ -38,6 +41,11 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public Tag updateTag(Tag tag) {
+        return null;
+    }
+
+    @Override
+    public Set<Tag> getAllTags() {
         return null;
     }
 }

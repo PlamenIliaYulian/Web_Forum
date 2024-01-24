@@ -1,4 +1,4 @@
-package com.PlamenIliaYulian.Web_Forum.repositories;
+package com.PlamenIliaYulian.Web_Forum.repositories.contracts;
 
 import com.PlamenIliaYulian.Web_Forum.models.Comment;
 

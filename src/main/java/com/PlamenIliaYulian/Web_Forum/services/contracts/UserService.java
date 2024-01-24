@@ -1,4 +1,4 @@
-package com.PlamenIliaYulian.Web_Forum.services;
+package com.PlamenIliaYulian.Web_Forum.services.contracts;
 
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
@@ -48,6 +48,6 @@ public interface UserService {
     /*TODO Plamen*/
     User addPhoneNumber(User userToBeUpdated, String phoneNumber, User userIsAuthorized);
 
-
+    /*TODO July*/
     User makeAdministrativeChanges(User userToDoUpdates, User userToBeUpdated);
 }

@@ -1,16 +1,18 @@
-package com.PlamenIliaYulian.Web_Forum.services;
+package com.PlamenIliaYulian.Web_Forum.repositories.contracts;
 
 import com.PlamenIliaYulian.Web_Forum.models.Tag;
 
-public interface TagService {
+import java.util.Set;
 
-    /*TODO Iliya*/
+public interface TagRepository {
+
     Tag getTagByName(String name);
-    /*TODO July - DONE*/
+
     Tag createTag(Tag tag);
-    /*TODO Plamen*/
+
     void deleteTag(Tag tag);
-    /*TODO Iliya*/
+
     Tag updateTag(Tag tag);
 
+    Set<Tag> getAllTags();
 }

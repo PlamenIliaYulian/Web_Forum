@@ -1,11 +1,12 @@
 package com.PlamenIliaYulian.Web_Forum.helpers;
 
+import com.PlamenIliaYulian.Web_Forum.helpers.contracts.ModelsMapper;
 import com.PlamenIliaYulian.Web_Forum.models.*;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.*;
-import com.PlamenIliaYulian.Web_Forum.services.CommentService;
-import com.PlamenIliaYulian.Web_Forum.services.PostService;
-import com.PlamenIliaYulian.Web_Forum.services.TagService;
-import com.PlamenIliaYulian.Web_Forum.services.UserService;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.PostService;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

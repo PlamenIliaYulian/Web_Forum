@@ -2,12 +2,13 @@ package com.PlamenIliaYulian.Web_Forum.controllers;
 
 
 import com.PlamenIliaYulian.Web_Forum.helpers.AuthenticationHelper;
-import com.PlamenIliaYulian.Web_Forum.helpers.ModelsMapper;
+import com.PlamenIliaYulian.Web_Forum.helpers.contracts.ModelsMapper;
 import com.PlamenIliaYulian.Web_Forum.models.*;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.CommentDto;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.PostDto;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.TagDto;
-import com.PlamenIliaYulian.Web_Forum.services.PostService;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.PostService;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -23,13 +24,15 @@ public class PostRestController {
     private final PostService postService;
     private final AuthenticationHelper authenticationHelper;
     private final ModelsMapper modelsMapper;
+    private final TagService tagService;
 
     @Autowired
     public PostRestController(PostService postService,
-                              AuthenticationHelper authenticationHelper, ModelsMapper modelsMapper) {
+                              AuthenticationHelper authenticationHelper, ModelsMapper modelsMapper, TagService tagService) {
         this.postService = postService;
         this.authenticationHelper = authenticationHelper;
         this.modelsMapper = modelsMapper;
+        this.tagService = tagService;
     }
 
 
@@ -91,7 +94,7 @@ public class PostRestController {
         return postService.dislikePost(post, authorizedUser);
     }
 
-    @PutMapping("/{title}")
+    @PutMapping("/{title}/tags")
     public Post addTagToPost(@RequestHeader HttpHeaders headers,
                              @PathVariable String title,
                              @Valid @RequestBody TagDto tagDto) {
@@ -101,13 +104,13 @@ public class PostRestController {
         return postService.addTagToPost(post, tag, authorizedUser);
     }
 
-    @PutMapping("/{title}")
+    @DeleteMapping("/{title}/tags/{tagName}")
     public Post removeTagFromPost(@RequestHeader HttpHeaders headers,
                                   @PathVariable String title,
-                                  @Valid @RequestBody TagDto tagDto) {
+                                  @PathVariable String tagName) {
         User authorizedUser = authenticationHelper.tryGetUser(headers);
         Post post = postService.getPostByTitle(title);
-        Tag tag = modelsMapper.tagFromDto(tagDto);
+        Tag tag = tagService.getTagByName(tagName);
         return postService.removeTagFromPost(post, tag, authorizedUser);
     }
 

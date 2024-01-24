@@ -1,4 +1,4 @@
-package com.PlamenIliaYulian.Web_Forum.services;
+package com.PlamenIliaYulian.Web_Forum.services.contracts;
 
 import com.PlamenIliaYulian.Web_Forum.models.Comment;
 import com.PlamenIliaYulian.Web_Forum.models.User;

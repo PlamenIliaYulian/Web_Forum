@@ -4,7 +4,8 @@ import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
 import com.PlamenIliaYulian.Web_Forum.models.Role;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
-import com.PlamenIliaYulian.Web_Forum.repositories.UserRepository;
+import com.PlamenIliaYulian.Web_Forum.repositories.contracts.UserRepository;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

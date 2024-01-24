@@ -1,12 +1,13 @@
 package com.PlamenIliaYulian.Web_Forum.repositories;
 
 import com.PlamenIliaYulian.Web_Forum.models.Comment;
+import com.PlamenIliaYulian.Web_Forum.repositories.contracts.CommentRepository;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 @Repository
-public class CommentRepositoryImpl implements CommentRepository{
+public class CommentRepositoryImpl implements CommentRepository {
 
     private final SessionFactory sessionFactory;
 

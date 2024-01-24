@@ -1,6 +1,7 @@
 package com.PlamenIliaYulian.Web_Forum.repositories;
 
 import com.PlamenIliaYulian.Web_Forum.models.Post;
+import com.PlamenIliaYulian.Web_Forum.repositories.contracts.PostRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;

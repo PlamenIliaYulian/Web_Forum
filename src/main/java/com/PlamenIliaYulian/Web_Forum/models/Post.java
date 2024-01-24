@@ -49,12 +49,12 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags;
 
-    @OneToMany
+    @ManyToMany
     @JoinTable(name = "posts_users_likes",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> usersWhoLikedPost;
-    @OneToMany
+    @ManyToMany
     @JoinTable(name = "posts_users_dislikes",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))

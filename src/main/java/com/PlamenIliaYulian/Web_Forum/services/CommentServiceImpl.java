@@ -2,15 +2,16 @@ package com.PlamenIliaYulian.Web_Forum.services;
 
 import com.PlamenIliaYulian.Web_Forum.models.Comment;
 import com.PlamenIliaYulian.Web_Forum.models.User;
-import com.PlamenIliaYulian.Web_Forum.repositories.CommentRepository;
+import com.PlamenIliaYulian.Web_Forum.repositories.contracts.CommentRepository;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class CommentServiceImpl implements CommentService{
+public class CommentServiceImpl implements CommentService {
 
     private final UserService userService;
     private final CommentRepository commentRepository;

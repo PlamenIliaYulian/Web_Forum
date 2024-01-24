@@ -1,4 +1,4 @@
-package com.PlamenIliaYulian.Web_Forum.services;
+package com.PlamenIliaYulian.Web_Forum.services.contracts;
 
 import com.PlamenIliaYulian.Web_Forum.models.Comment;
 import com.PlamenIliaYulian.Web_Forum.models.Post;
@@ -41,8 +41,8 @@ public interface PostService {
 
     /*TODO Plamen*/
     Post addCommentToPost(Post postToComment, Comment commentToBeAdded, User userWhoComments);
-
+    /*TODO Iliya*/
     List<Comment> getAllCommentsRelatedToPost(Post postWithComments);
-
+    /*TODO July*/
     Post removeCommentFromPost(Post postToComment, int commentId, User authorizedUser);
 }

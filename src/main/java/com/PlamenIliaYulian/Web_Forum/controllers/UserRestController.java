@@ -1,12 +1,12 @@
 package com.PlamenIliaYulian.Web_Forum.controllers;
 
 import com.PlamenIliaYulian.Web_Forum.helpers.AuthenticationHelper;
-import com.PlamenIliaYulian.Web_Forum.helpers.ModelsMapper;
+import com.PlamenIliaYulian.Web_Forum.helpers.contracts.ModelsMapper;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.UserAdministrativeDto;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.UserDto;
 import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
-import com.PlamenIliaYulian.Web_Forum.services.UserService;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;

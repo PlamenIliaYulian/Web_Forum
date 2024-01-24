@@ -4,7 +4,11 @@ import com.PlamenIliaYulian.Web_Forum.models.Comment;
 import com.PlamenIliaYulian.Web_Forum.models.Post;
 import com.PlamenIliaYulian.Web_Forum.models.Tag;
 import com.PlamenIliaYulian.Web_Forum.models.User;
-import com.PlamenIliaYulian.Web_Forum.repositories.PostRepository;
+import com.PlamenIliaYulian.Web_Forum.repositories.contracts.PostRepository;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.PostService;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
