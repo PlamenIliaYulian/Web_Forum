@@ -6,7 +6,7 @@ public interface TagService {
 
     /*TODO Iliya*/
     Tag getTagByName(String name);
-    /*TODO July*/
+    /*TODO July - DONE*/
     Tag createTag(Tag tag);
     /*TODO Plamen*/
     void deleteTag(Tag tag);

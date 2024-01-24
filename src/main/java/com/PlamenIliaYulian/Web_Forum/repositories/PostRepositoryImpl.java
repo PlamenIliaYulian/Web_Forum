@@ -1,6 +1,7 @@
 package com.PlamenIliaYulian.Web_Forum.repositories;
 
 import com.PlamenIliaYulian.Web_Forum.models.Post;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -19,7 +20,12 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public Post createPost(Post post) {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.persist(post);
+            session.getTransaction().commit();
+            return post;
+        }
     }
 
     @Override

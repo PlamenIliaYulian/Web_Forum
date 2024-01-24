@@ -9,11 +9,12 @@ import com.PlamenIliaYulian.Web_Forum.repositories.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
 @Service
-public class PostServiceImpl implements PostService{
+public class PostServiceImpl implements PostService {
 
     private final TagService tagService;
     private final UserService userService;
@@ -30,7 +31,9 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public Post createPost(Post post, User authorizedUser) {
-        return null;
+        post.setCreatedOn(LocalDateTime.now());
+        post.setCreatedBy(authorizedUser);
+        return postRepository.createPost(post);
     }
 
     @Override
@@ -60,6 +63,12 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public Post likePost(Post post, User authorizedUser) {
+        Post postToLike = postRepository.getPostByTitle(post.getTitle());
+        /* Once we have the post:
+            - we need to check if the authorizedUser has already liked this post;
+            - we need to check if the authorizedUser has already disliked this post;
+
+         Based on the info we get, we need to perform certain actions.*/
         return null;
     }
 
@@ -74,7 +83,7 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public Post removeTagToPost(Post post, Tag tag) {
+    public Post removeTagFromPost(Post post, Tag tag) {
         return null;
     }
 

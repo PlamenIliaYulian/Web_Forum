@@ -8,6 +8,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "posts")
+@SecondaryTable(name = "posts_users_likes", pkJoinColumns = @PrimaryKeyJoinColumn(name = "post_id"))
+@SecondaryTable(name = "posts_users_dislikes", pkJoinColumns = @PrimaryKeyJoinColumn(name = "post_id"))
 public class Post {
 
     @Id
@@ -48,6 +50,17 @@ public class Post {
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags;
+
+    @OneToMany
+    @JoinTable(name = "posts_users_likes",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> usersWhoLikedPost;
+    @OneToMany
+    @JoinTable(name = "posts_users_dislikes",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> usersWhoDislikedPost;
 
     public Post() {
     }
