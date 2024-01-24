@@ -59,7 +59,8 @@ public class UserRestController {
     }
 
 
-    @GetMapping("/{username}")
+    /*TODO It is not the best way for this method.*/
+    @GetMapping("/username/{username}")
     public User getUserByUsername(@PathVariable String username) {
         return userService.getUserByUsername(username);
     }
@@ -76,8 +77,8 @@ public class UserRestController {
         return userService.getAllUsers(userExecutingTheRequest, userFilterOptions);
     }
 
-
-    @GetMapping("/{id}")
+    /*TODO It is not the best way for this method.*/
+    @GetMapping("/id/{id}")
     public User getUserById(@PathVariable int id){
         return userService.getUserById(id);
     }

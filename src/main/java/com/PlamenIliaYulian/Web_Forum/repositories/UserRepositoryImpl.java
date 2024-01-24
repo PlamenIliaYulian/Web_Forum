@@ -79,7 +79,15 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User getUserById(int id) {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            Query<User> query = session.createQuery("FROM User WHERE userId = :id AND isDeleted = false ", User.class);
+            query.setParameter("id", id);
+            List<User> result = query.list();
+            if (result.isEmpty()) {
+                throw new EntityNotFoundException("User", id);
+            }
+            return result.get(0);
+        }
     }
 
     @Override
