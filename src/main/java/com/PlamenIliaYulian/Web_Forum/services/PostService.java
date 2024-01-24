@@ -34,11 +34,13 @@ public interface PostService {
     Post dislikePost(Post post, User authorizedUser);
 
     /*TODO Iliya*/
-    Post addTagToPost(Post post, Tag tag);
+    Post addTagToPost(Post post, Tag tag, User authorizedUser);
 
     /*TODO July*/
-    Post removeTagFromPost(Post post, Tag tag);
+    Post removeTagFromPost(Post post, Tag tag, User authorizedUser);
 
     /*TODO Plamen*/
     Post addCommentToPost(Post postToComment, Comment commentToBeAdded, User userWhoComments);
+
+    List<Comment> getAllCommentsRelatedToPost(Post postWithComments);
 }

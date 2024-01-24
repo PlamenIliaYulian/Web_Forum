@@ -4,7 +4,6 @@ import com.PlamenIliaYulian.Web_Forum.models.Comment;
 import com.PlamenIliaYulian.Web_Forum.models.Post;
 import com.PlamenIliaYulian.Web_Forum.models.Tag;
 import com.PlamenIliaYulian.Web_Forum.models.User;
-import com.PlamenIliaYulian.Web_Forum.repositories.CommentRepository;
 import com.PlamenIliaYulian.Web_Forum.repositories.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,12 +77,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post addTagToPost(Post post, Tag tag) {
+    public Post addTagToPost(Post post, Tag tag, User authorizedUser) {
         return null;
     }
 
     @Override
-    public Post removeTagFromPost(Post post, Tag tag) {
+    public Post removeTagFromPost(Post post, Tag tag, User authorizedUser) {
         return null;
     }
 
@@ -98,4 +97,10 @@ public class PostServiceImpl implements PostService {
         return null;
 
     }
+
+    @Override
+    public List<Comment> getAllCommentsRelatedToPost(Post postWithComments) {
+        return null;
+    }
+
 }

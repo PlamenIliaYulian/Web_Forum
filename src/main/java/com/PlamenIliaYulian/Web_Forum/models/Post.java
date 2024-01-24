@@ -8,8 +8,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "posts")
-@SecondaryTable(name = "posts_users_likes", pkJoinColumns = @PrimaryKeyJoinColumn(name = "post_id"))
-@SecondaryTable(name = "posts_users_dislikes", pkJoinColumns = @PrimaryKeyJoinColumn(name = "post_id"))
 public class Post {
 
     @Id
