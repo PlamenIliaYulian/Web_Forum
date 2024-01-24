@@ -105,4 +105,9 @@ public class UserRepositoryImpl implements UserRepository {
     public User addPhoneNumber(User userToBeUpdated, String phoneNumber) {
         return null;
     }
+
+    @Override
+    public User makeAdministrativeChanges(User userToBeUpdated) {
+        return null;
+    }
 }

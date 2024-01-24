@@ -3,13 +3,13 @@ package com.PlamenIliaYulian.Web_Forum.services;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
 import com.PlamenIliaYulian.Web_Forum.models.Role;
 import com.PlamenIliaYulian.Web_Forum.models.User;
+import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
 import com.PlamenIliaYulian.Web_Forum.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers(User userExecutingTheRequest, UserFilterOptions userFilterOptions) {
         return null;
     }
 
@@ -55,46 +55,53 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByEmail(String email, User userIsAdmin) {
+    public User getUserByEmail(String email, User userIsAuthorized) {
         return userRepository.getUserByEmail(email);
     }
 
     @Override
     public User getUserById(int id) {
-        return null;
+        return userRepository.getUserById(id);
     }
 
     @Override
-    public User updateToAdmin(User toBeUpdated, User userIsAdmin) {
-        if (!isAdmin(userIsAdmin)) {
+    public User updateToAdmin(User userTryingToAuthorize, int userToBeChangedToAdmin) {
+        if (!isAdmin(userTryingToAuthorize)) {
             throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
         }
-        Set<Role> rolesOfTheUserToBeUpdated = toBeUpdated.getRoles();
+        User userToBeUpdated = userRepository.getUserById(userToBeChangedToAdmin);
+        Set<Role> rolesOfTheUserToBeUpdated = userToBeUpdated.getRoles();
         rolesOfTheUserToBeUpdated.add(new Role(1, "ROLE_ADMIN"));
-        return userRepository.updateToAdmin(toBeUpdated);
+        return userRepository.updateToAdmin(userToBeUpdated);
     }
 
     @Override
-    public User blockUser(User toBeBlocked, User userIsAdmin) {
+    public User blockUser(User userToDoChanges,int userToBeBlocked) {
         return null;
     }
 
     @Override
-    public User unBlockUser(User toBeUnblocked, User userIsAdmin) {
+    public User unBlockUser(User userToDoChanges,int userToBeBlocked) {
         return null;
     }
 
     @Override
-    public User addAvatar(User userToBeUpdated, byte[] avatar, User userIsAuthorized) {
-        if (!isSameUser(userToBeUpdated, userIsAuthorized)) {
-            throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
-        }
-        userToBeUpdated.setAvatar(avatar);
-        return userRepository.addAvatar(userToBeUpdated);
+    public User addAvatar(int userToBeUpdated, byte[] avatar, User userIsAuthorized) {
+//        if (!isSameUser(userToBeUpdated, userIsAuthorized)) {
+//            throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
+//        }
+//        userToBeUpdated.setAvatar(avatar);
+//        return userRepository.addAvatar(userToBeUpdated);
+        return  null;
     }
 
     @Override
     public User addPhoneNumber(User userToBeUpdated, String phoneNumber, User userIsAuthorized) {
+        return null;
+    }
+
+    @Override
+    public User makeAdministrativeChanges(User userToDoUpdates, User userToBeUpdated) {
         return null;
     }
 

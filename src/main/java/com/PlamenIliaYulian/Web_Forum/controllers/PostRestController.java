@@ -4,6 +4,9 @@ package com.PlamenIliaYulian.Web_Forum.controllers;
 import com.PlamenIliaYulian.Web_Forum.helpers.AuthenticationHelper;
 import com.PlamenIliaYulian.Web_Forum.helpers.ModelsMapper;
 import com.PlamenIliaYulian.Web_Forum.models.*;
+import com.PlamenIliaYulian.Web_Forum.models.dtos.CommentDto;
+import com.PlamenIliaYulian.Web_Forum.models.dtos.PostDto;
+import com.PlamenIliaYulian.Web_Forum.models.dtos.TagDto;
 import com.PlamenIliaYulian.Web_Forum.services.PostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +26,7 @@ public class PostRestController {
 
     @Autowired
     public PostRestController(PostService postService,
-                              AuthenticationHelper authenticationHelper,
-                              ModelsMapper modelsMapper) {
+                              AuthenticationHelper authenticationHelper, ModelsMapper modelsMapper) {
         this.postService = postService;
         this.authenticationHelper = authenticationHelper;
         this.modelsMapper = modelsMapper;

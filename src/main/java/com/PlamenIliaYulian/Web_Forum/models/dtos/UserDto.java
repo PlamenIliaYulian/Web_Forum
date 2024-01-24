@@ -1,4 +1,4 @@
-package com.PlamenIliaYulian.Web_Forum.models;
+package com.PlamenIliaYulian.Web_Forum.models.dtos;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;

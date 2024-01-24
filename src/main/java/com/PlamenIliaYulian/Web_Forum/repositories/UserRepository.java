@@ -26,5 +26,7 @@ public interface UserRepository {
     User addAvatar(User userToBeUpdated);
     User addPhoneNumber(User userToBeUpdated, String phoneNumber);
 
+    User makeAdministrativeChanges(User userToBeUpdated);
+
 
 }

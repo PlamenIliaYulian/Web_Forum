@@ -6,8 +6,6 @@ import jakarta.persistence.*;
 import java.util.Objects;
 import java.util.Set;
 
-
-
 @Entity
 @Table(name = "users")
 /* https://www.baeldung.com/jpa-mapping-single-entity-to-multiple-tables
