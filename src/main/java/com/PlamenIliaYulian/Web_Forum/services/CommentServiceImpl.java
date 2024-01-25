@@ -18,6 +18,7 @@ public class CommentServiceImpl implements CommentService {
 
     public static final String UNAUTHORIZED_OPERATION = "Unauthorized operation.";
     public static final String MULTIPLE_LIKE_ERROR = "You have already liked this comment";
+    public static final String YOU_ARE_THE_CREATOR_OF_THIS_COMMENT = "You are the creator of this comment";
 
     private final UserService userService;
     private final CommentRepository commentRepository;
@@ -64,6 +65,11 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment likeComment(Comment comment, User authorizedUser) {
+
+        if(comment.getCreatedBy().equals(authorizedUser)){
+            throw new UnauthorizedOperationException(YOU_ARE_THE_CREATOR_OF_THIS_COMMENT);
+        }
+
         Set<User> usersWhoLiked = comment.getUsersWhoLikedComment();
         Set<User> usersWhoDisliked = comment.getUsersWhoDislikedComment();
 

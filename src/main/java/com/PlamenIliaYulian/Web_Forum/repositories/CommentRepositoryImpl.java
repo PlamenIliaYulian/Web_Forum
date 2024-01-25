@@ -1,5 +1,6 @@
 package com.PlamenIliaYulian.Web_Forum.repositories;
 
+import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.models.Comment;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.CommentRepository;
 import org.hibernate.Session;
@@ -18,7 +19,13 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public Comment getCommentById(int id) {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            Comment comment = session.get(Comment.class, id);
+            if (comment == null) {
+                throw new EntityNotFoundException("Comment", id);
+            }
+            return comment;
+        }
     }
 
     @Override

@@ -1,9 +1,7 @@
 package com.PlamenIliaYulian.Web_Forum.services;
 
-import com.PlamenIliaYulian.Web_Forum.models.Comment;
-import com.PlamenIliaYulian.Web_Forum.models.Post;
-import com.PlamenIliaYulian.Web_Forum.models.Tag;
-import com.PlamenIliaYulian.Web_Forum.models.User;
+import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
+import com.PlamenIliaYulian.Web_Forum.models.*;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.PostRepository;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.PostService;
@@ -19,6 +17,7 @@ import java.util.Set;
 @Service
 public class PostServiceImpl implements PostService {
 
+    public static final String UNAUTHORIZED_OPERATION = "Unauthorized operation.";
     private final TagService tagService;
     private final UserService userService;
     private final CommentService commentService;
@@ -41,7 +40,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void deletePost(Post post, User authorizedUser) {
-
+        checkModifyPermission(post.getPostId(), authorizedUser);
+        postRepository.deletePost(post);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post getPostByTitle(String title) {
-        return null;
+        return postRepository.getPostByTitle(title);
     }
 
     @Override
@@ -111,6 +111,25 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Comment> getAllCommentsRelatedToPost(Post postWithComments) {
         return null;
+    }
+
+
+    private void checkModifyPermission(int postId, User user) {
+        Post post = postRepository.getPostById(postId);
+
+        if (!(isAdmin(user) || post.getCreatedBy().equals(user))) {
+            throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
+        }
+    }
+
+    private boolean isAdmin(User userIsAuthorized) {
+        List<Role> rolesOfAuthorizedUser = userIsAuthorized.getRoles().stream().toList();
+        for (Role currentRoleToBeChecked : rolesOfAuthorizedUser) {
+            if (currentRoleToBeChecked.getName().equals("ROLE_ADMIN")) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

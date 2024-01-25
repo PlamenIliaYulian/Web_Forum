@@ -1,9 +1,11 @@
 package com.PlamenIliaYulian.Web_Forum.repositories;
 
+import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.models.Post;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.PostRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -31,7 +33,11 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public void deletePost(Post post) {
-
+        try(Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.remove(post);
+            session.getTransaction().commit();
+        }
     }
 
     @Override
@@ -51,7 +57,15 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public Post getPostByTitle(String title) {
-        return null;
+        try(Session session = sessionFactory.openSession()) {
+            Query<Post> query = session.createQuery("from Post where title = :title", Post.class);
+            query.setParameter("title", title);
+            List<Post> result = query.list();
+            if(result.isEmpty()){
+                throw new EntityNotFoundException("Post", "title", title);
+            }
+            return result.get(0);
+        }
     }
 
     @Override
