@@ -95,7 +95,17 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post dislikePost(Post post, User authorizedUser) {
-        return null;
+        PermissionHelper.isNotSameUser(post.getCreatedBy(), authorizedUser, UNAUTHORIZED_OPERATION);
+        Set<User> usersWhoDislikedThePost = post.getUsersWhoDislikedPost();
+        Set<User> usersWhoLikedThePost = post.getUsersWhoLikedPost();
+
+        if(usersWhoDislikedThePost.contains(authorizedUser)){
+            throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
+        }
+        usersWhoLikedThePost.remove(authorizedUser);
+        usersWhoDislikedThePost.add(authorizedUser);
+
+        return postRepository.updatePost(post);
     }
 
     /*Ilia*/
@@ -129,8 +139,8 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post addCommentToPost(Post postToComment, Comment commentToBeAdded, User userWhoComments) {
         /*check is authorized or blocked*/
-
-        commentService.createComment(commentToBeAdded, userWhoComments);
+        PermissionHelper.isBlocked(userWhoComments,UNAUTHORIZED_OPERATION);
+        commentService.createComment(commentToBeAdded);
         Set<Comment> comments = postToComment.getRelatedComments();
         comments.add(commentToBeAdded);
         postToComment.setRelatedComments(comments);

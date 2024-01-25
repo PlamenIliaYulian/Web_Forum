@@ -84,7 +84,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addPhoneNumber(User userToBeUpdated, String phoneNumber, User userIsAuthorized) {
-        return null;
+        PermissionHelper.isAdmin(userToBeUpdated, UNAUTHORIZED_OPERATION);
+        PermissionHelper.isAdmin(userIsAuthorized, UNAUTHORIZED_OPERATION);
+        userToBeUpdated.setPhoneNumber(phoneNumber);
+        return userRepository.updateUser(userToBeUpdated);
     }
 
     @Override
