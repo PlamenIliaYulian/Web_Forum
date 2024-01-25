@@ -15,7 +15,8 @@ public interface CommentRepository {
 
     /*TODO implement Comment FilterOptions*/
     List<Comment> getAllComments();
-    Comment likeComment(Comment comment);
-    Comment dislikeComment(Comment comment);
+
+//    Comment likeComment(Comment comment);
+//    Comment dislikeComment(Comment comment);
 
 }

@@ -1,10 +1,10 @@
 package com.PlamenIliaYulian.Web_Forum.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "comments")
@@ -33,6 +33,36 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User createdBy;
+
+
+    @ManyToMany
+    @JoinTable(name = "comments_users_likes",
+            joinColumns = @JoinColumn(name = "comment_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> usersWhoLikedComment;
+
+
+    @ManyToMany
+    @JoinTable(name = "comments_users_dislikes",
+            joinColumns = @JoinColumn(name = "comment_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> usersWhoDislikedComment;
+
+    public Set<User> getUsersWhoLikedComment() {
+        return usersWhoLikedComment;
+    }
+
+    public void setUsersWhoLikedComment(Set<User> usersWhoLikedComment) {
+        this.usersWhoLikedComment = usersWhoLikedComment;
+    }
+
+    public Set<User> getUsersWhoDislikedComment() {
+        return usersWhoDislikedComment;
+    }
+
+    public void setUsersWhoDislikedComment(Set<User> usersWhoDislikedComment) {
+        this.usersWhoDislikedComment = usersWhoDislikedComment;
+    }
 
     public Comment() {
     }
