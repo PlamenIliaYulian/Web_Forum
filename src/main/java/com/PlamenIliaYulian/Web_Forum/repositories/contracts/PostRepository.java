@@ -9,8 +9,6 @@ public interface PostRepository {
 
     Post createPost(Post post);
 
-    void deletePost(Post post);
-
     Post updatePost(Post post);
 
     /*TODO implement Post FilterOptions*/
@@ -20,10 +18,5 @@ public interface PostRepository {
 
     Post getPostById(int id);
 
-    Post likePost(Post post);
-
-    Post dislikePost(Post post);
-
-    Post addCommentToPost (Post postToComment);
 
 }

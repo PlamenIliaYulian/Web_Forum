@@ -31,21 +31,12 @@ public class PostRepositoryImpl implements PostRepository {
         }
     }
 
-    @Override
-    public void deletePost(Post post) {
-        try(Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.remove(post);
-            session.getTransaction().commit();
-        }
-    }
-
     /*Ilia - I did not implement this method*/
     @Override
     public Post updatePost(Post post) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.persist(post);
+            session.merge(post);
             session.getTransaction().commit();
             return post;
         }
@@ -58,11 +49,11 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public Post getPostByTitle(String title) {
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Query<Post> query = session.createQuery("from Post where title = :title", Post.class);
             query.setParameter("title", title);
             List<Post> result = query.list();
-            if(result.isEmpty()){
+            if (result.isEmpty()) {
                 throw new EntityNotFoundException("Post", "title", title);
             }
             return result.get(0);
@@ -81,20 +72,5 @@ public class PostRepositoryImpl implements PostRepository {
             }
             return query.list().get(0);
         }
-    }
-
-    @Override
-    public Post likePost(Post post) {
-        return null;
-    }
-
-    @Override
-    public Post dislikePost(Post post) {
-        return null;
-    }
-
-    @Override
-    public Post addCommentToPost(Post postToComment) {
-        return null;
     }
 }

@@ -50,7 +50,8 @@ public class PostServiceImpl implements PostService {
     public void deletePost(Post post, User authorizedUser) {
         PermissionHelper.isBlocked(authorizedUser, UNAUTHORIZED_OPERATION);
         PermissionHelper.isAdminOrSameUser(post.getCreatedBy(), authorizedUser, UNAUTHORIZED_OPERATION);
-        postRepository.deletePost(post);
+        post.setDeleted(true);
+        postRepository.updatePost(post);
     }
 
     /*Ilia*/
@@ -79,7 +80,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post likePost(Post post, User authenticatedUser) {
-       PermissionHelper.isNotSameUser(post.getCreatedBy(),authenticatedUser,UNAUTHORIZED_OPERATION);
+        PermissionHelper.isNotSameUser(post.getCreatedBy(), authenticatedUser, UNAUTHORIZED_OPERATION);
         Set<User> usersWhoDislikedThePost = post.getUsersWhoDislikedPost();
         Set<User> usersWhoLikedThePost = post.getUsersWhoLikedPost();
 
@@ -101,7 +102,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post addTagToPost(Post post, Tag tag, User authorizedUser) {
         PermissionHelper.isBlocked(authorizedUser, UNAUTHORIZED_OPERATION);
-        PermissionHelper.isAdminOrSameUser(post.getCreatedBy(),authorizedUser, UNAUTHORIZED_OPERATION);
+        PermissionHelper.isAdminOrSameUser(post.getCreatedBy(), authorizedUser, UNAUTHORIZED_OPERATION);
         try {
             tagService.getTagByName(tag.getName());
         } catch (EntityNotFoundException e) {
@@ -114,7 +115,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post removeTagFromPost(Post post, Tag tag, User authenticatedUser) {
-        PermissionHelper.isAdminOrSameUser(post.getCreatedBy(),authenticatedUser, UNAUTHORIZED_OPERATION);
+        PermissionHelper.isAdminOrSameUser(post.getCreatedBy(), authenticatedUser, UNAUTHORIZED_OPERATION);
 
         Set<Tag> tagsOfThePost = post.getTags();
         if (!tagsOfThePost.contains(tag)) {
@@ -133,7 +134,7 @@ public class PostServiceImpl implements PostService {
         Set<Comment> comments = postToComment.getRelatedComments();
         comments.add(commentToBeAdded);
         postToComment.setRelatedComments(comments);
-        return postRepository.addCommentToPost(postToComment);
+        return postRepository.updatePost(postToComment);
 
     }
 
@@ -141,7 +142,7 @@ public class PostServiceImpl implements PostService {
     public Post removeCommentFromPost(Post postToRemoveCommentFrom, int commentId, User authorizedUser) {
         Comment commentToBeRemoved = commentService.getCommentById(commentId);
         User commentCreator = commentToBeRemoved.getCreatedBy();
-        PermissionHelper.isAdminOrSameUser(commentCreator,authorizedUser,UNAUTHORIZED_OPERATION);
+        PermissionHelper.isAdminOrSameUser(commentCreator, authorizedUser, UNAUTHORIZED_OPERATION);
 
         Set<Comment> comments = postToRemoveCommentFrom.getRelatedComments();
         if (!comments.contains(commentToBeRemoved)) {

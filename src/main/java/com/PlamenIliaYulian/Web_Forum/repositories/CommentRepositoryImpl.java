@@ -10,6 +10,7 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
 @Repository
 public class CommentRepositoryImpl implements CommentRepository {
 
@@ -33,7 +34,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     /*Ilia*/
     @Override
     public Comment getCommentByContent(String content) {
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Query<Comment> query = session.createQuery("from Comment b where b.content = :content AND b.isDeleted = false",
                     Comment.class);
             query.setParameter("content", content);
@@ -52,11 +53,6 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public Comment updateComment(Comment comment) {
         return null;
-    }
-    /*Ilia*/
-    @Override
-    public void deleteCommentFromPost(Comment comment) {
-
     }
 
     @Override
