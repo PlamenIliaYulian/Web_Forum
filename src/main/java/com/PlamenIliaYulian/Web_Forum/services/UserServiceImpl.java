@@ -159,3 +159,4 @@ public class UserServiceImpl implements UserService {
         return userToBeUpdated.equals(userIsAuthorized);
     }
 }
+
