@@ -6,6 +6,7 @@ import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -40,7 +41,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Set<Tag> getAllTags() {
+    public List<Tag> getAllTags() {
         return tagRepository.getAllTags();
     }
 }

@@ -129,6 +129,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User makeAdministrativeChanges(User userToBeUpdated) {
-        return null;
+        return updateUser(userToBeUpdated);
     }
 }

@@ -1,6 +1,7 @@
 package com.PlamenIliaYulian.Web_Forum.services.contracts;
 
 import com.PlamenIliaYulian.Web_Forum.models.Comment;
+import com.PlamenIliaYulian.Web_Forum.models.Post;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface CommentService {
     /*TODO ✔ Iliya ✔*/
     Comment getCommentByContent(String content);
     /*TODO July*/
-    Comment createComment(Comment comment, User authorizedUser);
+    Comment createComment(Post postToAddCommentTo, Comment comment, User authorizedUser);
     /*TODO Plamen*/
     Comment updateComment(Comment comment, User authorizedUser);
     /*TODO ✔ Iliya ✔*/

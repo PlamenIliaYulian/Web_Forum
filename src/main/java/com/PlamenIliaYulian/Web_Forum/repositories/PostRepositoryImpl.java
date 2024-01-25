@@ -45,6 +45,12 @@ public class PostRepositoryImpl implements PostRepository {
     public Post updatePost(Post post) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
+            session.persist(post);
+            session.getTransaction().commit();
+            return post;
+        }
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
             session.merge(post);
             session.getTransaction().commit();
             return post;

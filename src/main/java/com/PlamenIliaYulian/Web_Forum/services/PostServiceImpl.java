@@ -1,5 +1,8 @@
 package com.PlamenIliaYulian.Web_Forum.services;
 
+import com.PlamenIliaYulian.Web_Forum.exceptions.InvalidUserInputException;
+import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
+import com.PlamenIliaYulian.Web_Forum.models.*;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
 import com.PlamenIliaYulian.Web_Forum.models.*;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.PostRepository;
@@ -20,6 +23,8 @@ import java.util.stream.Collectors;
 public class PostServiceImpl implements PostService {
 
     public static final String UNAUTHORIZED_OPERATION = "Unauthorized operation.";
+    public static final String NO_TAG_RELATED_TO_POST = "The post does not contain such a tag.";
+    public static final String UNAUTHORIZED_OPERATION = "Unauthorized operation.";
     private final TagService tagService;
     private final UserService userService;
     private final CommentService commentService;
@@ -34,9 +39,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post createPost(Post post, User authorizedUser) {
+    public Post createPost(Post post, User authenticatedUser) {
         post.setCreatedOn(LocalDateTime.now());
-        post.setCreatedBy(authorizedUser);
+        post.setCreatedBy(authenticatedUser);
         return postRepository.createPost(post);
     }
 
@@ -85,14 +90,22 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post likePost(Post post, User authorizedUser) {
-        Post postToLike = postRepository.getPostByTitle(post.getTitle());
-        /* Once we have the post:
-            - we need to check if the authorizedUser has already liked this post;
-            - we need to check if the authorizedUser has already disliked this post;
-
-         Based on the info we get, we need to perform certain actions.*/
-        return null;
+    public Post likePost(Post post, User authenticatedUser) {
+        if (isSameUser(authenticatedUser, post.getCreatedBy())) {
+            throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
+        }
+        Set<User> usersWhoDislikedThePost = post.getUsersWhoDislikedPost();
+        Set<User> usersWhoLikedThePost = post.getUsersWhoLikedPost();
+        if (usersWhoLikedThePost.contains(authenticatedUser)) {
+            throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
+        }
+        if (usersWhoDislikedThePost.contains(authenticatedUser)) {
+            usersWhoDislikedThePost.remove(authenticatedUser);
+            usersWhoLikedThePost.add(authenticatedUser);
+        } else {
+            usersWhoLikedThePost.add(authenticatedUser);
+        }
+        return postRepository.updatePost(post);
     }
 
     @Override
@@ -114,13 +127,22 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post removeTagFromPost(Post post, Tag tag, User authorizedUser) {
-        return null;
+    public Post removeTagFromPost(Post post, Tag tag, User authenticatedUser) {
+        User postCreator = post.getCreatedBy();
+        if (!isSameUser(postCreator, authenticatedUser)) {
+            throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
+        }
+        Set<Tag> tagsOfThePost = post.getTags();
+        if (!tagsOfThePost.contains(tag)) {
+            throw new InvalidUserInputException(NO_TAG_RELATED_TO_POST);
+        }
+        tagsOfThePost.remove(tag);
+        return postRepository.updatePost(post);
     }
 
     @Override
     public Post addCommentToPost(Post postToComment, Comment commentToBeAdded, User userWhoComments) {
-        commentService.createComment(commentToBeAdded, userWhoComments);
+        commentService.createComment(postToComment, commentToBeAdded, userWhoComments);
         Set<Comment> comments = postToComment.getRelatedComments();
         comments.add(commentToBeAdded);
         //row 87 is unnecessary
@@ -131,9 +153,19 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post removeCommentFromPost(Post postToComment, int commentId, User authorizedUser) {
-        Comment comment = commentService.getCommentById(commentId);
-        return null;
+    public Post removeCommentFromPost(Post postToRemoveCommentFrom, int commentId, User authorizedUser) {
+        Comment commentToBeRemoved = commentService.getCommentById(commentId);
+        User commentCreator = commentToBeRemoved.getCreatedBy();
+        if (!isAdminOrSameUser(commentCreator, authorizedUser)) {
+            throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
+        }
+        Set<Comment> comments = postToRemoveCommentFrom.getRelatedComments();
+        if (!comments.contains(commentToBeRemoved)) {
+            /*TODO - ask the guys if we can implement something like "InvalidOperation" exception, or something like this.*/
+            throw new InvalidUserInputException("The comment does not belong to this post.");
+        }
+        comments.remove(commentToBeRemoved);
+        return postRepository.updatePost(postToRemoveCommentFrom);
     }
 
     /*Ilia - we are not calling the repository.*/
@@ -159,6 +191,24 @@ public class PostServiceImpl implements PostService {
         for (Role currentRoleToBeChecked : rolesOfAuthorizedUser) {
             if (currentRoleToBeChecked.getName().equals("ROLE_ADMIN")) {
                 return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isSameUser(User user1, User user2) {
+        return user1.equals(user2);
+    }
+
+    private boolean isAdminOrSameUser(User userToBeUpdated, User userIsAuthorized) {
+        if (userToBeUpdated.equals(userIsAuthorized)) {
+            return true;
+        } else {
+            List<Role> rolesOfAuthorizedUser = userIsAuthorized.getRoles().stream().toList();
+            for (Role currentRoleToBeChecked : rolesOfAuthorizedUser) {
+                if (currentRoleToBeChecked.getName().equals("ROLE_ADMIN")) {
+                    return true;
+                }
             }
         }
         return false;

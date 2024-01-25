@@ -2,6 +2,7 @@ package com.PlamenIliaYulian.Web_Forum.repositories.contracts;
 
 import com.PlamenIliaYulian.Web_Forum.models.Tag;
 
+import java.util.List;
 import java.util.Set;
 
 public interface TagRepository {
@@ -14,5 +15,5 @@ public interface TagRepository {
 
     Tag updateTag(Tag tag);
 
-    Set<Tag> getAllTags();
+    List<Tag> getAllTags();
 }

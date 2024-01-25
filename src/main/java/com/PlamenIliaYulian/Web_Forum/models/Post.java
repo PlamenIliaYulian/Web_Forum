@@ -143,6 +143,22 @@ public class Post {
         this.tags = tags;
     }
 
+    public Set<User> getUsersWhoLikedPost() {
+        return usersWhoLikedPost;
+    }
+
+    public void setUsersWhoLikedPost(Set<User> usersWhoLikedPost) {
+        this.usersWhoLikedPost = usersWhoLikedPost;
+    }
+
+    public Set<User> getUsersWhoDislikedPost() {
+        return usersWhoDislikedPost;
+    }
+
+    public void setUsersWhoDislikedPost(Set<User> usersWhoDislikedPost) {
+        this.usersWhoDislikedPost = usersWhoDislikedPost;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateToAdmin(User userTryingToAuthorize, int userToBeChangedToAdmin) {
-        if (!isAdmin(userTryingToAuthorize)) {
+        if (isAdmin(userTryingToAuthorize)) {
             throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
         }
         User userToBeUpdated = userRepository.getUserById(userToBeChangedToAdmin);
@@ -91,12 +91,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User blockUser(User userToDoChanges,int userToBeBlocked) {
+    public User blockUser(User userToDoChanges, int userToBeBlocked) {
         return null;
     }
 
     /*Ilia*/
     @Override
+    public User unBlockUser(User userToDoChanges, int userToBeBlocked) {
+        return null;
     public User unBlockUser(User userToDoChanges,int idUserToBeUnblocked) {
         if (!isAdmin(userToDoChanges)) {
             throw new UnauthorizedOperationException("You are not the admin and cannot block users.");
@@ -108,12 +110,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addAvatar(int userToBeUpdated, byte[] avatar, User userIsAuthorized) {
-//        if (!isSameUser(userToBeUpdated, userIsAuthorized)) {
-//            throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
-//        }
-//        userToBeUpdated.setAvatar(avatar);
-//        return userRepository.addAvatar(userToBeUpdated);
-        return  null;
+        User userToUpdateAvatarTo = userRepository.getUserById(userToBeUpdated);
+        if (!isSameUser(userToUpdateAvatarTo, userIsAuthorized)) {
+            throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
+        }
+        userToUpdateAvatarTo.setAvatar(avatar);
+        return userRepository.addAvatar(userToUpdateAvatarTo);
     }
 
     @Override
@@ -122,12 +124,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User makeAdministrativeChanges(User userToDoUpdates, User userToBeUpdated) {
-        return null;
+    public User makeAdministrativeChanges(User userToMakeUpdates, User userToBeUpdated) {
+        if (!isAdmin(userToMakeUpdates)) {
+            throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
+        }
+        return userRepository.makeAdministrativeChanges(userToBeUpdated);
     }
 
     private boolean isAdminOrSameUser(User userToBeUpdated, User userIsAuthorized) {
-        if (!userToBeUpdated.equals(userIsAuthorized)) {
+        if (userToBeUpdated.equals(userIsAuthorized)) {
+            return true;
+        } else {
             List<Role> rolesOfAuthorizedUser = userIsAuthorized.getRoles().stream().toList();
             for (Role currentRoleToBeChecked : rolesOfAuthorizedUser) {
                 if (currentRoleToBeChecked.getName().equals("ROLE_ADMIN")) {
@@ -138,8 +145,8 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
-    private boolean isAdmin(User userIsAuthorized) {
-        List<Role> rolesOfAuthorizedUser = userIsAuthorized.getRoles().stream().toList();
+    private boolean isAdmin(User authenticatedUser) {
+        List<Role> rolesOfAuthorizedUser = authenticatedUser.getRoles().stream().toList();
         for (Role currentRoleToBeChecked : rolesOfAuthorizedUser) {
             if (currentRoleToBeChecked.getName().equals("ROLE_ADMIN")) {
                 return true;

@@ -9,6 +9,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Set;
 
 @Repository
@@ -61,7 +62,10 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public Set<Tag> getAllTags() {
-        return null;
+    public List<Tag> getAllTags() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Tag> query = session.createQuery("from Tag", Tag.class);
+            return query.list();
+        }
     }
 }

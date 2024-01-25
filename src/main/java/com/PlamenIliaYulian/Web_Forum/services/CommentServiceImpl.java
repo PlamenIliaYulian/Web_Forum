@@ -3,6 +3,7 @@ package com.PlamenIliaYulian.Web_Forum.services;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
 import com.PlamenIliaYulian.Web_Forum.models.Comment;
 import com.PlamenIliaYulian.Web_Forum.models.Role;
+import com.PlamenIliaYulian.Web_Forum.models.Post;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.CommentRepository;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
@@ -43,8 +44,9 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.getCommentByContent(content);
     }
 
+    /*TODO - Yuli - ask Plamkata and Iliikata how they`d like us to implement this method. At the moment it is not */
     @Override
-    public Comment createComment(Comment comment, User authorizedUser) {
+    public Comment createComment(Post postToAddCommentTo, Comment comment, User authorizedUser) {
         return null;
     }
 
