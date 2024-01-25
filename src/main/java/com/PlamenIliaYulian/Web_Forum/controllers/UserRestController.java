@@ -34,6 +34,7 @@ public class UserRestController {
         this.modelsMapper = modelsMapper;
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public User createUser(@RequestBody @Valid UserDto userDto) {
         User user = modelsMapper.userFromDto(userDto);
@@ -81,7 +82,6 @@ public class UserRestController {
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
-
     }
 
     /*Ilia*/
@@ -94,10 +94,9 @@ public class UserRestController {
     }
     /*TODO It is not the best way for this method.*/
     @GetMapping("/username/{username}")
-    public User getUserByUsername(@RequestParam String username) {
+    public User getUserByUsername(@PathVariable String username) {
         return userService.getUserByUsername(username);
     }
-
 
     @GetMapping
     public List<User> getAllUsers(@RequestHeader HttpHeaders headers,
@@ -117,24 +116,6 @@ public class UserRestController {
     public User getUserById(@RequestParam int id) {
         return userService.getUserById(id);
     }
-
-//    @PutMapping("/{userId}/updateToAdmin")
-//    public User updateToAdmin(@PathVariable int userId, @RequestHeader HttpHeaders headers){
-//        User userToDoChanges = authenticationHelper.tryGetUser(headers);
-//        return userService.updateToAdmin(userToDoChanges, userId);
-//    }
-//
-//    @PutMapping("/{userToBeBlocked}/block")
-//    public User blockUser(@PathVariable int userToBeBlocked, @RequestHeader HttpHeaders headers){
-//        User userToDoChanges = authenticationHelper.tryGetUser(headers);
-//        return userService.blockUser(userToDoChanges, userToBeBlocked);
-//    }
-//
-//    @PutMapping("/{userToBeBlocked}/unblock")
-//    public User unBlockUser(@PathVariable int userToBeBlocked, @RequestHeader HttpHeaders headers){
-//        User userToDoChanges = authenticationHelper.tryGetUser(headers);
-//        return userService.unBlockUser(userToDoChanges, userToBeBlocked);
-//    }
 
     @PutMapping("/{userToBeUpdated}/avatar")
     public User addAvatar(@PathVariable int userToBeUpdated, @RequestBody byte[] avatar, @RequestHeader HttpHeaders headers) {

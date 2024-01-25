@@ -1,6 +1,7 @@
 package com.PlamenIliaYulian.Web_Forum.services;
 
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
+import com.PlamenIliaYulian.Web_Forum.helpers.PermissionHelper;
 import com.PlamenIliaYulian.Web_Forum.models.Comment;
 import com.PlamenIliaYulian.Web_Forum.models.Role;
 import com.PlamenIliaYulian.Web_Forum.models.Post;
@@ -25,8 +26,6 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
 
 
-
-
     @Autowired
     public CommentServiceImpl(UserService userService, CommentRepository commentRepository) {
         this.userService = userService;
@@ -44,32 +43,25 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.getCommentByContent(content);
     }
 
-    /*TODO - Yuli - ask Plamkata and Iliikata how they`d like us to implement this method. At the moment it is not */
+    /*TODO - Yuli*/
     @Override
-    public Comment createComment(Post postToAddCommentTo, Comment comment, User authorizedUser) {
+    public Comment createComment(Comment comment) {
         return null;
     }
 
     @Override
     public Comment updateComment(Comment comment, User authorizedUser) {
-        checkModifyPermission(comment.getCommentId(), authorizedUser);
+        PermissionHelper.isBlocked(authorizedUser, UNAUTHORIZED_OPERATION);
+        PermissionHelper.isAdminOrSameUser(comment.getCreatedBy(), authorizedUser, UNAUTHORIZED_OPERATION);
         return commentRepository.updateComment(comment);
     }
 
-    /*Ilia We are not using this method. Have to delete it. We are using this in Post layers.*/
+    /*Ilia.*/
     @Override
-    public void deleteCommentFromPost(Comment comment, User authorizedUser) {
-        checkIfUserIsAuthorized(comment, authorizedUser);
+    public void deleteComment(Comment comment) {
 
     }
-    /*TODO Is this is the best way to check if someone is Admin? */
-    private void checkIfUserIsAuthorized(Comment comment, User authorizedUser) {
-        if (!authorizedUser.equals(comment.getCreatedBy()) &&
-                !authorizedUser.getRoles().contains(new Role(1, "ROLE_ADMIN"))) {
-            throw new UnauthorizedOperationException("You have to be admin or the comment creator to modify/delete the comment.");
-        }
-    }
-
+    /*TODO Filter Options to be added*/
     @Override
     public List<Comment> getAllComments() {
         return null;
@@ -77,10 +69,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment likeComment(Comment comment, User authorizedUser) {
-
-        if(comment.getCreatedBy().equals(authorizedUser)){
-            throw new UnauthorizedOperationException(YOU_ARE_THE_CREATOR_OF_THIS_COMMENT);
-        }
+        PermissionHelper.isNotSameUser(comment.getCreatedBy(), authorizedUser,UNAUTHORIZED_OPERATION);
 
         Set<User> usersWhoLiked = comment.getUsersWhoLikedComment();
         Set<User> usersWhoDisliked = comment.getUsersWhoDislikedComment();
@@ -97,37 +86,18 @@ public class CommentServiceImpl implements CommentService {
     /*Ilia*/
     @Override
     public Comment dislikeComment(Comment comment, User authorizedUser) {
-        checkThatTheUserIsNotTheCreator(comment, authorizedUser);
+        PermissionHelper.isNotSameUser(comment.getCreatedBy(), authorizedUser,UNAUTHORIZED_OPERATION);
 
         Set<User> usersWhoLiked = comment.getUsersWhoLikedComment();
         Set<User> usersWhoDisliked = comment.getUsersWhoDislikedComment();
+
+        if(usersWhoLiked.contains(authorizedUser)){
+            throw new UnauthorizedOperationException(MULTIPLE_LIKE_ERROR);
+        }
+
         usersWhoLiked.remove(authorizedUser);
         usersWhoDisliked.add(authorizedUser);
 
         return commentRepository.updateComment(comment);
-    }
-
-    private void checkThatTheUserIsNotTheCreator(Comment comment, User authorizedUser) {
-        if (comment.getCreatedBy().equals(authorizedUser)) {
-           throw new  UnauthorizedOperationException("As the comment creator, you cannot react to your comments.");
-        }
-    }
-
-    private void checkModifyPermission(int commentId, User user) {
-        Comment comment = commentRepository.getCommentById(commentId);
-
-        if (!(isAdmin(user) || comment.getCreatedBy().equals(user))) {
-            throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
-        }
-    }
-
-    private boolean isAdmin(User userIsAuthorized) {
-        List<Role> rolesOfAuthorizedUser = userIsAuthorized.getRoles().stream().toList();
-        for (Role currentRoleToBeChecked : rolesOfAuthorizedUser) {
-            if (currentRoleToBeChecked.getName().equals("ROLE_ADMIN")) {
-                return true;
-            }
-        }
-        return false;
     }
 }

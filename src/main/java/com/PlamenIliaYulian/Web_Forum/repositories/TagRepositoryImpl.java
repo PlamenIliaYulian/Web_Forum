@@ -46,10 +46,6 @@ public class TagRepositoryImpl implements TagRepository {
         }
     }
 
-    @Override
-    public void deleteTag(Tag tag) {
-
-    }
     /*Ilia*/
     @Override
     public Tag updateTag(Tag tag) {

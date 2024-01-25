@@ -19,13 +19,8 @@ public interface UserRepository {
     User getUserByUsername(String username);
     User getUserByEmail(String email);
     User getUserById(int id);
-    User updateToAdmin(User toBeUpdated);
-    User blockUser(User toBeBlocked);
-    User unBlockUser(User toBeUnblocked);
-
     User addAvatar(User userToBeUpdated);
     User addPhoneNumber(User userToBeUpdated, String phoneNumber);
-
     User makeAdministrativeChanges(User userToBeUpdated);
 
 

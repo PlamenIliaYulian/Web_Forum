@@ -102,22 +102,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User updateToAdmin(User toBeUpdated) {
-        return updateUser(toBeUpdated);
-    }
-
-    @Override
-    public User blockUser(User toBeBlocked) {
-        return null;
-    }
-
-    /*Ilia - not calling this method. We don't need it.*/
-    @Override
-    public User unBlockUser(User toBeUnblocked) {
-        return null;
-    }
-
-    @Override
     public User addAvatar(User userToBeUpdated) {
         return updateUser(userToBeUpdated);
     }

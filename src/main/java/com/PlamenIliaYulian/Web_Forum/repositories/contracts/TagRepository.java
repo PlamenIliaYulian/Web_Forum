@@ -11,8 +11,6 @@ public interface TagRepository {
 
     Tag createTag(Tag tag);
 
-    void deleteTag(Tag tag);
-
     Tag updateTag(Tag tag);
 
     List<Tag> getAllTags();

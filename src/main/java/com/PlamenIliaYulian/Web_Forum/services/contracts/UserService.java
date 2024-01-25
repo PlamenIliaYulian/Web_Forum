@@ -34,15 +34,6 @@ public interface UserService {
     User getUserById(int id);
 
     /*TODO July - DONE - last updated 25.01.2024*/
-    User updateToAdmin(User toBeUpdated, int userIsAdmin);
-
-    /*TODO Plamen*/
-    User blockUser(User userToDoChanges,int userToBeBlocked);
-
-    /*TODO ✔ Ilia ✔*/
-    User unBlockUser(User userToDoChanges,int userToBeBlocked);
-
-    /*TODO July - DONE - last updated 25.01.2024*/
     User addAvatar(int userToBeUpdated, byte[] avatar, User userIsAuthorized);
 
     /*TODO Plamen*/

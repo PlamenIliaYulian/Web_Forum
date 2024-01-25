@@ -53,7 +53,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     public Comment updateComment(Comment comment) {
         return null;
     }
-    /*Ilia - We are not using this method.*/
+    /*Ilia*/
     @Override
     public void deleteCommentFromPost(Comment comment) {
 
@@ -64,24 +64,4 @@ public class CommentRepositoryImpl implements CommentRepository {
         return null;
     }
 
-//    @Override
-//    public Comment likeComment(Comment comment) {
-//        return null;
-//    }
-//    @Override
-//    public Comment dislikeComment(Comment comment, User authorizedUser) {
-//        String hqlQuery = "DELETE FROM comments_users_likes "  +
-//                "WHERE comment_id = :currentCommentId AND user_id = :currentUserId";
-//
-//        try(Session session = sessionFactory.openSession()) {
-//            session.beginTransaction();
-//            Query query = session.createQuery(hqlQuery);
-//            query.setParameter("comment_id", comment.getCommentId());
-//            query.setParameter("user_id", authorizedUser.getUserId());
-//            query.executeUpdate();
-//            session.getTransaction().commit();
-//
-//        }
-//        return comment;
-//    }
 }

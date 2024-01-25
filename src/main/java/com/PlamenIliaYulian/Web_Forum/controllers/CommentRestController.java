@@ -16,18 +16,18 @@ public class CommentRestController {
     return null;
     }
     @PutMapping("/{id}")
-    public Comment updateComment(Comment comment) {
+    public Comment updateComment(@PathVariable String id) {
         return null;
     }
 
     @PutMapping("/{id}/like")
-    public Comment likeComment(Comment comment) {
+    public Comment likeComment(@PathVariable String id) {
         return null;
     }
 
     /*Ilia*/
     @PutMapping("/{id}/dislike")
-    public Comment dislikeComment(Comment comment){
+    public Comment dislikeComment(@PathVariable String id){
         return null;
     }
 

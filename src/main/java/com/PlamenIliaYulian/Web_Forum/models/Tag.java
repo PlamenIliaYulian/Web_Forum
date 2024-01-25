@@ -1,14 +1,15 @@
 package com.PlamenIliaYulian.Web_Forum.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tags")
 public class Tag {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +22,13 @@ public class Tag {
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "posts_tags",
+            joinColumns = @JoinColumn(name = "tag_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id"))
+    private Set<Post> relatedPosts;
+
     public Tag() {
     }
 
@@ -28,6 +36,14 @@ public class Tag {
         this.tagId = tagId;
         this.name = name;
         this.isDeleted = isDeleted;
+    }
+
+    public Set<Post> getRelatedPosts() {
+        return relatedPosts;
+    }
+
+    public void setRelatedPosts(Set<Post> relatedPosts) {
+        this.relatedPosts = relatedPosts;
     }
 
     public int getTagId() {

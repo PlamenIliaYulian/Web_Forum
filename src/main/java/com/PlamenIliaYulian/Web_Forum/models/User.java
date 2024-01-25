@@ -8,8 +8,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-/* https://www.baeldung.com/jpa-mapping-single-entity-to-multiple-tables
- https://docs.oracle.com/javaee%2F7%2Fapi%2F%2F/javax/persistence/SecondaryTable.html*/
 @SecondaryTable(name = "phone_numbers", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
 @SecondaryTable(name = "avatars", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
 public class User {

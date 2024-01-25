@@ -1,9 +1,10 @@
 package com.PlamenIliaYulian.Web_Forum.services;
 
+import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
+import com.PlamenIliaYulian.Web_Forum.exceptions.InvalidOperationException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.InvalidUserInputException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
-import com.PlamenIliaYulian.Web_Forum.models.*;
-import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
+import com.PlamenIliaYulian.Web_Forum.helpers.PermissionHelper;
 import com.PlamenIliaYulian.Web_Forum.models.*;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.PostRepository;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
@@ -24,7 +25,6 @@ public class PostServiceImpl implements PostService {
 
     public static final String UNAUTHORIZED_OPERATION = "Unauthorized operation.";
     public static final String NO_TAG_RELATED_TO_POST = "The post does not contain such a tag.";
-    public static final String UNAUTHORIZED_OPERATION = "Unauthorized operation.";
     private final TagService tagService;
     private final UserService userService;
     private final CommentService commentService;
@@ -40,6 +40,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post createPost(Post post, User authenticatedUser) {
+        PermissionHelper.isBlocked(authenticatedUser, UNAUTHORIZED_OPERATION);
         post.setCreatedOn(LocalDateTime.now());
         post.setCreatedBy(authenticatedUser);
         return postRepository.createPost(post);
@@ -47,30 +48,17 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void deletePost(Post post, User authorizedUser) {
-        checkModifyPermission(post.getPostId(), authorizedUser);
+        PermissionHelper.isBlocked(authorizedUser, UNAUTHORIZED_OPERATION);
+        PermissionHelper.isAdminOrSameUser(post.getCreatedBy(), authorizedUser, UNAUTHORIZED_OPERATION);
         postRepository.deletePost(post);
     }
 
     /*Ilia*/
     @Override
     public Post updatePost(Post post, User authorizedUser) {
-        checkIfUserIsBlocked(authorizedUser);
-        checkIfUserIsAuthorized(post, authorizedUser);
+        PermissionHelper.isBlocked(authorizedUser, UNAUTHORIZED_OPERATION);
+        PermissionHelper.isAdminOrSameUser(post.getCreatedBy(), authorizedUser, UNAUTHORIZED_OPERATION);
         return postRepository.updatePost(post);
-    }
-
-    private void checkIfUserIsBlocked(User authorizedUser) {
-        if (authorizedUser.isBlocked()) {
-            throw new UnauthorizedOperationException("You are blocked and cannot create/modify/delete posts.");
-        }
-    }
-
-    /*TODO Is this is the best way to check if someone is Admin? */
-    private void checkIfUserIsAuthorized(Post post, User authorizedUser) {
-        if (!authorizedUser.equals(post.getCreatedBy()) &&
-                !authorizedUser.getRoles().contains(new Role(1, "ROLE_ADMIN"))) {
-            throw new UnauthorizedOperationException("You have to be admin or the post creator to modify/delete the post.");
-        }
     }
 
     @Override
@@ -91,20 +79,16 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post likePost(Post post, User authenticatedUser) {
-        if (isSameUser(authenticatedUser, post.getCreatedBy())) {
-            throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
-        }
+       PermissionHelper.isNotSameUser(post.getCreatedBy(),authenticatedUser,UNAUTHORIZED_OPERATION);
         Set<User> usersWhoDislikedThePost = post.getUsersWhoDislikedPost();
         Set<User> usersWhoLikedThePost = post.getUsersWhoLikedPost();
+
         if (usersWhoLikedThePost.contains(authenticatedUser)) {
             throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
         }
-        if (usersWhoDislikedThePost.contains(authenticatedUser)) {
-            usersWhoDislikedThePost.remove(authenticatedUser);
-            usersWhoLikedThePost.add(authenticatedUser);
-        } else {
-            usersWhoLikedThePost.add(authenticatedUser);
-        }
+        usersWhoDislikedThePost.remove(authenticatedUser);
+        usersWhoLikedThePost.add(authenticatedUser);
+
         return postRepository.updatePost(post);
     }
 
@@ -116,9 +100,11 @@ public class PostServiceImpl implements PostService {
     /*Ilia*/
     @Override
     public Post addTagToPost(Post post, Tag tag, User authorizedUser) {
-        checkIfUserIsBlocked(authorizedUser);
-        checkIfUserIsAuthorized(post,authorizedUser);
-        if (tagService.getTagByName(tag.getName()) == null) {
+        PermissionHelper.isBlocked(authorizedUser, UNAUTHORIZED_OPERATION);
+        PermissionHelper.isAdminOrSameUser(post.getCreatedBy(),authorizedUser, UNAUTHORIZED_OPERATION);
+        try {
+            tagService.getTagByName(tag.getName());
+        } catch (EntityNotFoundException e) {
             tagService.createTag(tag);
         }
         Set<Tag> postTags = post.getTags();
@@ -128,10 +114,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post removeTagFromPost(Post post, Tag tag, User authenticatedUser) {
-        User postCreator = post.getCreatedBy();
-        if (!isSameUser(postCreator, authenticatedUser)) {
-            throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
-        }
+        PermissionHelper.isAdminOrSameUser(post.getCreatedBy(),authenticatedUser, UNAUTHORIZED_OPERATION);
+
         Set<Tag> tagsOfThePost = post.getTags();
         if (!tagsOfThePost.contains(tag)) {
             throw new InvalidUserInputException(NO_TAG_RELATED_TO_POST);
@@ -140,15 +124,16 @@ public class PostServiceImpl implements PostService {
         return postRepository.updatePost(post);
     }
 
+    /*TODO Plamkata*/
     @Override
     public Post addCommentToPost(Post postToComment, Comment commentToBeAdded, User userWhoComments) {
-        commentService.createComment(postToComment, commentToBeAdded, userWhoComments);
+        /*check is authorized or blocked*/
+
+        commentService.createComment(commentToBeAdded);
         Set<Comment> comments = postToComment.getRelatedComments();
         comments.add(commentToBeAdded);
-        //row 87 is unnecessary
         postToComment.setRelatedComments(comments);
-        postRepository.addCommentToPost(postToComment);
-        return null;
+        return postRepository.addCommentToPost(postToComment);
 
     }
 
@@ -156,19 +141,17 @@ public class PostServiceImpl implements PostService {
     public Post removeCommentFromPost(Post postToRemoveCommentFrom, int commentId, User authorizedUser) {
         Comment commentToBeRemoved = commentService.getCommentById(commentId);
         User commentCreator = commentToBeRemoved.getCreatedBy();
-        if (!isAdminOrSameUser(commentCreator, authorizedUser)) {
-            throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
-        }
+        PermissionHelper.isAdminOrSameUser(commentCreator,authorizedUser,UNAUTHORIZED_OPERATION);
+
         Set<Comment> comments = postToRemoveCommentFrom.getRelatedComments();
         if (!comments.contains(commentToBeRemoved)) {
-            /*TODO - ask the guys if we can implement something like "InvalidOperation" exception, or something like this.*/
-            throw new InvalidUserInputException("The comment does not belong to this post.");
+            throw new InvalidOperationException("The comment does not belong to this post.");
         }
         comments.remove(commentToBeRemoved);
+        commentService.deleteComment(commentToBeRemoved);
         return postRepository.updatePost(postToRemoveCommentFrom);
     }
 
-    /*Ilia - we are not calling the repository.*/
     @Override
     public List<Comment> getAllCommentsRelatedToPost(Post postWithComments) {
         return postWithComments.getRelatedComments()
@@ -176,42 +159,4 @@ public class PostServiceImpl implements PostService {
                 .sorted(Comparator.comparing(Comment::getCommentId))
                 .collect(Collectors.toList());
     }
-
-
-    private void checkModifyPermission(int postId, User user) {
-        Post post = postRepository.getPostById(postId);
-
-        if (!(isAdmin(user) || post.getCreatedBy().equals(user))) {
-            throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
-        }
-    }
-
-    private boolean isAdmin(User userIsAuthorized) {
-        List<Role> rolesOfAuthorizedUser = userIsAuthorized.getRoles().stream().toList();
-        for (Role currentRoleToBeChecked : rolesOfAuthorizedUser) {
-            if (currentRoleToBeChecked.getName().equals("ROLE_ADMIN")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isSameUser(User user1, User user2) {
-        return user1.equals(user2);
-    }
-
-    private boolean isAdminOrSameUser(User userToBeUpdated, User userIsAuthorized) {
-        if (userToBeUpdated.equals(userIsAuthorized)) {
-            return true;
-        } else {
-            List<Role> rolesOfAuthorizedUser = userIsAuthorized.getRoles().stream().toList();
-            for (Role currentRoleToBeChecked : rolesOfAuthorizedUser) {
-                if (currentRoleToBeChecked.getName().equals("ROLE_ADMIN")) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
 }

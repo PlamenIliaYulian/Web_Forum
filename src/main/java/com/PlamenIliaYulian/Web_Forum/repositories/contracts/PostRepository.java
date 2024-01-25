@@ -24,9 +24,6 @@ public interface PostRepository {
 
     Post dislikePost(Post post);
 
-    Post addTagToPost(Post post);
-
-    Post removeTagToPost(Post post);
     Post addCommentToPost (Post postToComment);
 
 }

@@ -49,12 +49,6 @@ public class PostRepositoryImpl implements PostRepository {
             session.getTransaction().commit();
             return post;
         }
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.merge(post);
-            session.getTransaction().commit();
-            return post;
-        }
     }
 
     @Override
@@ -96,17 +90,6 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public Post dislikePost(Post post) {
-        return null;
-    }
-
-    /*Ilia - we are not calling this method.*/
-    @Override
-    public Post addTagToPost(Post post) {
-        return null;
-    }
-
-    @Override
-    public Post removeTagToPost(Post post) {
         return null;
     }
 

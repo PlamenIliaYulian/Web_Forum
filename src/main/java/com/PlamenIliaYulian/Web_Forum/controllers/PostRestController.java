@@ -20,8 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -162,7 +160,6 @@ public class PostRestController {
         return postService.addCommentToPost(postToComment, commentToAdd, authorizedUser);
     }
 
-    /*TODO Have to be changed to removedCommentFromPost*/
     @PutMapping("/{title}/comments/{commentId}")
     public Post removeCommentFromPost(@RequestHeader HttpHeaders headers,
                                       @PathVariable String title,
