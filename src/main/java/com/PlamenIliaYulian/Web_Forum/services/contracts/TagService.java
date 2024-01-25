@@ -16,7 +16,6 @@ public interface TagService {
     /*TODO Plamen*/
     void deleteTag(Tag tag);
 
-    /*TODO Iliya*/
     /*TODO ✔ Iliya ✔*/
     Tag updateTag(Tag tag);
 

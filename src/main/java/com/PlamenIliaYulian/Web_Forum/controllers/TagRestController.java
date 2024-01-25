@@ -50,8 +50,18 @@ public class TagRestController {
     public Tag getTagByName(@PathVariable String tagName,
                             @RequestHeader HttpHeaders headers) {
 
-        User user = authenticationHelper.tryGetUser(headers);
-        return tagService.getTagByName(tagName);
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            return tagService.getTagByName(tagName);
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage());
+        }
     }
 
     @PostMapping()
@@ -90,8 +100,18 @@ public class TagRestController {
     public Tag updateTag(@RequestHeader HttpHeaders headers,
                          @PathVariable String tagName,
                          @RequestBody TagDto tagDto) {
-        User user = authenticationHelper.tryGetUser(headers);
-        Tag tagToBeUpdated = modelsMapper.tagFromDto(tagDto, tagName);
-        return tagService.updateTag(tagToBeUpdated);
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Tag tagToBeUpdated = modelsMapper.tagFromDto(tagDto, tagName);
+            return tagService.updateTag(tagToBeUpdated);
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage());
+        }
     }
 }

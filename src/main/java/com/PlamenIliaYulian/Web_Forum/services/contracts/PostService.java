@@ -39,7 +39,6 @@ public interface PostService {
     /*TODO Plamen*/
     Post addCommentToPost(Post postToComment, Comment commentToBeAdded, User userWhoComments);
 
-    /*TODO Iliya*/
     /*TODO ✔ Iliya ✔*/
     List<Comment> getAllCommentsRelatedToPost(Post postWithComments);
 

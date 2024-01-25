@@ -31,7 +31,7 @@ public class TagServiceImpl implements TagService {
     public Tag createTag(Tag tag) {
         return tagRepository.createTag(tag);
     }
-
+    /*TODO To add additional logic only Admin can delete Tag.*/
     @Override
     public void deleteTag(Tag tag) {
         Set<Post> relatedPosts = tag.getRelatedPosts();

@@ -32,12 +32,6 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    /*Ilia - we don't need this method.*/
-    @Override
-    public void deleteUser(User user) {
-
-    }
-
     @Override
     public User updateUser(User user) {
         try (Session session = sessionFactory.openSession()) {

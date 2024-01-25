@@ -78,10 +78,24 @@ public class PostRestController {
     public Post updatePost(@PathVariable String title,
                            @RequestHeader HttpHeaders headers,
                            @Valid @RequestBody PostDto postDto) {
-        User userMakingRequest = authenticationHelper.tryGetUser(headers);
-        Post postByTitle = postService.getPostByTitle(title);
-        Post postToUpdate = modelsMapper.postFromDto(postDto, postByTitle);
-        return postService.updatePost(postToUpdate, userMakingRequest);
+        try {
+            User userMakingRequest = authenticationHelper.tryGetUser(headers);
+            Post postByTitle = postService.getPostByTitle(title);
+            Post postToUpdate = modelsMapper.postFromDto(postDto, postByTitle);
+            return postService.updatePost(postToUpdate, userMakingRequest);
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    e.getMessage());
+        }
     }
 
     @GetMapping
@@ -117,7 +131,13 @@ public class PostRestController {
     /*Ilia*/
     @GetMapping("/{id}")
     public Post getPostById(@PathVariable int id) {
-        return postService.getPostById(id);
+        try {
+            return postService.getPostById(id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage());
+        }
     }
 
     @PutMapping("/{title}/like")
@@ -158,10 +178,28 @@ public class PostRestController {
     public Post addTagToPost(@RequestHeader HttpHeaders headers,
                              @PathVariable String title,
                              @Valid @RequestBody TagDto tagDto) {
-        User authorizedUser = authenticationHelper.tryGetUser(headers);
-        Post post = postService.getPostByTitle(title);
-        Tag tag = modelsMapper.tagFromDto(tagDto);
-        return postService.addTagToPost(post, tag, authorizedUser);
+        try {
+            User authorizedUser = authenticationHelper.tryGetUser(headers);
+            Post post = postService.getPostByTitle(title);
+            Tag tag = modelsMapper.tagFromDto(tagDto);
+            return postService.addTagToPost(post, tag, authorizedUser);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    e.getMessage());
+        } catch (InvalidUserInputException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage());
+        }
     }
 
     @DeleteMapping("/{title}/tags/{tagName}")
@@ -228,8 +266,18 @@ public class PostRestController {
     @GetMapping("/{title}/comments")
     public List<Comment> getAllCommentsRelatedToPost(@RequestHeader HttpHeaders headers,
                                                      @PathVariable String title) {
-        User authorizedUser = authenticationHelper.tryGetUser(headers);
-        Post postWithComments = postService.getPostByTitle(title);
-        return postService.getAllCommentsRelatedToPost(postWithComments);
+        try {
+            User authorizedUser = authenticationHelper.tryGetUser(headers);
+            Post postWithComments = postService.getPostByTitle(title);
+            return postService.getAllCommentsRelatedToPost(postWithComments);
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage());
+        }
     }
 }

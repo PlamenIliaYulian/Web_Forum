@@ -43,11 +43,27 @@ public class UserRestController {
     }
 
     /*Ilia*/
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{username}")
     void deleteUser(@RequestHeader HttpHeaders headers, @PathVariable String username) {
-        User userIsAuthenticated = authenticationHelper.tryGetUser(headers);
-        User userToBeDeleted = userService.getUserByUsername(username);
-        userService.deleteUser(userIsAuthenticated, userToBeDeleted);
+        try {
+            User userIsAuthenticated = authenticationHelper.tryGetUser(headers);
+            User userToBeDeleted = userService.getUserByUsername(username);
+            userService.deleteUser(userIsAuthenticated, userToBeDeleted);
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    e.getMessage());
+        }
+
     }
 
     /*TODO - Yuli - implemented:*/
@@ -90,8 +106,22 @@ public class UserRestController {
     @GetMapping("/first_name/{firstName}")
     public User getUserByFirstName(@PathVariable String firstName,
                                    @RequestHeader HttpHeaders headers) {
-        User userToBeAuthorized = authenticationHelper.tryGetUser(headers);
-        return userService.getUserByFirstName(firstName, userToBeAuthorized);
+        try {
+            User userToBeAuthorized = authenticationHelper.tryGetUser(headers);
+            return userService.getUserByFirstName(firstName, userToBeAuthorized);
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    e.getMessage());
+        }
     }
 
     /*TODO It is not the best way for this method.*/
@@ -121,9 +151,16 @@ public class UserRestController {
 
     /*TODO It is not the best way for this method.*/
     /*Ilia*/
+    /*Should we need authentication for this, also for getUserByUsername method?*/
     @GetMapping("/id/{id}")
-    public User getUserById(@RequestParam int id) {
-        return userService.getUserById(id);
+    public User getUserById(@PathVariable int id) {
+        try {
+            return userService.getUserById(id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage());
+        }
     }
 
     @PutMapping("/{userToBeUpdated}/avatar")

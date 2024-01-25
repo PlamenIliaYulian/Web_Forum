@@ -86,13 +86,14 @@ public class CommentServiceImpl implements CommentService {
 
     /*Ilia*/
     @Override
-    public Comment dislikeComment(Comment comment, User authorizedUser) {
-        PermissionHelper.isNotSameUser(comment.getCreatedBy(), authorizedUser, UNAUTHORIZED_OPERATION);
+    public Comment dislikeComment(int commentId, User authorizedUser) {
+        Comment comment = commentRepository.getCommentById(commentId);
+        PermissionHelper.isNotSameUser(comment.getCreatedBy(), authorizedUser,YOU_ARE_THE_CREATOR_OF_THIS_COMMENT);
 
         Set<User> usersWhoLiked = comment.getUsersWhoLikedComment();
         Set<User> usersWhoDisliked = comment.getUsersWhoDislikedComment();
 
-        if (usersWhoLiked.contains(authorizedUser)) {
+        if(usersWhoLiked.contains(authorizedUser)){
             throw new UnauthorizedOperationException(MULTIPLE_LIKE_ERROR);
         }
 

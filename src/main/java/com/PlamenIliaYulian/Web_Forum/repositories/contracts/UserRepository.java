@@ -8,9 +8,6 @@ import java.util.List;
 public interface UserRepository {
 
     User createUser(User user);
-
-    void deleteUser(User user);
-
     User updateUser(User user);
 
     /*TODO implement User FilterOptions*/

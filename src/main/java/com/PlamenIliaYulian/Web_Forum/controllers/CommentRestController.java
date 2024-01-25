@@ -14,9 +14,17 @@ import com.PlamenIliaYulian.Web_Forum.exceptions.AuthenticationException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
 import com.PlamenIliaYulian.Web_Forum.helpers.AuthenticationHelper;
+import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
+import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
+import com.PlamenIliaYulian.Web_Forum.helpers.AuthenticationHelper;
 import com.PlamenIliaYulian.Web_Forum.models.Comment;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import com.PlamenIliaYulian.Web_Forum.models.User;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -92,8 +100,22 @@ public class CommentRestController {
 
     /*Ilia*/
     @PutMapping("/{id}/dislike")
-    public Comment dislikeComment(@PathVariable String id) {
-        return null;
-    }
+    public Comment dislikeComment(@PathVariable int id,
+                                  @RequestHeader HttpHeaders headers){
 
+        try {
+            User userToDislikeComment = authenticationHelper.tryGetUser(headers);
+            return commentService.dislikeComment(id, userToDislikeComment);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    e.getMessage()
+            );
+        } catch (EntityNotFoundException e) {
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                e.getMessage()
+        );
+        }
+    }
 }
