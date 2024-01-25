@@ -23,11 +23,12 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public Comment getCommentById(int id) {
         try (Session session = sessionFactory.openSession()) {
-            Comment comment = session.get(Comment.class, id);
-            if (comment == null) {
+            Query<Comment> query = session.createQuery("from Comment where commentId = :id and isDeleted = false ", Comment.class);
+            query.setParameter("commentId", id);
+            if(query.list().isEmpty()){
                 throw new EntityNotFoundException("Comment", id);
             }
-            return comment;
+            return query.list().get(0);
         }
     }
 
@@ -52,7 +53,12 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public Comment updateComment(Comment comment) {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.merge(comment);
+            session.getTransaction().commit();
+            return comment;
+        }
     }
 
     @Override
