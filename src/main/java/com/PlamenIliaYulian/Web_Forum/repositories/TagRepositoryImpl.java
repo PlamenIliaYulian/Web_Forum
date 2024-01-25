@@ -1,9 +1,11 @@
 package com.PlamenIliaYulian.Web_Forum.repositories;
 
+import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.models.Tag;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.TagRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -19,9 +21,18 @@ public class TagRepositoryImpl implements TagRepository {
         this.sessionFactory = sessionFactory;
     }
 
+    /*Ilia*/
     @Override
     public Tag getTagByName(String name) {
-        return null;
+        try (Session session = sessionFactory.openSession();) {
+            Query<Tag> query = session.createQuery("from Tag where name = :name AND isDeleted = false",
+                    Tag.class);
+            query.setParameter("name", name);
+            if (query.list().isEmpty()) {
+                throw new EntityNotFoundException("Tag", "name", name);
+            }
+            return query.list().get(0);
+        }
     }
 
     @Override
@@ -38,10 +49,15 @@ public class TagRepositoryImpl implements TagRepository {
     public void deleteTag(Tag tag) {
 
     }
-
+    /*Ilia*/
     @Override
     public Tag updateTag(Tag tag) {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.merge(tag);
+            session.getTransaction().commit();
+            return tag;
+        }
     }
 
     @Override

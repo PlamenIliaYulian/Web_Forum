@@ -10,7 +10,7 @@ public interface UserService {
     /*TODO Plamen*/
     User createUser(User user);
 
-    /*TODO Ilia*/
+    /*TODO ✔ Ilia ✔*/
     void deleteUser(User userToBeDeleted, User userIsAuthorized);
 
     /*TODO July - DONE*/
@@ -21,7 +21,7 @@ public interface UserService {
     *  Don't forget to check if they are authorized(admin only)*/
     List<User> getAllUsers(User user, UserFilterOptions userFilterOptions);
 
-    /*TODO Ilia*/
+    /*TODO ✔  Ilia ✔ */
     User getUserByFirstName(String firstName, User userIsAdmin);
 
     /*TODO July - DONE*/
@@ -30,7 +30,7 @@ public interface UserService {
     /*TODO Plamen*/
     User getUserByEmail(String email, User userIsAuthorized);
 
-    /*TODO Ilia*/
+    /*TODO ✔  Ilia ✔ */
     User getUserById(int id);
 
     /*TODO July - DONE*/
@@ -39,7 +39,7 @@ public interface UserService {
     /*TODO Plamen*/
     User blockUser(User userToDoChanges,int userToBeBlocked);
 
-    /*TODO Ilia*/
+    /*TODO ✔ Ilia ✔*/
     User unBlockUser(User userToDoChanges,int userToBeBlocked);
 
     /*TODO July - DONE*/

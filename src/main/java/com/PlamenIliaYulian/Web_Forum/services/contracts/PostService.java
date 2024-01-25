@@ -14,7 +14,7 @@ public interface PostService {
     /*TODO Plamen*/
     void deletePost(Post post, User authorizedUser);
 
-    /*TODO Iliya*/
+    /*TODO ✔ Iliya ✔*/
     Post updatePost(Post post, User authorizedUser);
 
     /*TODO July*/
@@ -24,7 +24,7 @@ public interface PostService {
     /*TODO Plamen*/
     Post getPostByTitle(String title);
 
-    /*TODO Iliya*/
+    /*TODO ✔ Iliya ✔*/
     Post getPostById(int id);
 
     /*TODO July*/
@@ -33,7 +33,7 @@ public interface PostService {
     /*TODO Plamen*/
     Post dislikePost(Post post, User authorizedUser);
 
-    /*TODO Iliya*/
+    /*TODO ✔ Iliya ✔*/
     Post addTagToPost(Post post, Tag tag, User authorizedUser);
 
     /*TODO July*/
@@ -41,7 +41,7 @@ public interface PostService {
 
     /*TODO Plamen*/
     Post addCommentToPost(Post postToComment, Comment commentToBeAdded, User userWhoComments);
-    /*TODO Iliya*/
+    /*TODO ✔ Iliya ✔*/
     List<Comment> getAllCommentsRelatedToPost(Post postWithComments);
     /*TODO July*/
     Post removeCommentFromPost(Post postToComment, int commentId, User authorizedUser);

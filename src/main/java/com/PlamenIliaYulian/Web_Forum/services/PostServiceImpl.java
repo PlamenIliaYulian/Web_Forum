@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -44,9 +46,26 @@ public class PostServiceImpl implements PostService {
         postRepository.deletePost(post);
     }
 
+    /*Ilia*/
     @Override
     public Post updatePost(Post post, User authorizedUser) {
-        return null;
+        checkIfUserIsBlocked(authorizedUser);
+        checkIfUserIsAuthorized(post, authorizedUser);
+        return postRepository.updatePost(post);
+    }
+
+    private void checkIfUserIsBlocked(User authorizedUser) {
+        if (authorizedUser.isBlocked()) {
+            throw new UnauthorizedOperationException("You are blocked and cannot create/modify/delete posts.");
+        }
+    }
+
+    /*TODO Is this is the best way to check if someone is Admin? */
+    private void checkIfUserIsAuthorized(Post post, User authorizedUser) {
+        if (!authorizedUser.equals(post.getCreatedBy()) &&
+                !authorizedUser.getRoles().contains(new Role(1, "ROLE_ADMIN"))) {
+            throw new UnauthorizedOperationException("You have to be admin or the post creator to modify/delete the post.");
+        }
     }
 
     @Override
@@ -59,9 +78,10 @@ public class PostServiceImpl implements PostService {
         return postRepository.getPostByTitle(title);
     }
 
+    /*Ilia*/
     @Override
     public Post getPostById(int id) {
-        return null;
+        return postRepository.getPostById(id);
     }
 
     @Override
@@ -80,9 +100,17 @@ public class PostServiceImpl implements PostService {
         return null;
     }
 
+    /*Ilia*/
     @Override
     public Post addTagToPost(Post post, Tag tag, User authorizedUser) {
-        return null;
+        checkIfUserIsBlocked(authorizedUser);
+        checkIfUserIsAuthorized(post,authorizedUser);
+        if (tagService.getTagByName(tag.getName()) == null) {
+            tagService.createTag(tag);
+        }
+        Set<Tag> postTags = post.getTags();
+        postTags.add(tag);
+        return postRepository.updatePost(post);
     }
 
     @Override
@@ -108,9 +136,13 @@ public class PostServiceImpl implements PostService {
         return null;
     }
 
+    /*Ilia - we are not calling the repository.*/
     @Override
     public List<Comment> getAllCommentsRelatedToPost(Post postWithComments) {
-        return null;
+        return postWithComments.getRelatedComments()
+                .stream()
+                .sorted(Comparator.comparing(Comment::getCommentId))
+                .collect(Collectors.toList());
     }
 
 

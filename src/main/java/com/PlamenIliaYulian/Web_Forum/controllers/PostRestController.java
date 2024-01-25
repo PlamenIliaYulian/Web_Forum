@@ -52,6 +52,7 @@ public class PostRestController {
         postService.deletePost(post, userMakingRequest);
     }
 
+    /*Ilia*/
     @PutMapping("/{title}")
     public Post updatePost(@PathVariable String title,
                            @RequestHeader HttpHeaders headers,
@@ -73,6 +74,7 @@ public class PostRestController {
         return postService.getPostByTitle(title);
     }
 
+    /*Ilia*/
     @GetMapping("/{id}")
     public Post getPostById(@PathVariable int id) {
         return postService.getPostById(id);
@@ -94,6 +96,7 @@ public class PostRestController {
         return postService.dislikePost(post, authorizedUser);
     }
 
+    /*Ilia*/
     @PutMapping("/{title}/tags")
     public Post addTagToPost(@RequestHeader HttpHeaders headers,
                              @PathVariable String title,
@@ -125,6 +128,7 @@ public class PostRestController {
         return postService.addCommentToPost(postToComment, commentToAdd, authorizedUser);
     }
 
+    /*TODO Have to be changed to removedCommentFromPost*/
     @PutMapping("/{title}/comments/{commentId}")
     public Post removeCommentToPost(@RequestHeader HttpHeaders headers,
                                     @PathVariable String title,
@@ -134,7 +138,7 @@ public class PostRestController {
 
         return postService.removeCommentFromPost(postToComment, commentId, authorizedUser);
     }
-
+    /*Ilia*/
     @GetMapping("/{title}/comments")
     public List<Comment> getAllCommentsRelatedToPost(@RequestHeader HttpHeaders headers,
                                                      @PathVariable String title) {

@@ -33,6 +33,7 @@ public class UserRestController {
         return userService.createUser(user);
     }
 
+    /*Ilia*/
     @DeleteMapping("/{username}")
     void deleteUser(@RequestHeader HttpHeaders headers, @PathVariable String username){
         User userIsAuthenticated = authenticationHelper.tryGetUser(headers);
@@ -58,12 +59,20 @@ public class UserRestController {
         return userService.makeAdministrativeChanges(userToDoUpdates, userToBeUpdated);
     }
 
-
+    /*Ilia*/
+    /*TODO It is not the best way for this method.*/
+    @GetMapping("/first_name/{firstName}")
+    public User getUserByFirstName(@PathVariable String firstName,
+                                   @RequestHeader HttpHeaders headers) {
+        User userToBeAuthorized = authenticationHelper.tryGetUser(headers);
+        return userService.getUserByFirstName(firstName, userToBeAuthorized);
+    }
     /*TODO It is not the best way for this method.*/
     @GetMapping("/username/{username}")
     public User getUserByUsername(@PathVariable String username) {
         return userService.getUserByUsername(username);
     }
+
 
     @GetMapping
     public List<User> getAllUsers(@RequestHeader HttpHeaders headers,
@@ -78,6 +87,7 @@ public class UserRestController {
     }
 
     /*TODO It is not the best way for this method.*/
+    /*Ilia*/
     @GetMapping("/id/{id}")
     public User getUserById(@PathVariable int id){
         return userService.getUserById(id);

@@ -19,10 +19,10 @@ public class TagServiceImpl implements TagService {
         this.tagRepository = tagRepository;
     }
 
-
+    /*Ilia*/
     @Override
     public Tag getTagByName(String name) {
-        return null;
+        return tagRepository.getTagByName(name);
     }
 
     @Override
@@ -34,10 +34,9 @@ public class TagServiceImpl implements TagService {
     public void deleteTag(Tag tag) {
 
     }
-
     @Override
     public Tag updateTag(Tag tag) {
-        return null;
+        return tagRepository.updateTag(tag);
     }
 
     @Override

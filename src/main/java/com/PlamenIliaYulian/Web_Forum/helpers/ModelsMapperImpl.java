@@ -68,6 +68,12 @@ public class ModelsMapperImpl implements ModelsMapper {
         tag.setName(tagDto.getName());
         return tag;
     }
+    @Override
+    public Tag tagFromDto(TagDto tagDto, String name) {
+        Tag tag = tagService.getTagByName(name);
+        tag.setName(tagDto.getName());
+        return tag;
+    }
 
     @Override
     public User userFromDto(UserDto userDto, int id) {

@@ -2,9 +2,11 @@ package com.PlamenIliaYulian.Web_Forum.repositories;
 
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.models.Comment;
+import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.CommentRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,9 +30,18 @@ public class CommentRepositoryImpl implements CommentRepository {
         }
     }
 
+    /*Ilia*/
     @Override
     public Comment getCommentByContent(String content) {
-        return null;
+        try(Session session = sessionFactory.openSession()) {
+            Query<Comment> query = session.createQuery("from Comment b where b.content = :content AND b.isDeleted = false",
+                    Comment.class);
+            query.setParameter("content", content);
+            if (query.list().isEmpty()) {
+                throw new EntityNotFoundException("Comment", "content", content);
+            }
+            return query.list().get(0);
+        }
     }
 
     @Override
@@ -40,16 +51,12 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public Comment updateComment(Comment comment) {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.persist(comment);
-            session.getTransaction().commit();
-            return comment;
-        }
+        return null;
     }
-
+    /*Ilia - We are not using this method.*/
     @Override
     public void deleteCommentFromPost(Comment comment) {
+
     }
 
     @Override
@@ -61,9 +68,20 @@ public class CommentRepositoryImpl implements CommentRepository {
 //    public Comment likeComment(Comment comment) {
 //        return null;
 //    }
-//
 //    @Override
-//    public Comment dislikeComment(Comment comment) {
-//        return null;
+//    public Comment dislikeComment(Comment comment, User authorizedUser) {
+//        String hqlQuery = "DELETE FROM comments_users_likes "  +
+//                "WHERE comment_id = :currentCommentId AND user_id = :currentUserId";
+//
+//        try(Session session = sessionFactory.openSession()) {
+//            session.beginTransaction();
+//            Query query = session.createQuery(hqlQuery);
+//            query.setParameter("comment_id", comment.getCommentId());
+//            query.setParameter("user_id", authorizedUser.getUserId());
+//            query.executeUpdate();
+//            session.getTransaction().commit();
+//
+//        }
+//        return comment;
 //    }
 }

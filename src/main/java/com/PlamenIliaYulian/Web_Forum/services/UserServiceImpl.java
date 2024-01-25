@@ -28,8 +28,15 @@ public class UserServiceImpl implements UserService {
         return userRepository.createUser(user);
     }
 
+    /*Ilia*/
     @Override
     public void deleteUser(User userToBeDeleted, User userIsAuthorized) {
+        /*This method have to return exception if no authorization. Don't have to do it in our method.*/
+        if(!isAdminOrSameUser(userToBeDeleted,userIsAuthorized)) {
+            throw new UnauthorizedOperationException("You are not admin or the stated user to modify/delete user.");
+        }
+        userToBeDeleted.setDeleted(true);
+        userRepository.updateUser(userToBeDeleted);
     }
 
     @Override
@@ -45,9 +52,15 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    /*Ilia*/
     @Override
     public User getUserByFirstName(String firstName, User userIsAdmin) {
-        return null;
+        /*I'm not sure how we will use this method.*/
+        /*This method have to return exception if no authorization. Don't have to do it in our method.*/
+        if(!isAdmin(userIsAdmin)) {
+            throw new UnauthorizedOperationException("You are not admin and cannot get user by first name.");
+        }
+        return userRepository.getUserByFirstName(firstName);
     }
 
     @Override
@@ -60,6 +73,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.getUserByEmail(email);
     }
 
+    /*Ilia*/
     @Override
     public User getUserById(int id) {
         return userRepository.getUserById(id);
@@ -81,9 +95,15 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    /*Ilia*/
     @Override
-    public User unBlockUser(User userToDoChanges,int userToBeBlocked) {
-        return null;
+    public User unBlockUser(User userToDoChanges,int idUserToBeUnblocked) {
+        if (!isAdmin(userToDoChanges)) {
+            throw new UnauthorizedOperationException("You are not the admin and cannot block users.");
+        }
+        User userToBeUnblocked = userRepository.getUserById(idUserToBeUnblocked);
+        userToBeUnblocked.setBlocked(false);
+        return userRepository.updateUser(userToBeUnblocked);
     }
 
     @Override

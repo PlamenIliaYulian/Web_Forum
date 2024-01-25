@@ -37,9 +37,10 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.getCommentById(id);
     }
 
+    /*Ilia*/
     @Override
     public Comment getCommentByContent(String content) {
-        return null;
+        return commentRepository.getCommentByContent(content);
     }
 
     @Override
@@ -53,9 +54,18 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.updateComment(comment);
     }
 
+    /*Ilia We are not using this method. Have to delete it. We are using this in Post layers.*/
     @Override
     public void deleteCommentFromPost(Comment comment, User authorizedUser) {
+        checkIfUserIsAuthorized(comment, authorizedUser);
 
+    }
+    /*TODO Is this is the best way to check if someone is Admin? */
+    private void checkIfUserIsAuthorized(Comment comment, User authorizedUser) {
+        if (!authorizedUser.equals(comment.getCreatedBy()) &&
+                !authorizedUser.getRoles().contains(new Role(1, "ROLE_ADMIN"))) {
+            throw new UnauthorizedOperationException("You have to be admin or the comment creator to modify/delete the comment.");
+        }
     }
 
     @Override
@@ -82,10 +92,23 @@ public class CommentServiceImpl implements CommentService {
 
         return commentRepository.updateComment(comment);
     }
-
+    /*Ilia*/
     @Override
     public Comment dislikeComment(Comment comment, User authorizedUser) {
-        return null;
+        checkThatTheUserIsNotTheCreator(comment, authorizedUser);
+
+        Set<User> usersWhoLiked = comment.getUsersWhoLikedComment();
+        Set<User> usersWhoDisliked = comment.getUsersWhoDislikedComment();
+        usersWhoLiked.remove(authorizedUser);
+        usersWhoDisliked.add(authorizedUser);
+
+        return commentRepository.updateComment(comment);
+    }
+
+    private void checkThatTheUserIsNotTheCreator(Comment comment, User authorizedUser) {
+        if (comment.getCreatedBy().equals(authorizedUser)) {
+           throw new  UnauthorizedOperationException("As the comment creator, you cannot react to your comments.");
+        }
     }
 
     private void checkModifyPermission(int commentId, User user) {

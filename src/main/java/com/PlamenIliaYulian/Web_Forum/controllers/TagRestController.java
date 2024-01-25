@@ -33,6 +33,7 @@ public class TagRestController {
         return tagService.getAllTags();
     }
 
+    /*Ilia*/
     @GetMapping("/{tagName}")
     public Tag getTagByName(@PathVariable String tagName,
                             @RequestHeader HttpHeaders headers) {
@@ -54,11 +55,13 @@ public class TagRestController {
         Tag tag = tagService.getTagByName(tagName);
         tagService.deleteTag(tag);
     }
+    /*Ilia*/
     @PutMapping("/{tagName}")
     public Tag updateTag(@RequestHeader HttpHeaders headers,
-                         @PathVariable String tagName) {
+                         @PathVariable String tagName,
+                         @RequestBody TagDto tagDto) {
         User user = authenticationHelper.tryGetUser(headers);
-        Tag tag = tagService.getTagByName(tagName);
-        return tagService.updateTag(tag);
+        Tag tagToBeUpdated = modelsMapper.tagFromDto(tagDto, tagName);
+        return tagService.updateTag(tagToBeUpdated);
     }
 }

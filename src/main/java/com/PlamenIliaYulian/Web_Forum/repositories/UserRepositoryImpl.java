@@ -26,6 +26,7 @@ public class UserRepositoryImpl implements UserRepository {
         return null;
     }
 
+    /*Ilia - we don't need this method.*/
     @Override
     public void deleteUser(User user) {
 
@@ -46,9 +47,18 @@ public class UserRepositoryImpl implements UserRepository {
         return null;
     }
 
+    /*Ilia*/
     @Override
     public User getUserByFirstName(String firstName) {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            Query<User> query = session.createQuery("FROM User WHERE firstName = :firstName AND isDeleted = false ", User.class);
+            query.setParameter("firstName", firstName);
+            List<User> result = query.list();
+            if (result.isEmpty()) {
+                throw new EntityNotFoundException("User", "first name", firstName);
+            }
+            return result.get(0);
+        }
     }
 
     @Override
@@ -77,6 +87,7 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    /*Ilia*/
     @Override
     public User getUserById(int id) {
         try (Session session = sessionFactory.openSession()) {
@@ -100,6 +111,7 @@ public class UserRepositoryImpl implements UserRepository {
         return null;
     }
 
+    /*Ilia - not calling this method. We don't need it.*/
     @Override
     public User unBlockUser(User toBeUnblocked) {
         return null;

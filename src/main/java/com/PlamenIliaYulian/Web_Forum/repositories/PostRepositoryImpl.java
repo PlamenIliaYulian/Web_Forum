@@ -40,6 +40,7 @@ public class PostRepositoryImpl implements PostRepository {
         }
     }
 
+    /*Ilia - I did not implement this method*/
     @Override
     public Post updatePost(Post post) {
         try (Session session = sessionFactory.openSession()) {
@@ -68,9 +69,18 @@ public class PostRepositoryImpl implements PostRepository {
         }
     }
 
+    /*Ilia*/
     @Override
     public Post getPostById(int id) {
-        return null;
+        try (Session session = sessionFactory.openSession();) {
+            Query<Post> query = session.createQuery("from Post where postId = :post_id AND isDeleted = false",
+                    Post.class);
+            query.setParameter("post_id", id);
+            if (query.list().isEmpty()) {
+                throw new EntityNotFoundException("Post", id);
+            }
+            return query.list().get(0);
+        }
     }
 
     @Override
@@ -83,6 +93,7 @@ public class PostRepositoryImpl implements PostRepository {
         return null;
     }
 
+    /*Ilia - we are not calling this method.*/
     @Override
     public Post addTagToPost(Post post) {
         return null;

@@ -9,7 +9,7 @@ public interface ModelsMapper {
     Comment commentFromDto(CommentDto commentDto);
 
     Tag tagFromDto(TagDto tagDto);
-
+    Tag tagFromDto(TagDto tagDto, String name);
     User userFromDto(UserDto userDto);
     User userFromDto(UserDto userDto, int id);
     User userFromDto(UserDto userDto, String username);

@@ -9,19 +9,19 @@ public interface CommentService {
 
     /*TODO Plamen*/
     Comment getCommentById(int id);
-    /*TODO Iliya*/
+    /*TODO ✔ Iliya ✔*/
     Comment getCommentByContent(String content);
     /*TODO July*/
     Comment createComment(Comment comment, User authorizedUser);
     /*TODO Plamen*/
     Comment updateComment(Comment comment, User authorizedUser);
-    /*TODO Iliya*/
+    /*TODO ✔ Iliya ✔*/
     void deleteCommentFromPost(Comment comment, User authorizedUser);
     /*TODO July*/
     /*TODO implement Comment FilterOptions*/
     List<Comment> getAllComments();
     /*TODO Plamen*/
     Comment likeComment(Comment comment, User authorizedUser);
-    /*TODO Iliya*/
+    /*TODO ✔ Iliya ✔*/
     Comment dislikeComment(Comment comment, User authorizedUser);
 }
