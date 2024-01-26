@@ -56,12 +56,21 @@ public class PostRestController {
         }
     }
 
+    /*TODO Plamen*/
     @DeleteMapping("/{postTitle}")
     public void deletePost(@PathVariable String postTitle,
                            @RequestHeader HttpHeaders headers) {
-        User userMakingRequest = authenticationHelper.tryGetUser(headers);
-        Post post = postService.getPostByTitle(postTitle);
-        postService.deletePost(post, userMakingRequest);
+        try {
+            User userMakingRequest = authenticationHelper.tryGetUser(headers);
+            Post post = postService.getPostByTitle(postTitle);
+            postService.deletePost(post, userMakingRequest);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     /*Ilia*/
@@ -95,9 +104,14 @@ public class PostRestController {
         }
     }
 
+    /*TODO Plamen*/
     @GetMapping("/{title}")
     public Post getPostByTitle(@PathVariable String title) {
-        return postService.getPostByTitle(title);
+        try {
+            return postService.getPostByTitle(title);
+        } catch (EntityNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     /*Ilia*/
@@ -120,15 +134,23 @@ public class PostRestController {
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
-
     }
 
+    /*TODO Plamen*/
     @PutMapping("/{title}/dislike")
     public Post dislikePost(@RequestHeader HttpHeaders headers,
                             @PathVariable String title) {
-        User authorizedUser = authenticationHelper.tryGetUser(headers);
-        Post post = postService.getPostByTitle(title);
-        return postService.dislikePost(post, authorizedUser);
+        try {
+            User authenticatedUser = authenticationHelper.tryGetUser(headers);
+            Post post = postService.getPostByTitle(title);
+            return postService.dislikePost(post, authenticatedUser);
+        } catch (AuthenticationException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 
     /*Ilia*/
@@ -162,15 +184,24 @@ public class PostRestController {
         }
     }
 
-    /*TODO - ask Plamkata if he likes this.*/
+
+    /*TODO Plamen*/
     @PostMapping("/{title}/comments")
     public Post addCommentToPost(@RequestHeader HttpHeaders headers,
                                  @PathVariable String title,
                                  @Valid @RequestBody CommentDto commentDto) {
-        User authorizedUser = authenticationHelper.tryGetUser(headers);
-        Post postToComment = postService.getPostByTitle(title);
-        Comment commentToAdd = modelsMapper.commentFromDto(commentDto);
-        return postService.addCommentToPost(postToComment, commentToAdd, authorizedUser);
+        try {
+            User authorizedUser = authenticationHelper.tryGetUser(headers);
+            Post postToComment = postService.getPostByTitle(title);
+            Comment commentToAdd = modelsMapper.commentFromDto(commentDto);
+            return postService.addCommentToPost(postToComment, commentToAdd, authorizedUser);
+        } catch (AuthenticationException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 
     @PutMapping("/{title}/comments/{commentId}")

@@ -10,6 +10,15 @@ import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import com.PlamenIliaYulian.Web_Forum.exceptions.AuthenticationException;
+import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
+import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
+import com.PlamenIliaYulian.Web_Forum.helpers.AuthenticationHelper;
+import com.PlamenIliaYulian.Web_Forum.models.Comment;
+import com.PlamenIliaYulian.Web_Forum.models.User;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -18,6 +27,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/comments")
 public class CommentRestController {
+
+    private final AuthenticationHelper authenticationHelper;
+
+    private final CommentService commentService;
+
+    public CommentRestController(AuthenticationHelper authenticationHelper, CommentService commentService) {
+        this.authenticationHelper = authenticationHelper;
+        this.commentService = commentService;
+    }
+
 
     private final AuthenticationHelper authenticationHelper;
     private final CommentService commentService;
@@ -50,12 +69,39 @@ public class CommentRestController {
 
     @PutMapping("/{id}")
     public Comment updateComment(@PathVariable String id) {
+    @GetMapping()
+    public List<Comment> getAllComments() {
         return null;
     }
 
-    @PutMapping("/{id}/like")
-    public Comment likeComment(@PathVariable String id) {
-        return null;
+    @PutMapping("/{content}")
+    public Comment updateComment(@PathVariable String content, @RequestHeader HttpHeaders headers) {
+        try {
+            User userToAuthenticate = authenticationHelper.tryGetUser(headers);
+            Comment commentToUpdate = commentService.getCommentByContent(content);
+            return commentService.updateComment(commentToUpdate, userToAuthenticate);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    /*TODO we should implement getCommentByTitle*/
+    @PutMapping("/{content}/like")
+    public Comment likeComment(@PathVariable String content, @RequestHeader HttpHeaders headers) {
+        try {
+            User userToAuthenticate = authenticationHelper.tryGetUser(headers);
+            return commentService.getCommentByContent(content);
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     /*Ilia*/

@@ -2,6 +2,7 @@ package com.PlamenIliaYulian.Web_Forum.controllers;
 
 import com.PlamenIliaYulian.Web_Forum.exceptions.AuthenticationException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
+import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
 import com.PlamenIliaYulian.Web_Forum.helpers.AuthenticationHelper;
 import com.PlamenIliaYulian.Web_Forum.helpers.contracts.ModelsMapper;
 import com.PlamenIliaYulian.Web_Forum.models.Tag;
@@ -67,12 +68,21 @@ public class TagRestController {
         }
     }
 
+    /*TODO Plamen*/
     @DeleteMapping("/{tagName}")
     public void deleteTag(@RequestHeader HttpHeaders headers,
                           @PathVariable String tagName) {
-        User user = authenticationHelper.tryGetUser(headers);
-        Tag tag = tagService.getTagByName(tagName);
-        tagService.deleteTag(tag);
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Tag tag = tagService.getTagByName(tagName);
+            tagService.deleteTag(tag);
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 
     /*Ilia*/

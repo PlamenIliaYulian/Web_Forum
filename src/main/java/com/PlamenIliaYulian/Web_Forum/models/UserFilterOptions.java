@@ -10,7 +10,6 @@ public class UserFilterOptions {
     private Optional<String> sortBy;
     private Optional<String> sortOrder;
 
-
     public UserFilterOptions(String username, String email, String firstName, String sortBy, String sortOrder) {
         this.username = Optional.ofNullable(username);
         this.email = Optional.ofNullable(email);
@@ -29,5 +28,13 @@ public class UserFilterOptions {
 
     public Optional<String> getFirstName() {
         return firstName;
+    }
+
+    public Optional<String> getSortBy() {
+        return sortBy;
+    }
+
+    public Optional<String> getSortOrder() {
+        return sortOrder;
     }
 }

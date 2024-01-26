@@ -1,6 +1,7 @@
 package com.PlamenIliaYulian.Web_Forum.repositories.contracts;
 
 import com.PlamenIliaYulian.Web_Forum.models.User;
+import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface UserRepository {
     User updateUser(User user);
 
     /*TODO implement User FilterOptions*/
-    List<User> getAllUsers();
+    List<User> getAllUsers(UserFilterOptions userFilterOptions);
 
     User getUserByFirstName(String firstName);
     User getUserByUsername(String username);

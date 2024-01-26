@@ -46,7 +46,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers(User userExecutingTheRequest,
                                   UserFilterOptions userFilterOptions) {
-        return null;
+        PermissionHelper.isAdmin(userExecutingTheRequest, UNAUTHORIZED_OPERATION);
+        return userRepository.getAllUsers(userFilterOptions);
     }
 
     /*Ilia*/

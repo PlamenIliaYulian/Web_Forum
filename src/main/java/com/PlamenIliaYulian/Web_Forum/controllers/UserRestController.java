@@ -34,11 +34,12 @@ public class UserRestController {
         this.modelsMapper = modelsMapper;
     }
 
+    /*TODO Plamen*/
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public User createUser(@RequestBody @Valid UserDto userDto) {
-        User user = modelsMapper.userFromDto(userDto);
-        return userService.createUser(user);
+            User user = modelsMapper.userFromDto(userDto);
+            return userService.createUser(user);
     }
 
     /*Ilia*/
@@ -92,12 +93,14 @@ public class UserRestController {
         User userToBeAuthorized = authenticationHelper.tryGetUser(headers);
         return userService.getUserByFirstName(firstName, userToBeAuthorized);
     }
+
     /*TODO It is not the best way for this method.*/
     @GetMapping("/username/{username}")
     public User getUserByUsername(@PathVariable String username) {
         return userService.getUserByUsername(username);
     }
 
+    /*TODO Plamen*/
     @GetMapping
     public List<User> getAllUsers(@RequestHeader HttpHeaders headers,
                                   @RequestParam(required = false) String username,
@@ -105,9 +108,15 @@ public class UserRestController {
                                   @RequestParam(required = false) String firstName,
                                   @RequestParam(required = false) String sortBy,
                                   @RequestParam(required = false) String sortOrder) {
-        User userExecutingTheRequest = authenticationHelper.tryGetUser(headers);
-        UserFilterOptions userFilterOptions = new UserFilterOptions(username, email, firstName, sortBy, sortOrder);
-        return userService.getAllUsers(userExecutingTheRequest, userFilterOptions);
+        try {
+            User userExecutingTheRequest = authenticationHelper.tryGetUser(headers);
+            UserFilterOptions userFilterOptions = new UserFilterOptions(username, email, firstName, sortBy, sortOrder);
+            return userService.getAllUsers(userExecutingTheRequest, userFilterOptions);
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 
     /*TODO It is not the best way for this method.*/
@@ -132,11 +141,20 @@ public class UserRestController {
 
     }
 
+    /*TODO Plamen*/
     @PutMapping("/{username}/PhoneNumber")
     public User addPhoneNumber(@PathVariable String username, @RequestBody String phoneNumber, @RequestHeader HttpHeaders headers) {
-        User userToDoChanges = authenticationHelper.tryGetUser(headers);
-        User userToBeUpdated = userService.getUserByUsername(username);
-        return userService.addPhoneNumber(userToDoChanges, phoneNumber, userToBeUpdated);
+        try {
+            User userToDoChanges = authenticationHelper.tryGetUser(headers);
+            User userToBeUpdated = userService.getUserByUsername(username);
+            return userService.addPhoneNumber(userToDoChanges, phoneNumber, userToBeUpdated);
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
 }
