@@ -40,7 +40,6 @@ public class PostRestController {
         this.tagService = tagService;
     }
 
-
     @PostMapping
     public Post createPost(@Valid @RequestBody PostDto postDto,
                            @RequestHeader HttpHeaders headers) {
@@ -76,10 +75,24 @@ public class PostRestController {
         return postService.updatePost(postToUpdate, userMakingRequest);
     }
 
-    /*TODO implement Post FilterOptions*/
     @GetMapping
-    public List<Post> getAllPosts() {
-        return postService.getAllPosts();
+    public List<Post> getAllPosts(@RequestHeader HttpHeaders headers,
+                                  @RequestParam(required = false) Integer likes,
+                                  @RequestParam(required = false) Integer dislikes,
+                                  @RequestParam(required = false) String title,
+                                  @RequestParam(required = false) String content,
+                                  @RequestParam(required = false) String createdBefore,
+                                  @RequestParam(required = false) String createdBy,
+                                  @RequestParam(required = false) String sortBy,
+                                  @RequestParam(required = false) String sortOrder) {
+        try {
+            User userExecutingTheRequest = authenticationHelper.tryGetUser(headers);
+            PostFilterOptions postFilterOptions =
+                    new PostFilterOptions(likes, dislikes, title, content, createdBefore, createdBy, sortBy, sortOrder);
+            return postService.getAllPosts(userExecutingTheRequest, postFilterOptions);
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 
     @GetMapping("/{title}")
@@ -179,6 +192,7 @@ public class PostRestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
     /*Ilia*/
     @GetMapping("/{title}/comments")
     public List<Comment> getAllCommentsRelatedToPost(@RequestHeader HttpHeaders headers,

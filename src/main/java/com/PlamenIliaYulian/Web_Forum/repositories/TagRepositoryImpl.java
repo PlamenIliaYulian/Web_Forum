@@ -2,6 +2,7 @@ package com.PlamenIliaYulian.Web_Forum.repositories;
 
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.models.Tag;
+import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.TagRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -60,7 +61,7 @@ public class TagRepositoryImpl implements TagRepository {
     @Override
     public List<Tag> getAllTags() {
         try (Session session = sessionFactory.openSession()) {
-            Query<Tag> query = session.createQuery("from Tag", Tag.class);
+            Query<Tag> query = session.createQuery("FROM Tag WHERE isDeleted = false ", Tag.class);
             return query.list();
         }
     }

@@ -10,7 +10,7 @@ public interface TagService {
     /*TODO ✔ Iliya ✔*/
     Tag getTagByName(String name);
 
-    /*TODO July - DONE - last updated 25.01.2024*/
+    /*TODO July - 📌 DONE 📌- last updated 25.01.2024*/
     Tag createTag(Tag tag);
 
     /*TODO Plamen*/
@@ -20,6 +20,6 @@ public interface TagService {
     /*TODO ✔ Iliya ✔*/
     Tag updateTag(Tag tag);
 
-    /*TODO July - DONE - last updated 25.01.2024*/
+    /*TODO July - 📌 DONE 📌- last updated 25.01.2024.*/
     List<Tag> getAllTags();
 }

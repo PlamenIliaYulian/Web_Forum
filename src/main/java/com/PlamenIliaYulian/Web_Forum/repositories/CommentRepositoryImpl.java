@@ -2,14 +2,21 @@ package com.PlamenIliaYulian.Web_Forum.repositories;
 
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.models.Comment;
-import com.PlamenIliaYulian.Web_Forum.models.User;
+import com.PlamenIliaYulian.Web_Forum.models.CommentFilterOptions;
+import com.PlamenIliaYulian.Web_Forum.models.Post;
+import com.PlamenIliaYulian.Web_Forum.models.PostFilterOptions;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.CommentRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class CommentRepositoryImpl implements CommentRepository {
@@ -25,7 +32,7 @@ public class CommentRepositoryImpl implements CommentRepository {
         try (Session session = sessionFactory.openSession()) {
             Query<Comment> query = session.createQuery("from Comment where commentId = :id and isDeleted = false ", Comment.class);
             query.setParameter("commentId", id);
-            if(query.list().isEmpty()){
+            if (query.list().isEmpty()) {
                 throw new EntityNotFoundException("Comment", id);
             }
             return query.list().get(0);
@@ -48,7 +55,12 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public Comment createComment(Comment comment) {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.persist(comment);
+            session.getTransaction().commit();
+            return comment;
+        }
     }
 
     @Override
@@ -62,8 +74,79 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public List<Comment> getAllComments() {
-        return null;
+    public List<Comment> getAllComments(CommentFilterOptions commentFilterOptions) {
+        try (Session session = sessionFactory.openSession();) {
+            List<String> filters = new ArrayList<>();
+            Map<String, Object> parameters = new HashMap<>();
+
+            commentFilterOptions.getLikes().ifPresent(value -> {
+                filters.add(" likes = :likes ");
+                parameters.put("likes", value);
+            });
+            commentFilterOptions.getDislikes().ifPresent(value -> {
+                filters.add(" dislikes = :dislikes ");
+                parameters.put("dislikes", value);
+            });
+            commentFilterOptions.getContent().ifPresent(value -> {
+                filters.add(" content like :content ");
+                parameters.put("content", String.format("%%%s%%", value));
+            });
+            /*TODO - ask how to make it possible to filter by date, bu just using yyyy-MM-dd*/
+            commentFilterOptions.getCreatedBefore().ifPresent(value -> {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss");
+                LocalDateTime date = LocalDateTime.parse(value, formatter);
+
+                filters.add(" createdOn < :createdBefore ");
+                parameters.put("createdBefore", date);
+            });
+            commentFilterOptions.getCreatedBy().ifPresent(value -> {
+                filters.add(" createdBy.userName like :createdBy ");
+                parameters.put("createdBy", String.format("%%%s%%", value));
+            });
+
+            StringBuilder queryString = new StringBuilder("FROM Post WHERE isDeleted = :isDeleted ");
+            if (!filters.isEmpty()) {
+                queryString.append(" WHERE ")
+                        .append(String.join(" AND ", filters));
+            }
+            queryString.append(generateOrderBy(commentFilterOptions));
+            Query<Comment> query = session.createQuery(queryString.toString(), Comment.class);
+            query.setParameter("isDeleted", false);
+            query.setProperties(parameters);
+            return query.list();
+
+        }
+    }
+
+    private String generateOrderBy(CommentFilterOptions filterOptions) {
+        if (filterOptions.getSortBy().isEmpty()) {
+            return "";
+        }
+        String orderBy = "";
+        switch (filterOptions.getSortBy().get()) {
+            case "likes":
+                orderBy = "likes";
+                break;
+            case "dislikes":
+                orderBy = "dislikes";
+                break;
+            case "content":
+                orderBy = "content";
+                break;
+            case "createdBefore":
+                orderBy = "createdOn";
+                break;
+            case "createdBy":
+                orderBy = "createdBy.userName";
+                break;
+        }
+        orderBy = String.format(" order by %s", orderBy);
+
+        if (filterOptions.getSortOrder().isPresent() &&
+                filterOptions.getSortOrder().get().equalsIgnoreCase("desc")) {
+            orderBy = String.format("%s desc", orderBy);
+        }
+        return orderBy;
     }
 
 }

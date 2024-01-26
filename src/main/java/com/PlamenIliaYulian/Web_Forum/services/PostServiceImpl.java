@@ -63,8 +63,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getAllPosts() {
-        return null;
+    public List<Post> getAllPosts(User userExecutingTheRequest, PostFilterOptions postFilterOptions) {
+        return postRepository.getAllPosts(postFilterOptions);
     }
 
     @Override
@@ -130,7 +130,7 @@ public class PostServiceImpl implements PostService {
     public Post addCommentToPost(Post postToComment, Comment commentToBeAdded, User userWhoComments) {
         /*check is authorized or blocked*/
 
-        commentService.createComment(commentToBeAdded);
+        commentService.createComment(commentToBeAdded, userWhoComments);
         Set<Comment> comments = postToComment.getRelatedComments();
         comments.add(commentToBeAdded);
         postToComment.setRelatedComments(comments);

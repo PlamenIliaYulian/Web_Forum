@@ -1,5 +1,6 @@
 package com.PlamenIliaYulian.Web_Forum.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -37,24 +38,24 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User createdBy;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "posts_comments",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "comment_id"))
     private Set<Comment> relatedComments;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "posts_tags",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "posts_users_likes",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> usersWhoLikedPost;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "posts_users_dislikes",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))

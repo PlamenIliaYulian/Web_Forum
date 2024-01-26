@@ -2,16 +2,14 @@ package com.PlamenIliaYulian.Web_Forum.services;
 
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
 import com.PlamenIliaYulian.Web_Forum.helpers.PermissionHelper;
-import com.PlamenIliaYulian.Web_Forum.models.Comment;
-import com.PlamenIliaYulian.Web_Forum.models.Role;
-import com.PlamenIliaYulian.Web_Forum.models.Post;
-import com.PlamenIliaYulian.Web_Forum.models.User;
+import com.PlamenIliaYulian.Web_Forum.models.*;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.CommentRepository;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -43,10 +41,15 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.getCommentByContent(content);
     }
 
-    /*TODO - Yuli*/
+    /*TODO - Yuli - DONE. Last updated on 26.01.2024.*/
     @Override
-    public Comment createComment(Comment comment) {
-        return null;
+    public Comment createComment(Comment comment, User commentCreator) {
+        comment.setLikes(0);
+        comment.setDislikes(0);
+        comment.setDeleted(false);
+        comment.setCreatedOn(LocalDateTime.now());
+        comment.setCreatedBy(commentCreator);
+        return commentRepository.createComment(comment);
     }
 
     @Override
@@ -61,20 +64,20 @@ public class CommentServiceImpl implements CommentService {
     public void deleteComment(Comment comment) {
 
     }
-    /*TODO Filter Options to be added*/
+
     @Override
-    public List<Comment> getAllComments() {
-        return null;
+    public List<Comment> getAllComments(User userExecutingTheRequest, CommentFilterOptions commentFilterOptions) {
+        return commentRepository.getAllComments(commentFilterOptions);
     }
 
     @Override
     public Comment likeComment(Comment comment, User authorizedUser) {
-        PermissionHelper.isNotSameUser(comment.getCreatedBy(), authorizedUser,UNAUTHORIZED_OPERATION);
+        PermissionHelper.isNotSameUser(comment.getCreatedBy(), authorizedUser, UNAUTHORIZED_OPERATION);
 
         Set<User> usersWhoLiked = comment.getUsersWhoLikedComment();
         Set<User> usersWhoDisliked = comment.getUsersWhoDislikedComment();
 
-        if(usersWhoLiked.contains(authorizedUser)){
+        if (usersWhoLiked.contains(authorizedUser)) {
             throw new UnauthorizedOperationException(MULTIPLE_LIKE_ERROR);
         }
 
@@ -83,15 +86,16 @@ public class CommentServiceImpl implements CommentService {
 
         return commentRepository.updateComment(comment);
     }
+
     /*Ilia*/
     @Override
     public Comment dislikeComment(Comment comment, User authorizedUser) {
-        PermissionHelper.isNotSameUser(comment.getCreatedBy(), authorizedUser,UNAUTHORIZED_OPERATION);
+        PermissionHelper.isNotSameUser(comment.getCreatedBy(), authorizedUser, UNAUTHORIZED_OPERATION);
 
         Set<User> usersWhoLiked = comment.getUsersWhoLikedComment();
         Set<User> usersWhoDisliked = comment.getUsersWhoDislikedComment();
 
-        if(usersWhoLiked.contains(authorizedUser)){
+        if (usersWhoLiked.contains(authorizedUser)) {
             throw new UnauthorizedOperationException(MULTIPLE_LIKE_ERROR);
         }
 
