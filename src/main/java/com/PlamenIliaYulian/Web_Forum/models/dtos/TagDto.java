@@ -6,22 +6,22 @@ import jakarta.validation.constraints.Size;
 public class TagDto {
     @NotNull(message = "Tag can't be empty")
     @Size(min = 3, max = 30)
-    private String name;
+    private String tag;
 
     public TagDto() {
 
     }
 
-    public TagDto(String name) {
-        this.name = name;
+    public TagDto(String tag) {
+        this.tag = tag;
     }
 
-    public String getName() {
-        return name;
+    public String getTag() {
+        return tag;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
 

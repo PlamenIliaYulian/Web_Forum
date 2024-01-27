@@ -42,5 +42,5 @@ public interface PostService {
     List<Comment> getAllCommentsRelatedToPost(Post postWithComments);
 
     /*📌 July 📌- DONE - last updated 25.01.2025*/
-    Post removeCommentFromPost(Post postToComment, int commentId, User authorizedUser);
+    Post removeCommentFromPost(Post postToComment, String comment, User authorizedUser);
 }

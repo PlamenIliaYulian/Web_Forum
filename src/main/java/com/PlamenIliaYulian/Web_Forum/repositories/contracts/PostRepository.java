@@ -12,6 +12,8 @@ public interface PostRepository {
 
     Post updatePost(Post post);
 
+    Post softDeletePost(Post post);
+
     List<Post> getAllPosts(PostFilterOptions postFilterOptions);
 
     Post getPostByTitle(String title);

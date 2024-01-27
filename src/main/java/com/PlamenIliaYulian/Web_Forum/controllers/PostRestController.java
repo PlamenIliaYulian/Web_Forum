@@ -121,28 +121,34 @@ public class PostRestController {
     }
 
     /*Plamen*/
-    @GetMapping("/{title}")
-    public Post getPostByTitle(@PathVariable String title) {
+    @GetMapping("/title/{title}")
+    public Post getPostByTitle(@PathVariable String title, @RequestHeader HttpHeaders headers) {
         try {
+            User authenticatedUser = authenticationHelper.tryGetUser(headers);
             return postService.getPostByTitle(title);
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
     /*Ilia*/
-    @GetMapping("/{id}")
-    public Post getPostById(@PathVariable int id) {
+    @GetMapping("/id/{id}")
+    public Post getPostById(@PathVariable int id, @RequestHeader HttpHeaders headers) {
         try {
+            User authenticatedUser = authenticationHelper.tryGetUser(headers);
             return postService.getPostById(id);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
                     e.getMessage());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
-    @PutMapping("/{title}/like")
+    @PutMapping("/{title}/likes")
     public Post likePost(@RequestHeader HttpHeaders headers,
                          @PathVariable String title) {
         try {
@@ -159,24 +165,24 @@ public class PostRestController {
     }
 
     /*Plamen*/
-    @PutMapping("/{title}/dislike")
+    @PutMapping("/{title}/dislikes")
     public Post dislikePost(@RequestHeader HttpHeaders headers,
                             @PathVariable String title) {
         try {
             User authenticatedUser = authenticationHelper.tryGetUser(headers);
             Post post = postService.getPostByTitle(title);
             return postService.dislikePost(post, authenticatedUser);
-        } catch (AuthenticationException e){
+        } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (UnauthorizedOperationException e){
+        } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
 
     /*Ilia*/
-    @PutMapping("/{title}/tags")
+    @PostMapping("/{title}/tags")
     public Post addTagToPost(@RequestHeader HttpHeaders headers,
                              @PathVariable String title,
                              @Valid @RequestBody TagDto tagDto) {
@@ -236,25 +242,24 @@ public class PostRestController {
             Post postToComment = postService.getPostByTitle(title);
             Comment commentToAdd = modelsMapper.commentFromDto(commentDto);
             return postService.addCommentToPost(postToComment, commentToAdd, authorizedUser);
-        } catch (AuthenticationException e){
+        } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (UnauthorizedOperationException e){
+        } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PutMapping("/{title}/comments/{commentId}")
+    @DeleteMapping("/{title}/comments/{comment}")
     public Post removeCommentFromPost(@RequestHeader HttpHeaders headers,
                                       @PathVariable String title,
-                                      @PathVariable int commentId) {
+                                      @PathVariable String comment) {
 
         try {
             User authorizedUser = authenticationHelper.tryGetUser(headers);
             Post postToComment = postService.getPostByTitle(title);
-            return postService.removeCommentFromPost(postToComment, commentId, authorizedUser);
+            return postService.removeCommentFromPost(postToComment, comment, authorizedUser);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (EntityNotFoundException e) {

@@ -31,5 +31,5 @@ public interface CommentService {
     Comment likeComment(Comment comment, User authorizedUser);
 
     /*✔ Iliya ✔*/
-    Comment dislikeComment(int commentId, User authorizedUser);
+    Comment dislikeComment(Comment comment, User authorizedUser);
 }

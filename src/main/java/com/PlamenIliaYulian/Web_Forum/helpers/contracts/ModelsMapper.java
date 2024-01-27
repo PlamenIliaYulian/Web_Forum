@@ -7,6 +7,7 @@ public interface ModelsMapper {
     Post postFromDto(PostDto postDto);
 
     Comment commentFromDto(CommentDto commentDto);
+    Comment commentFromDto(CommentDto commentDto, String content);
 
     Tag tagFromDto(TagDto tagDto);
     Tag tagFromDto(TagDto tagDto, String name);

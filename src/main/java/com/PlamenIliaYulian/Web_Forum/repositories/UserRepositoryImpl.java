@@ -45,7 +45,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public List<User> getAllUsers(UserFilterOptions userFilterOptions) {
         try(Session session = sessionFactory.openSession()) {
-            StringBuilder queryString = new StringBuilder(" from User");
+            StringBuilder queryString = new StringBuilder(" from User WHERE isDeleted = :isDeleted");
             List<String> filters = new ArrayList<>();
             Map<String, Object> params = new HashMap<>();
 
@@ -65,13 +65,12 @@ public class UserRepositoryImpl implements UserRepository {
             });
 
             if(!filters.isEmpty()){
-                queryString
-                        .append(" where ")
-                        .append(String.join(" and ", filters));
+                queryString.append(String.join(" and ", filters));
             }
             queryString.append(generateOrderBy(userFilterOptions));
 
             Query<User> query = session.createQuery(queryString.toString(), User.class);
+            query.setParameter("isDeleted", false);
             query.setProperties(params);
             return query.list();
         }

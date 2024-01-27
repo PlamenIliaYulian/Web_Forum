@@ -49,6 +49,16 @@ public class PostRepositoryImpl implements PostRepository {
             session.beginTransaction();
             session.merge(post);
             session.getTransaction().commit();
+            return getPostById(post.getPostId());
+        }
+    }
+
+    @Override
+    public Post softDeletePost(Post post) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.merge(post);
+            session.getTransaction().commit();
             return post;
         }
     }
@@ -76,27 +86,29 @@ public class PostRepositoryImpl implements PostRepository {
                 filters.add(" content like :content ");
                 parameters.put("content", String.format("%%%s%%", value));
             });
-            /*TODO - ask how to make it possible to filter by date, bu just using yyyy-MM-dd*/
+
             postFilterOptions.getCreatedBefore().ifPresent(value -> {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 LocalDateTime date = LocalDateTime.parse(value, formatter);
 
                 filters.add(" createdOn < :createdBefore ");
                 parameters.put("createdBefore", date);
             });
+
+            /*TODO CRATED AFTER IMPL YULI*/
             postFilterOptions.getCreatedBy().ifPresent(value -> {
                 filters.add(" createdBy.userName like :createdBy ");
                 parameters.put("createdBy", String.format("%%%s%%", value));
             });
 
-            StringBuilder queryString = new StringBuilder("FROM Post WHERE isDeleted = :isDeleted ");
-            if (!filters.isEmpty()) {
-                queryString.append(" WHERE ")
-                        .append(String.join(" AND ", filters));
-            }
+            filters.add(" isDeleted = false ");
+            parameters.put("isDeleted", false);
+            StringBuilder queryString = new StringBuilder("FROM Post ");
+            queryString.append(" WHERE ")
+                    .append(String.join(" AND ", filters));
+
             queryString.append(generateOrderBy(postFilterOptions));
             Query<Post> query = session.createQuery(queryString.toString(), Post.class);
-            query.setParameter("isDeleted", false);
             query.setProperties(parameters);
             return query.list();
 
@@ -106,7 +118,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public Post getPostByTitle(String title) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Post> query = session.createQuery("from Post where title = :title", Post.class);
+            Query<Post> query = session.createQuery("from Post where title = :title AND isDeleted = false", Post.class);
             query.setParameter("title", title);
             List<Post> result = query.list();
             if (result.isEmpty()) {

@@ -25,6 +25,8 @@ public class PostServiceImpl implements PostService {
 
     public static final String UNAUTHORIZED_OPERATION = "Unauthorized operation.";
     public static final String NO_TAG_RELATED_TO_POST = "The post does not contain such a tag.";
+    static final String MULTIPLE_LIKE_ERROR = "You have already liked this comment";
+    static final String MULTIPLE_DISLIKE_ERROR = "You have already disliked this comment";
     private final TagService tagService;
     private final UserService userService;
     private final CommentService commentService;
@@ -41,6 +43,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post createPost(Post post, User authenticatedUser) {
         PermissionHelper.isBlocked(authenticatedUser, UNAUTHORIZED_OPERATION);
+        /*TODO implement unique name verification*/
         post.setCreatedOn(LocalDateTime.now());
         post.setCreatedBy(authenticatedUser);
         return postRepository.createPost(post);
@@ -52,7 +55,7 @@ public class PostServiceImpl implements PostService {
         PermissionHelper.isAdminOrSameUser(post.getCreatedBy(), authorizedUser, UNAUTHORIZED_OPERATION);
         post.getRelatedComments().forEach(commentService::deleteComment);
         post.setDeleted(true);
-        postRepository.updatePost(post);
+        postRepository.softDeletePost(post);
     }
 
     /*Ilia*/
@@ -86,7 +89,7 @@ public class PostServiceImpl implements PostService {
         Set<User> usersWhoLikedThePost = post.getUsersWhoLikedPost();
 
         if (usersWhoLikedThePost.contains(authenticatedUser)) {
-            throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
+            throw new UnauthorizedOperationException(MULTIPLE_LIKE_ERROR);
         }
         usersWhoDislikedThePost.remove(authenticatedUser);
         usersWhoLikedThePost.add(authenticatedUser);
@@ -101,7 +104,7 @@ public class PostServiceImpl implements PostService {
         Set<User> usersWhoLikedThePost = post.getUsersWhoLikedPost();
 
         if(usersWhoDislikedThePost.contains(authorizedUser)){
-            throw new UnauthorizedOperationException(UNAUTHORIZED_OPERATION);
+            throw new UnauthorizedOperationException(MULTIPLE_DISLIKE_ERROR);
         }
         usersWhoLikedThePost.remove(authorizedUser);
         usersWhoDislikedThePost.add(authorizedUser);
@@ -115,9 +118,9 @@ public class PostServiceImpl implements PostService {
         PermissionHelper.isBlocked(authorizedUser, UNAUTHORIZED_OPERATION);
         PermissionHelper.isAdminOrSameUser(post.getCreatedBy(), authorizedUser, UNAUTHORIZED_OPERATION);
         try {
-            tagService.getTagByName(tag.getName());
+           tag = tagService.getTagByName(tag.getName());
         } catch (EntityNotFoundException e) {
-            tagService.createTag(tag, authorizedUser);
+           tag = tagService.createTag(tag, authorizedUser);
         }
 
         /*move validation to TagServiceImpl*/
@@ -149,12 +152,12 @@ public class PostServiceImpl implements PostService {
         comments.add(commentToBeAdded);
         postToComment.setRelatedComments(comments);
         return postRepository.updatePost(postToComment);
-
     }
+
     @Override
-    public Post removeCommentFromPost(Post postToRemoveCommentFrom, int commentId, User authorizedUser) {
+    public Post removeCommentFromPost(Post postToRemoveCommentFrom, String comment, User authorizedUser) {
         PermissionHelper.isBlocked(authorizedUser,UNAUTHORIZED_OPERATION);
-        Comment commentToBeRemoved = commentService.getCommentById(commentId);
+        Comment commentToBeRemoved = commentService.getCommentByContent(comment);
         User commentCreator = commentToBeRemoved.getCreatedBy();
         PermissionHelper.isAdminOrSameUser(commentCreator, authorizedUser, UNAUTHORIZED_OPERATION);
 

@@ -69,7 +69,7 @@ public class CommentRepositoryImpl implements CommentRepository {
             session.beginTransaction();
             session.merge(comment);
             session.getTransaction().commit();
-            return comment;
+            return getCommentById(comment.getCommentId());
         }
     }
 
@@ -91,9 +91,10 @@ public class CommentRepositoryImpl implements CommentRepository {
                 filters.add(" content like :content ");
                 parameters.put("content", String.format("%%%s%%", value));
             });
-            /*TODO - ask how to make it possible to filter by date, bu just using yyyy-MM-dd*/
+
+            /*TODO create createAfter for filtering purpose*/
             commentFilterOptions.getCreatedBefore().ifPresent(value -> {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 LocalDateTime date = LocalDateTime.parse(value, formatter);
 
                 filters.add(" createdOn < :createdBefore ");
@@ -104,14 +105,14 @@ public class CommentRepositoryImpl implements CommentRepository {
                 parameters.put("createdBy", String.format("%%%s%%", value));
             });
 
-            StringBuilder queryString = new StringBuilder("FROM Post WHERE isDeleted = :isDeleted ");
-            if (!filters.isEmpty()) {
+            filters.add(" isDeleted = false ");
+            parameters.put("isDeleted", false);
+            StringBuilder queryString = new StringBuilder("FROM Comment ");
                 queryString.append(" WHERE ")
                         .append(String.join(" AND ", filters));
-            }
+
             queryString.append(generateOrderBy(commentFilterOptions));
             Query<Comment> query = session.createQuery(queryString.toString(), Comment.class);
-            query.setParameter("isDeleted", false);
             query.setProperties(parameters);
             return query.list();
 

@@ -68,7 +68,14 @@ public class ModelsMapperImpl implements ModelsMapper {
     @Override
     public Comment commentFromDto(CommentDto commentDto) {
         Comment comment = new Comment();
-        comment.setContent(commentDto.getContent());
+        comment.setContent(commentDto.getComment());
+        return comment;
+    }
+
+    @Override
+    public Comment commentFromDto(CommentDto commentDto, String content) {
+        Comment comment = commentService.getCommentByContent(content);
+        comment.setContent(commentDto.getComment());
         return comment;
     }
 
@@ -76,13 +83,13 @@ public class ModelsMapperImpl implements ModelsMapper {
     @Override
     public Tag tagFromDto(TagDto tagDto) {
         Tag tag = new Tag();
-        tag.setName(tagDto.getName().toLowerCase());
+        tag.setName(tagDto.getTag());
         return tag;
     }
     @Override
     public Tag tagFromDto(TagDto tagDto, String name) {
         Tag tag = tagService.getTagByName(name);
-        tag.setName(tagDto.getName().toLowerCase());
+        tag.setName(tagDto.getTag());
         return tag;
     }
 

@@ -18,15 +18,16 @@ public class CommentServiceImpl implements CommentService {
 
     public static final String UNAUTHORIZED_OPERATION = "Unauthorized operation.";
     public static final String MULTIPLE_LIKE_ERROR = "You have already liked this comment";
+    public static final String MULTIPLE_DISLIKE_ERROR = "You have already disliked this comment";
     public static final String YOU_ARE_THE_CREATOR_OF_THIS_COMMENT = "You are the creator of this comment";
 
-    private final UserService userService;
+
     private final CommentRepository commentRepository;
 
 
     @Autowired
-    public CommentServiceImpl(UserService userService, CommentRepository commentRepository) {
-        this.userService = userService;
+    public CommentServiceImpl(CommentRepository commentRepository) {
+
         this.commentRepository = commentRepository;
     }
 
@@ -89,15 +90,14 @@ public class CommentServiceImpl implements CommentService {
 
     /*Ilia*/
     @Override
-    public Comment dislikeComment(int commentId, User authorizedUser) {
-        Comment comment = commentRepository.getCommentById(commentId);
+    public Comment dislikeComment(Comment comment, User authorizedUser) {
         PermissionHelper.isNotSameUser(comment.getCreatedBy(), authorizedUser,YOU_ARE_THE_CREATOR_OF_THIS_COMMENT);
 
         Set<User> usersWhoLiked = comment.getUsersWhoLikedComment();
         Set<User> usersWhoDisliked = comment.getUsersWhoDislikedComment();
 
         if(usersWhoDisliked.contains(authorizedUser)){
-            throw new UnauthorizedOperationException(MULTIPLE_LIKE_ERROR);
+            throw new UnauthorizedOperationException(MULTIPLE_DISLIKE_ERROR);
         }
 
         usersWhoLiked.remove(authorizedUser);
