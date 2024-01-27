@@ -138,9 +138,8 @@ public class PostServiceImpl implements PostService {
     /*TODO Plamkata*/
     @Override
     public Post addCommentToPost(Post postToComment, Comment commentToBeAdded, User userWhoComments) {
-        /*check is authorized or blocked*/
         PermissionHelper.isBlocked(userWhoComments,UNAUTHORIZED_OPERATION);
-        commentService.createComment(commentToBeAdded);
+        commentService.createComment(commentToBeAdded, userWhoComments);
         Set<Comment> comments = postToComment.getRelatedComments();
         comments.add(commentToBeAdded);
         postToComment.setRelatedComments(comments);

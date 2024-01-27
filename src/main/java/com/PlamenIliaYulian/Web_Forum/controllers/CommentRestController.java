@@ -38,14 +38,7 @@ public class CommentRestController {
     }
 
 
-    private final AuthenticationHelper authenticationHelper;
-    private final CommentService commentService;
 
-    @Autowired
-    public CommentRestController(AuthenticationHelper authenticationHelper, CommentService commentService) {
-        this.authenticationHelper = authenticationHelper;
-        this.commentService = commentService;
-    }
 
     /*TODO implement Comment FilterOptions*/
     @GetMapping
@@ -67,12 +60,6 @@ public class CommentRestController {
         }
     }
 
-    @PutMapping("/{id}")
-    public Comment updateComment(@PathVariable String id) {
-    @GetMapping()
-    public List<Comment> getAllComments() {
-        return null;
-    }
 
     @PutMapping("/{content}")
     public Comment updateComment(@PathVariable String content, @RequestHeader HttpHeaders headers) {
@@ -89,7 +76,6 @@ public class CommentRestController {
         }
     }
 
-    /*TODO we should implement getCommentByTitle*/
     @PutMapping("/{content}/like")
     public Comment likeComment(@PathVariable String content, @RequestHeader HttpHeaders headers) {
         try {

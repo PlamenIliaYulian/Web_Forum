@@ -44,9 +44,6 @@ public class CommentServiceImpl implements CommentService {
     /*TODO - Yuli - DONE. Last updated on 26.01.2024.*/
     @Override
     public Comment createComment(Comment comment, User commentCreator) {
-        comment.setLikes(0);
-        comment.setDislikes(0);
-        comment.setDeleted(false);
         comment.setCreatedOn(LocalDateTime.now());
         comment.setCreatedBy(commentCreator);
         return commentRepository.createComment(comment);
