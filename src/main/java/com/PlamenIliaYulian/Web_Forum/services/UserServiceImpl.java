@@ -90,7 +90,9 @@ public class UserServiceImpl implements UserService {
     public User addPhoneNumber(User userToBeUpdated, String phoneNumber, User userIsAuthorized) {
         /*Unique phone number validation.*/
         PermissionHelper.isAdmin(userToBeUpdated, UNAUTHORIZED_OPERATION);
-        PermissionHelper.isAdmin(userIsAuthorized, UNAUTHORIZED_OPERATION);
+        /*Check if the two users are one and the same. If not - throw exception.
+        * If we want to let the admin set phone number to another admin we can set
+        * it in administrative changes.*/
         userToBeUpdated.setPhoneNumber(phoneNumber);
         return userRepository.updateUser(userToBeUpdated);
     }

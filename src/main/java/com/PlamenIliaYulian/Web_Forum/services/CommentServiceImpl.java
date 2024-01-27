@@ -63,7 +63,7 @@ public class CommentServiceImpl implements CommentService {
     public void deleteComment(Comment comment) {
         PermissionHelper.isBlocked(comment.getCreatedBy(), UNAUTHORIZED_OPERATION);
         comment.setDeleted(true);
-        commentRepository.updateComment(comment);
+        commentRepository.softDeleteComment(comment);
     }
 
     @Override

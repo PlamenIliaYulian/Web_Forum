@@ -45,32 +45,35 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public List<User> getAllUsers(UserFilterOptions userFilterOptions) {
         try(Session session = sessionFactory.openSession()) {
-            StringBuilder queryString = new StringBuilder(" from User WHERE isDeleted = :isDeleted");
             List<String> filters = new ArrayList<>();
             Map<String, Object> params = new HashMap<>();
 
             userFilterOptions.getUsername().ifPresent(value -> {
-                filters.add("username like :username");
+                filters.add("userName like :username");
                 params.put("username", String.format("%%%s%%", value));
             });
 
             userFilterOptions.getEmail().ifPresent(value -> {
-                filters.add("user_email like :email");
+                filters.add("email like :email");
                 params.put("email", String.format("%%%s%%", value));
             });
 
             userFilterOptions.getFirstName().ifPresent(value ->{
-                filters.add("first_name like :firstName");
+                filters.add("firstName like :firstName");
                 params.put("firstName", String.format("%%%s%%", value));
             });
 
-            if(!filters.isEmpty()){
-                queryString.append(String.join(" and ", filters));
-            }
-            queryString.append(generateOrderBy(userFilterOptions));
 
+            filters.add(" isDeleted = false ");
+            params.put("isDeleted", false);
+
+            StringBuilder queryString = new StringBuilder("FROM User ");
+            queryString.append(" WHERE ")
+                    .append(String.join(" AND ", filters));
+
+
+            queryString.append(generateOrderBy(userFilterOptions));
             Query<User> query = session.createQuery(queryString.toString(), User.class);
-            query.setParameter("isDeleted", false);
             query.setProperties(params);
             return query.list();
         }

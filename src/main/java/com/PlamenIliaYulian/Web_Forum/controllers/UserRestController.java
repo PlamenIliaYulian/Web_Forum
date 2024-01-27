@@ -102,8 +102,9 @@ public class UserRestController {
     }
 
     /*Ilia*/
+    /*We have to delete this method!*/
     /*TODO It is not the best way for this method.*/
-    @GetMapping("/first_name/{firstName}")
+    @GetMapping("/first-name/{firstName}")
     public User getUserByFirstName(@PathVariable String firstName,
                                    @RequestHeader HttpHeaders headers) {
         try {
@@ -125,9 +126,16 @@ public class UserRestController {
     }
 
     /*TODO It is not the best way for this method.*/
+    /*TODO to implement authentication required for this end point.*/
     @GetMapping("/username/{username}")
     public User getUserByUsername(@PathVariable String username) {
-        return userService.getUserByUsername(username);
+        try {
+            return userService.getUserByUsername(username);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    e.getMessage());
+        }
     }
 
     /*Plamen*/
@@ -178,12 +186,15 @@ public class UserRestController {
     }
 
     /*Plamen*/
+    /*We have to find a better way to set the phone number.*/
     @PutMapping("/{username}/PhoneNumber")
-    public User addPhoneNumber(@PathVariable String username, @RequestBody String phoneNumber, @RequestHeader HttpHeaders headers) {
+    public User addPhoneNumber(@PathVariable String username,
+                               @RequestBody String phoneNumber,
+                               @RequestHeader HttpHeaders headers) {
         try {
             User userToDoChanges = authenticationHelper.tryGetUser(headers);
             User userToBeUpdated = userService.getUserByUsername(username);
-            return userService.addPhoneNumber(userToDoChanges, phoneNumber, userToBeUpdated);
+            return userService.addPhoneNumber(userToBeUpdated, phoneNumber, userToDoChanges);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (UnauthorizedOperationException e) {

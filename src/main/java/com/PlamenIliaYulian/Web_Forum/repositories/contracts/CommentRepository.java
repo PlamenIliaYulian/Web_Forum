@@ -14,6 +14,7 @@ public interface CommentRepository {
     Comment createComment(Comment comment);
 
     Comment updateComment(Comment comment);
+    Comment softDeleteComment(Comment comment);
 
     List<Comment> getAllComments(CommentFilterOptions commentFilterOptions);
 

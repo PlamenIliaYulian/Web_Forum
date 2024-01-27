@@ -72,6 +72,15 @@ public class CommentRepositoryImpl implements CommentRepository {
             return getCommentById(comment.getCommentId());
         }
     }
+    @Override
+    public Comment softDeleteComment(Comment comment) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.merge(comment);
+            session.getTransaction().commit();
+            return comment;
+        }
+    }
 
     @Override
     public List<Comment> getAllComments(CommentFilterOptions commentFilterOptions) {
