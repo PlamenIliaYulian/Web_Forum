@@ -158,17 +158,6 @@ public class UserRepositoryImpl implements UserRepository {
             return result.get(0);
         }
     }
-
-    @Override
-    public User addAvatar(User userToBeUpdated) {
-        return updateUser(userToBeUpdated);
-    }
-
-    @Override
-    public User addPhoneNumber(User userToBeUpdated, String phoneNumber) {
-        return null;
-    }
-
     @Override
     public User makeAdministrativeChanges(User userToBeUpdated) {
         return updateUser(userToBeUpdated);

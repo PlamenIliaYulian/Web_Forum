@@ -26,6 +26,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
+        /*Unique email validation.*/
+        /*Unique username validation.*/
         return userRepository.createUser(user);
     }
 
@@ -39,6 +41,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(User userToBeUpdated, User userIsAuthorized) {
+        /*Unique email validation.*/
         PermissionHelper.isAdminOrSameUser(userToBeUpdated, userIsAuthorized, UNAUTHORIZED_OPERATION);
         return userRepository.updateUser(userToBeUpdated);
     }
@@ -80,11 +83,12 @@ public class UserServiceImpl implements UserService {
         User userToUpdateAvatarTo = userRepository.getUserById(userToBeUpdated);
         PermissionHelper.isSameUser(userToUpdateAvatarTo, userIsAuthorized, UNAUTHORIZED_OPERATION);
         userToUpdateAvatarTo.setAvatar(avatar);
-        return userRepository.addAvatar(userToUpdateAvatarTo);
+        return userRepository.updateUser(userToUpdateAvatarTo);
     }
 
     @Override
     public User addPhoneNumber(User userToBeUpdated, String phoneNumber, User userIsAuthorized) {
+        /*Unique phone number validation.*/
         PermissionHelper.isAdmin(userToBeUpdated, UNAUTHORIZED_OPERATION);
         PermissionHelper.isAdmin(userIsAuthorized, UNAUTHORIZED_OPERATION);
         userToBeUpdated.setPhoneNumber(phoneNumber);

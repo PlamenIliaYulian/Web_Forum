@@ -9,28 +9,27 @@ import java.util.List;
 
 public interface CommentService {
 
-    /*TODO Plamen*/
+    /*Plamen*/
     Comment getCommentById(int id);
 
-    /*TODO ✔ Iliya ✔*/
+    /*✔ Iliya ✔*/
     Comment getCommentByContent(String content);
 
-    /*TODO 📌 July 📌 - DONE - last updated 26.01.2024*/
+    /*📌 July 📌 - DONE - last updated 26.01.2024*/
     Comment createComment(Comment comment, User commentCreator);
 
-    /*TODO Plamen*/
+    /*Plamen*/
     Comment updateComment(Comment comment, User authorizedUser);
 
-    /*TODO ✔ Iliya ✔*/
+    /*✔ Iliya ✔*/
     void deleteComment(Comment comment);
 
-    /*TODO July - 📌 DONE 📌 - last updated 26.01.2024*/
-    /*TODO implement Comment FilterOptions*/
+    /*July - 📌 DONE 📌 - last updated 26.01.2024*/
     List<Comment> getAllComments(User userExecutingTheRequest, CommentFilterOptions commentFilterOptions);
 
-    /*TODO Plamen*/
+    /*Plamen*/
     Comment likeComment(Comment comment, User authorizedUser);
 
-    /*TODO ✔ Iliya ✔*/
+    /*✔ Iliya ✔*/
     Comment dislikeComment(int commentId, User authorizedUser);
 }

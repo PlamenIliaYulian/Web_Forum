@@ -32,7 +32,6 @@ public class TagRestController {
         this.modelsMapper = modelsMapper;
     }
 
-    /*TODO - does a person need to be logged in in order to get all the tags?*/
     @GetMapping
     public List<Tag> getAllTags(@RequestHeader HttpHeaders headers) {
         try {
@@ -64,13 +63,14 @@ public class TagRestController {
         }
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
     public Tag createTag(@RequestBody TagDto tagDto,
                          @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Tag tag = modelsMapper.tagFromDto(tagDto);
-            return tagService.createTag(tag);
+            return tagService.createTag(tag, user);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
@@ -78,20 +78,21 @@ public class TagRestController {
         }
     }
 
-    /*TODO Plamen*/
+    /*Plamen*/
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{tagName}")
     public void deleteTag(@RequestHeader HttpHeaders headers,
                           @PathVariable String tagName) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Tag tag = tagService.getTagByName(tagName);
-            tagService.deleteTag(tag);
+            tagService.deleteTag(tag, user);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
 
@@ -103,7 +104,7 @@ public class TagRestController {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Tag tagToBeUpdated = modelsMapper.tagFromDto(tagDto, tagName);
-            return tagService.updateTag(tagToBeUpdated);
+            return tagService.updateTag(tagToBeUpdated, user);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED,

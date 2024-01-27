@@ -12,7 +12,6 @@ public interface PostRepository {
 
     Post updatePost(Post post);
 
-    /*TODO implement Post FilterOptions*/
     List<Post> getAllPosts(PostFilterOptions postFilterOptions);
 
     Post getPostByTitle(String title);

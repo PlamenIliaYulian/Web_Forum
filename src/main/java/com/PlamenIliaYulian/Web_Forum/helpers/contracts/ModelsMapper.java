@@ -11,11 +11,11 @@ public interface ModelsMapper {
     Tag tagFromDto(TagDto tagDto);
     Tag tagFromDto(TagDto tagDto, String name);
     User userFromDto(UserDto userDto);
-    User userFromDto(UserDto userDto, int id);
-    User userFromDto(UserDto userDto, String username);
+    User userFromDtoUpdate(UserDto userDto, int id);
 
     Post postFromDto(PostDto postDto, Post postWeGotFromTitle);
 
     User userFromAdministrativeDto(UserAdministrativeDto userAdministrativeDto, String username);
 
+    User userFromDtoUpdate(UserDtoUpdate userDtoUpdate, String username);
 }

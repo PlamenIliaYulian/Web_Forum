@@ -47,6 +47,16 @@ public class ModelsMapperImpl implements ModelsMapper {
     }
 
     @Override
+    public User userFromDtoUpdate(UserDtoUpdate userDtoUpdate, String username) {
+        User user = userService.getUserByUsername(username);
+        user.setFirstName(userDtoUpdate.getFirstName());
+        user.setLastName(userDtoUpdate.getLastName());
+        user.setEmail(userDtoUpdate.getEmail());
+        user.setPassword(userDtoUpdate.getPassword());
+        return user;
+    }
+
+    @Override
     public Post postFromDto(PostDto postDto) {
         Post post = new Post();
         post.setTitle(postDto.getTitle());
@@ -62,35 +72,23 @@ public class ModelsMapperImpl implements ModelsMapper {
         return comment;
     }
 
+    /*TODO add # to tags.*/
     @Override
     public Tag tagFromDto(TagDto tagDto) {
         Tag tag = new Tag();
-        tag.setName(tagDto.getName());
+        tag.setName(tagDto.getName().toLowerCase());
         return tag;
     }
     @Override
     public Tag tagFromDto(TagDto tagDto, String name) {
         Tag tag = tagService.getTagByName(name);
-        tag.setName(tagDto.getName());
+        tag.setName(tagDto.getName().toLowerCase());
         return tag;
     }
 
     @Override
-    public User userFromDto(UserDto userDto, int id) {
+    public User userFromDtoUpdate(UserDto userDto, int id) {
         User user = userService.getUserById(id);
-        user.setFirstName(userDto.getFirstName());
-        user.setLastName(userDto.getLastName());
-        user.setUserName(userDto.getUserName());
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
-        return user;
-    }
-
-
-
-    @Override
-    public User userFromDto(UserDto userDto, String username) {
-        User user = userService.getUserByUsername(username);
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setUserName(userDto.getUserName());

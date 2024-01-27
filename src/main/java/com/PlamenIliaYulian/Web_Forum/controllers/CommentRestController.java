@@ -1,30 +1,13 @@
 package com.PlamenIliaYulian.Web_Forum.controllers;
 
 import com.PlamenIliaYulian.Web_Forum.exceptions.AuthenticationException;
-import com.PlamenIliaYulian.Web_Forum.helpers.AuthenticationHelper;
-import com.PlamenIliaYulian.Web_Forum.helpers.contracts.ModelsMapper;
-import com.PlamenIliaYulian.Web_Forum.models.*;
-import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
-import com.PlamenIliaYulian.Web_Forum.services.contracts.PostService;
-import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import com.PlamenIliaYulian.Web_Forum.exceptions.AuthenticationException;
-import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
-import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
-import com.PlamenIliaYulian.Web_Forum.helpers.AuthenticationHelper;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
 import com.PlamenIliaYulian.Web_Forum.helpers.AuthenticationHelper;
 import com.PlamenIliaYulian.Web_Forum.models.Comment;
+import com.PlamenIliaYulian.Web_Forum.models.CommentFilterOptions;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import com.PlamenIliaYulian.Web_Forum.models.User;
-import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -46,9 +29,6 @@ public class CommentRestController {
     }
 
 
-
-
-    /*TODO implement Comment FilterOptions*/
     @GetMapping
     public List<Comment> getAllPosts(@RequestHeader HttpHeaders headers,
                                   @RequestParam(required = false) Integer likes,
@@ -76,7 +56,7 @@ public class CommentRestController {
             Comment commentToUpdate = commentService.getCommentByContent(content);
             return commentService.updateComment(commentToUpdate, userToAuthenticate);
         } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (AuthenticationException e) {
@@ -90,7 +70,7 @@ public class CommentRestController {
             User userToAuthenticate = authenticationHelper.tryGetUser(headers);
             return commentService.getCommentByContent(content);
         } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
@@ -108,7 +88,7 @@ public class CommentRestController {
             return commentService.dislikeComment(id, userToDislikeComment);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED,
+                    HttpStatus.FORBIDDEN,
                     e.getMessage()
             );
         } catch (EntityNotFoundException e) {

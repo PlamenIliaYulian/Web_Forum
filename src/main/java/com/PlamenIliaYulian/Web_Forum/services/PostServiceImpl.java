@@ -50,6 +50,7 @@ public class PostServiceImpl implements PostService {
     public void deletePost(Post post, User authorizedUser) {
         PermissionHelper.isBlocked(authorizedUser, UNAUTHORIZED_OPERATION);
         PermissionHelper.isAdminOrSameUser(post.getCreatedBy(), authorizedUser, UNAUTHORIZED_OPERATION);
+        post.getRelatedComments().forEach(commentService::deleteComment);
         post.setDeleted(true);
         postRepository.updatePost(post);
     }
@@ -116,16 +117,19 @@ public class PostServiceImpl implements PostService {
         try {
             tagService.getTagByName(tag.getName());
         } catch (EntityNotFoundException e) {
-            tagService.createTag(tag);
+            tagService.createTag(tag, authorizedUser);
         }
+
+        /*move validation to TagServiceImpl*/
+
         Set<Tag> postTags = post.getTags();
         postTags.add(tag);
         return postRepository.updatePost(post);
     }
 
-    /*TODO isBlocked check to be added.*/
     @Override
     public Post removeTagFromPost(Post post, Tag tag, User authenticatedUser) {
+        PermissionHelper.isBlocked(authenticatedUser, UNAUTHORIZED_OPERATION);
         PermissionHelper.isAdminOrSameUser(post.getCreatedBy(), authenticatedUser, UNAUTHORIZED_OPERATION);
 
         Set<Tag> tagsOfThePost = post.getTags();
@@ -136,7 +140,7 @@ public class PostServiceImpl implements PostService {
         return postRepository.updatePost(post);
     }
 
-    /*TODO Plamkata*/
+    /*Plamkata*/
     @Override
     public Post addCommentToPost(Post postToComment, Comment commentToBeAdded, User userWhoComments) {
         PermissionHelper.isBlocked(userWhoComments,UNAUTHORIZED_OPERATION);
@@ -147,10 +151,9 @@ public class PostServiceImpl implements PostService {
         return postRepository.updatePost(postToComment);
 
     }
-
-    /*TODO isBlocked check to be added.*/
     @Override
     public Post removeCommentFromPost(Post postToRemoveCommentFrom, int commentId, User authorizedUser) {
+        PermissionHelper.isBlocked(authorizedUser,UNAUTHORIZED_OPERATION);
         Comment commentToBeRemoved = commentService.getCommentById(commentId);
         User commentCreator = commentToBeRemoved.getCreatedBy();
         PermissionHelper.isAdminOrSameUser(commentCreator, authorizedUser, UNAUTHORIZED_OPERATION);
@@ -164,7 +167,6 @@ public class PostServiceImpl implements PostService {
         return postRepository.updatePost(postToRemoveCommentFrom);
     }
 
-    /*TODO Guys, we don't have to forget when we stream, to filter out deleted items.*/
     @Override
     public List<Comment> getAllCommentsRelatedToPost(Post postWithComments) {
         return postWithComments.getRelatedComments()

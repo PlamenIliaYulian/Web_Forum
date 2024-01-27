@@ -1,24 +1,25 @@
 package com.PlamenIliaYulian.Web_Forum.services.contracts;
 
 import com.PlamenIliaYulian.Web_Forum.models.Tag;
+import com.PlamenIliaYulian.Web_Forum.models.User;
 
 import java.util.List;
 import java.util.Set;
 
 public interface TagService {
 
-    /*TODO ✔ Iliya ✔*/
+    /*✔ Iliya ✔*/
     Tag getTagByName(String name);
 
-    /*TODO July - 📌 DONE 📌- last updated 25.01.2024*/
-    Tag createTag(Tag tag);
+    /*July - 📌 DONE 📌- last updated 25.01.2024*/
+    Tag createTag(Tag tag, User userToCheckIfBlocked);
 
-    /*TODO Plamen*/
-    void deleteTag(Tag tag);
+    /*Plamen*/
+    void deleteTag(Tag tag, User userToCheckIfBlocked);
 
-    /*TODO ✔ Iliya ✔*/
-    Tag updateTag(Tag tag);
+    /*✔ Iliya ✔*/
+    Tag updateTag(Tag tag, User userToCheckIfBlocked);
 
-    /*TODO July - 📌 DONE 📌- last updated 25.01.2024.*/
+    /*July - 📌 DONE 📌- last updated 25.01.2024.*/
     List<Tag> getAllTags();
 }

@@ -7,38 +7,36 @@ import java.util.List;
 
 public interface UserService {
 
-    /*TODO Plamen*/
+    /*Plamen*/
     User createUser(User user);
 
-    /*TODO ✔ Ilia ✔*/
+    /*✔ Ilia ✔*/
     void deleteUser(User userToBeDeleted, User userIsAuthorized);
 
-    /*TODO July - 📌 DONE 📌 - last updated 25.01.2024*/
+    /*July - 📌 DONE 📌 - last updated 25.01.2024*/
     User updateUser(User userToBeUpdated, User userIsAuthorized);
 
-    /*TODO Plamen*/
-    /*TODO implement User FilterOptions
-    *  Don't forget to check if they are authorized(admin only)*/
+    /*Plamen*/
     List<User> getAllUsers(User user, UserFilterOptions userFilterOptions);
 
-    /*TODO ✔  Ilia ✔ */
+    /*✔  Ilia ✔ */
     User getUserByFirstName(String firstName, User userIsAdmin);
 
-    /*TODO July - 📌 DONE 📌 - last updated 25.01.2024*/
+    /*July - 📌 DONE 📌 - last updated 25.01.2024*/
     User getUserByUsername(String username);
 
-    /*TODO Plamen*/
+    /*Plamen*/
     User getUserByEmail(String email, User userIsAuthorized);
 
-    /*TODO ✔  Ilia ✔ */
+    /*✔  Ilia ✔ */
     User getUserById(int id);
 
-    /*TODO July - 📌 DONE 📌- last updated 25.01.2024*/
+    /*July - 📌 DONE 📌- last updated 25.01.2024*/
     User addAvatar(int userToBeUpdated, byte[] avatar, User userIsAuthorized);
 
-    /*TODO Plamen*/
+    /*Plamen*/
     User addPhoneNumber(User userToBeUpdated, String phoneNumber, User userIsAuthorized);
 
-    /*TODO July - 📌 DONE 📌- last updated 25.01.2024*/
+    /*July - 📌 DONE 📌- last updated 25.01.2024*/
     User makeAdministrativeChanges(User userToMakeUpdates, User userToBeUpdated);
 }

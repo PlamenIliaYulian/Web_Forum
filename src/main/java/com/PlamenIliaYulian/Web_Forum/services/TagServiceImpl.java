@@ -1,7 +1,9 @@
 package com.PlamenIliaYulian.Web_Forum.services;
 
+import com.PlamenIliaYulian.Web_Forum.helpers.PermissionHelper;
 import com.PlamenIliaYulian.Web_Forum.models.Post;
 import com.PlamenIliaYulian.Web_Forum.models.Tag;
+import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.TagRepository;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import java.util.Set;
 
 @Service
 public class TagServiceImpl implements TagService {
+    public static final String UNAUTHORIZED_OPERATION = "Unauthorized operation.";
 
     private final TagRepository tagRepository;
 
@@ -28,12 +31,15 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag createTag(Tag tag) {
+    public Tag createTag(Tag tag, User userToCheckIfBlocked) {
+        PermissionHelper.isBlocked(userToCheckIfBlocked, UNAUTHORIZED_OPERATION);
+        /*Unique tag validation.*/
         return tagRepository.createTag(tag);
     }
-    /*TODO To add additional logic only Admin can delete Tag.*/
+
     @Override
-    public void deleteTag(Tag tag) {
+    public void deleteTag(Tag tag, User userToCheckIfBlocked) {
+        PermissionHelper.isAdmin(userToCheckIfBlocked, UNAUTHORIZED_OPERATION);
         Set<Post> relatedPosts = tag.getRelatedPosts();
         relatedPosts.clear();
         tag.setDeleted(true);
@@ -41,7 +47,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag updateTag(Tag tag) {
+    public Tag updateTag(Tag tag, User userToCheckIfBlocked) {
+        PermissionHelper.isBlocked(userToCheckIfBlocked, UNAUTHORIZED_OPERATION);
         return tagRepository.updateTag(tag);
     }
 

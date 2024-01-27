@@ -9,6 +9,7 @@ import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.UserAdministrativeDto;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.UserDto;
 import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
+import com.PlamenIliaYulian.Web_Forum.models.dtos.UserDtoUpdate;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
@@ -34,7 +35,7 @@ public class UserRestController {
         this.modelsMapper = modelsMapper;
     }
 
-    /*TODO Plamen*/
+    /*Plamen*/
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public User createUser(@RequestBody @Valid UserDto userDto) {
@@ -52,7 +53,7 @@ public class UserRestController {
             userService.deleteUser(userIsAuthenticated, userToBeDeleted);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED,
+                    HttpStatus.FORBIDDEN,
                     e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(
@@ -63,20 +64,19 @@ public class UserRestController {
                     HttpStatus.UNAUTHORIZED,
                     e.getMessage());
         }
-
     }
 
-    /*TODO - Yuli - implemented:*/
+    /*Yuli - implemented:*/
     @PutMapping("/{username}")
     User updateUser(@RequestHeader HttpHeaders headers,
                     @PathVariable String username,
-                    @Valid @RequestBody UserDto userDto) {
+                    @Valid @RequestBody UserDtoUpdate userDtoUpdate) {
         try {
             User userToDoUpdates = authenticationHelper.tryGetUser(headers);
-            User userToBeUpdated = modelsMapper.userFromDto(userDto, username);
+            User userToBeUpdated = modelsMapper.userFromDtoUpdate(userDtoUpdate, username);
             return userService.updateUser(userToBeUpdated, userToDoUpdates);
         } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
@@ -95,7 +95,7 @@ public class UserRestController {
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
@@ -119,7 +119,7 @@ public class UserRestController {
                     e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED,
+                    HttpStatus.FORBIDDEN,
                     e.getMessage());
         }
     }
@@ -130,7 +130,7 @@ public class UserRestController {
         return userService.getUserByUsername(username);
     }
 
-    /*TODO Plamen*/
+    /*Plamen*/
     @GetMapping
     public List<User> getAllUsers(@RequestHeader HttpHeaders headers,
                                   @RequestParam(required = false) String username,
@@ -145,13 +145,12 @@ public class UserRestController {
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
 
     /*TODO It is not the best way for this method.*/
     /*Ilia*/
-    /*Should we need authentication for this, also for getUserByUsername method?*/
     @GetMapping("/id/{id}")
     public User getUserById(@PathVariable int id) {
         try {
@@ -171,14 +170,14 @@ public class UserRestController {
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
 
     }
 
-    /*TODO Plamen*/
+    /*Plamen*/
     @PutMapping("/{username}/PhoneNumber")
     public User addPhoneNumber(@PathVariable String username, @RequestBody String phoneNumber, @RequestHeader HttpHeaders headers) {
         try {
@@ -188,7 +187,7 @@ public class UserRestController {
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

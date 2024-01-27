@@ -41,9 +41,10 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.getCommentByContent(content);
     }
 
-    /*TODO - Yuli - DONE. Last updated on 26.01.2024.*/
+    /*Yuli - DONE. Last updated on 26.01.2024.*/
     @Override
     public Comment createComment(Comment comment, User commentCreator) {
+        PermissionHelper.isBlocked(commentCreator, UNAUTHORIZED_OPERATION);
         comment.setCreatedOn(LocalDateTime.now());
         comment.setCreatedBy(commentCreator);
         return commentRepository.createComment(comment);
@@ -59,6 +60,7 @@ public class CommentServiceImpl implements CommentService {
     /*Ilia.*/
     @Override
     public void deleteComment(Comment comment) {
+        PermissionHelper.isBlocked(comment.getCreatedBy(), UNAUTHORIZED_OPERATION);
         comment.setDeleted(true);
         commentRepository.updateComment(comment);
     }

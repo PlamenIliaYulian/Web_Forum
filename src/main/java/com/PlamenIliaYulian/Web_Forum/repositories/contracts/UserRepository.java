@@ -9,16 +9,12 @@ public interface UserRepository {
 
     User createUser(User user);
     User updateUser(User user);
-
-    /*TODO implement User FilterOptions*/
     List<User> getAllUsers(UserFilterOptions userFilterOptions);
 
     User getUserByFirstName(String firstName);
     User getUserByUsername(String username);
     User getUserByEmail(String email);
     User getUserById(int id);
-    User addAvatar(User userToBeUpdated);
-    User addPhoneNumber(User userToBeUpdated, String phoneNumber);
     User makeAdministrativeChanges(User userToBeUpdated);
 
 

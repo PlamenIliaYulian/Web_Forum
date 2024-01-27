@@ -15,7 +15,6 @@ public interface CommentRepository {
 
     Comment updateComment(Comment comment);
 
-    /*TODO implement Comment FilterOptions*/
     List<Comment> getAllComments(CommentFilterOptions commentFilterOptions);
 
 }

@@ -51,17 +51,16 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "posts_users_likes",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> usersWhoLikedPost;
-    @ManyToMany(fetch = FetchType.EAGER)
+
 
     @JsonIgnore
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "posts_users_dislikes",
             joinColumns = @JoinColumn(name = "post_id"),

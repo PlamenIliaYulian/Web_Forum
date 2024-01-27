@@ -40,6 +40,7 @@ public class PostRestController {
         this.tagService = tagService;
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Post createPost(@Valid @RequestBody PostDto postDto,
                            @RequestHeader HttpHeaders headers) {
@@ -48,7 +49,7 @@ public class PostRestController {
             Post postToBeCreated = modelsMapper.postFromDto(postDto);
             return postService.createPost(postToBeCreated, creatorOfPost);
         } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (AuthenticationException e) {
@@ -56,7 +57,8 @@ public class PostRestController {
         }
     }
 
-    /*TODO Plamen*/
+    /*Plamen*/
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{postTitle}")
     public void deletePost(@PathVariable String postTitle,
                            @RequestHeader HttpHeaders headers) {
@@ -65,7 +67,7 @@ public class PostRestController {
             Post post = postService.getPostByTitle(postTitle);
             postService.deletePost(post, userMakingRequest);
         } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
@@ -93,7 +95,7 @@ public class PostRestController {
                     e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED,
+                    HttpStatus.FORBIDDEN,
                     e.getMessage());
         }
     }
@@ -118,7 +120,7 @@ public class PostRestController {
         }
     }
 
-    /*TODO Plamen*/
+    /*Plamen*/
     @GetMapping("/{title}")
     public Post getPostByTitle(@PathVariable String title) {
         try {
@@ -148,7 +150,7 @@ public class PostRestController {
             Post post = postService.getPostByTitle(title);
             return postService.likePost(post, authenticatedUser);
         } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (AuthenticationException e) {
@@ -156,7 +158,7 @@ public class PostRestController {
         }
     }
 
-    /*TODO Plamen*/
+    /*Plamen*/
     @PutMapping("/{title}/dislike")
     public Post dislikePost(@RequestHeader HttpHeaders headers,
                             @PathVariable String title) {
@@ -169,7 +171,7 @@ public class PostRestController {
         } catch (EntityNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
 
@@ -185,7 +187,7 @@ public class PostRestController {
             return postService.addTagToPost(post, tag, authorizedUser);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED,
+                    HttpStatus.FORBIDDEN,
                     e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(
@@ -197,7 +199,7 @@ public class PostRestController {
                     e.getMessage());
         } catch (InvalidUserInputException e) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
+                    HttpStatus.BAD_REQUEST,
                     e.getMessage());
         }
     }
@@ -212,18 +214,19 @@ public class PostRestController {
             Tag tag = tagService.getTagByName(tagName);
             return postService.removeTagFromPost(post, tag, authenticatedUser);
         } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (InvalidUserInputException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
 
-    /*TODO Plamen*/
+    /*Plamen*/
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{title}/comments")
     public Post addCommentToPost(@RequestHeader HttpHeaders headers,
                                  @PathVariable String title,
@@ -238,10 +241,11 @@ public class PostRestController {
         } catch (EntityNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{title}/comments/{commentId}")
     public Post removeCommentFromPost(@RequestHeader HttpHeaders headers,
                                       @PathVariable String title,
@@ -252,13 +256,13 @@ public class PostRestController {
             Post postToComment = postService.getPostByTitle(title);
             return postService.removeCommentFromPost(postToComment, commentId, authorizedUser);
         } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (InvalidUserInputException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
