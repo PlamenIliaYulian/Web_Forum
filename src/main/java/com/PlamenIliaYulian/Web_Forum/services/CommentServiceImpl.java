@@ -59,7 +59,8 @@ public class CommentServiceImpl implements CommentService {
     /*Ilia.*/
     @Override
     public void deleteComment(Comment comment) {
-
+        comment.setDeleted(true);
+        commentRepository.updateComment(comment);
     }
 
     @Override
@@ -93,7 +94,7 @@ public class CommentServiceImpl implements CommentService {
         Set<User> usersWhoLiked = comment.getUsersWhoLikedComment();
         Set<User> usersWhoDisliked = comment.getUsersWhoDislikedComment();
 
-        if(usersWhoLiked.contains(authorizedUser)){
+        if(usersWhoDisliked.contains(authorizedUser)){
             throw new UnauthorizedOperationException(MULTIPLE_LIKE_ERROR);
         }
 

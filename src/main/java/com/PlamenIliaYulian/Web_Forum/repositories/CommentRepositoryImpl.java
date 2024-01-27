@@ -31,8 +31,8 @@ public class CommentRepositoryImpl implements CommentRepository {
     public Comment getCommentById(int id) {
         try (Session session = sessionFactory.openSession()) {
             Query<Comment> query = session.createQuery("from Comment where commentId = :id and isDeleted = false ", Comment.class);
-            query.setParameter("commentId", id);
-            if (query.list().isEmpty()) {
+            query.setParameter("id", id);
+            if(query.list().isEmpty()){
                 throw new EntityNotFoundException("Comment", id);
             }
             return query.list().get(0);

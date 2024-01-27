@@ -123,6 +123,7 @@ public class PostServiceImpl implements PostService {
         return postRepository.updatePost(post);
     }
 
+    /*TODO isBlocked check to be added.*/
     @Override
     public Post removeTagFromPost(Post post, Tag tag, User authenticatedUser) {
         PermissionHelper.isAdminOrSameUser(post.getCreatedBy(), authenticatedUser, UNAUTHORIZED_OPERATION);
@@ -147,6 +148,7 @@ public class PostServiceImpl implements PostService {
 
     }
 
+    /*TODO isBlocked check to be added.*/
     @Override
     public Post removeCommentFromPost(Post postToRemoveCommentFrom, int commentId, User authorizedUser) {
         Comment commentToBeRemoved = commentService.getCommentById(commentId);
@@ -162,10 +164,12 @@ public class PostServiceImpl implements PostService {
         return postRepository.updatePost(postToRemoveCommentFrom);
     }
 
+    /*TODO Guys, we don't have to forget when we stream, to filter out deleted items.*/
     @Override
     public List<Comment> getAllCommentsRelatedToPost(Post postWithComments) {
         return postWithComments.getRelatedComments()
                 .stream()
+                .filter(comment -> !comment.isDeleted())
                 .sorted(Comparator.comparing(Comment::getCommentId))
                 .collect(Collectors.toList());
     }

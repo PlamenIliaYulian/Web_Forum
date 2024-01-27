@@ -1,5 +1,6 @@
 package com.PlamenIliaYulian.Web_Forum.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
@@ -51,10 +52,16 @@ public class Post {
     private Set<Tag> tags;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "posts_users_likes",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> usersWhoLikedPost;
+    @ManyToMany(fetch = FetchType.EAGER)
+
+    @JsonIgnore
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "posts_users_dislikes",
             joinColumns = @JoinColumn(name = "post_id"),

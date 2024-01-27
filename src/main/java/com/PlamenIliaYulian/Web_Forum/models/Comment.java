@@ -1,6 +1,8 @@
 package com.PlamenIliaYulian.Web_Forum.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -35,14 +37,15 @@ public class Comment {
     private User createdBy;
 
 
-    @ManyToMany
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "comments_users_likes",
             joinColumns = @JoinColumn(name = "comment_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> usersWhoLikedComment;
 
-
-    @ManyToMany
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "comments_users_dislikes",
             joinColumns = @JoinColumn(name = "comment_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
