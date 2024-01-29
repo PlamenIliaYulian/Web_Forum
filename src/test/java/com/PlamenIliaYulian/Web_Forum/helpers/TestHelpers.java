@@ -195,4 +195,14 @@ public class TestHelpers {
         );
     }
 
+    public static UserFilterOptions createUserFilterOptions(){
+        return new UserFilterOptions(
+                "username",
+                "email",
+                "firstName",
+                null,
+                null
+        );
+    }
+
 }

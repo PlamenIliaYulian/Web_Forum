@@ -2,6 +2,7 @@ package com.PlamenIliaYulian.Web_Forum.services;
 
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
 import com.PlamenIliaYulian.Web_Forum.helpers.TestHelpers;
+import com.PlamenIliaYulian.Web_Forum.models.Post;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.TagRepository;
 import org.junit.jupiter.api.Assertions;
@@ -14,7 +15,9 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @ExtendWith(MockitoExtension.class)
 public class TagServiceTests {
@@ -57,4 +60,33 @@ public class TagServiceTests {
         Assertions.assertEquals(allTags, returnedTags);
         Assertions.assertEquals(allTags.get(0), returnedTags.get(0));
     }
+
+    @Test
+    public void deleteTag_Should_Throw_When_UserIsNotAdmin(){
+        Tag tag = TestHelpers.createMockTag();
+        User nonAdminUser = TestHelpers.createMockNoAdminUser();
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                ()-> tagService.deleteTag(tag, nonAdminUser));
+
+    }
+
+    @Test
+    public void deleteTag_Should_Pass_When_UserIsAdmin(){
+        Tag tagToDelete = TestHelpers.createMockTag();
+        User adminUser = TestHelpers.createMockAdminUser();
+        Post post = TestHelpers.createMockPost1();
+        Set<Post> relatedPost = new HashSet<>();
+        relatedPost.add(post);
+        tagToDelete.setRelatedPosts(relatedPost);
+
+        tagService.deleteTag(tagToDelete, adminUser);
+
+        Mockito.verify(tagRepository, Mockito.times(1))
+                .updateTag(tagToDelete);
+
+    }
+
+
+
 }

@@ -4,6 +4,7 @@ import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
 import com.PlamenIliaYulian.Web_Forum.helpers.TestHelpers;
 import com.PlamenIliaYulian.Web_Forum.models.User;
+import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -106,5 +110,85 @@ public class UserServiceTests {
         User userToBeUpdated = TestHelpers.createMockNoAdminUser();
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 () -> userService.makeAdministrativeChanges(nonAdminUser, userToBeUpdated));
+    }
+
+    @Test
+    public void createUser_Should_CallRepository(){
+        User userToCreate = TestHelpers.createMockNoAdminUser();
+
+        userService.createUser(userToCreate);
+
+        Mockito.verify(userRepository, Mockito.times(1))
+                .createUser(userToCreate);
+    }
+
+    @Test
+    public void getAllUser_Should_Throw_When_UserIsNotAdmin(){
+        UserFilterOptions userFilterOptions = TestHelpers.createUserFilterOptions();
+        User nonAdminUser = TestHelpers.createMockNoAdminUser();
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                ()-> userService.getAllUsers(nonAdminUser, userFilterOptions));
+
+    }
+
+    @Test
+    public void getAllUsers_Should_Pass_When_Valid(){
+        User adminUser = TestHelpers.createMockAdminUser();
+        List<User> users = new ArrayList<>();
+        users.add(TestHelpers.createMockNoAdminUser());
+        UserFilterOptions userFilterOptions = TestHelpers.createUserFilterOptions();
+
+        Mockito.when(userRepository.getAllUsers(Mockito.any()))
+                .thenReturn(users);
+
+        List<User> result = userService.getAllUsers(adminUser, userFilterOptions);
+
+        Mockito.verify(userRepository, Mockito.times(1))
+                .getAllUsers(userFilterOptions);
+
+        Assertions.assertEquals(users, result);
+
+    }
+
+    @Test
+    public void getUserByUsername_Should_CallRepository(){
+        User userToFind = TestHelpers.createMockNoAdminUser();
+
+        Mockito.when(userRepository.getUserByUsername(Mockito.anyString()))
+                .thenReturn(userToFind);
+
+        User result = userService.getUserByUsername(userToFind.getUserName());
+
+        Assertions.assertEquals(userToFind, result);
+        Assertions.assertEquals(userToFind.getUserId(), result.getUserId());
+        Assertions.assertEquals(userToFind.getUserName(), result.getUserName());
+        Assertions.assertEquals(userToFind.getEmail(), result.getEmail());
+
+    }
+
+    @Test
+    public void addPhoneNumber_Should_Throw_When_UserIsNotAdmin(){
+        String phoneNumber = "088913141414";
+        User userTryingToAdd = TestHelpers.createMockNoAdminUser();
+        User userToBeUpdated = TestHelpers.createMockNoAdminUser();
+        userToBeUpdated.setUserId(777);
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                ()-> userService.addPhoneNumber(userToBeUpdated, phoneNumber, userTryingToAdd));
+
+    }
+
+    @Test
+    public void addPhoneNumber_Should_CallRepository_When_UserIsAdmin(){
+        String phoneNumber = "088913141414";
+        User userTryingToAdd = TestHelpers.createMockAdminUser();
+        User userToBeUpdated = TestHelpers.createMockAdminUser();
+
+        userService.addPhoneNumber(userToBeUpdated, phoneNumber, userTryingToAdd);
+
+        Mockito.verify(userRepository, Mockito.times(1))
+                .updateUser(userToBeUpdated);
+
     }
 }

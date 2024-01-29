@@ -99,6 +99,7 @@ public class PostServiceImpl implements PostService {
         return postRepository.updatePost(post);
     }
 
+    /*why do we make the first authorization*/
     @Override
     public Post dislikePost(Post post, User authorizedUser) {
         PermissionHelper.isNotSameUser(post.getCreatedBy(), authorizedUser, UNAUTHORIZED_OPERATION);
