@@ -1,13 +1,25 @@
 name: TelerikAcademy Web_Forum CI / CD
+
 on:
   workflow_dispatch:
+
 jobs:
   initial_testing:
-    runs-on:
-      - self-hosted
-    steps:
-      - name: Echo "Hello world."
-        run: |
-          echo "Hello world."
-          pwd
+    runs-on: self-hosted
 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2  # This step checks out your repository on the runner
+
+      - name: Run Gradle Unit Tests
+        run: |
+          ./gradlew test
+          
+      - name: Check test results and print message
+        run: |
+          if [ $? -eq 0 ]; then
+            echo "GREAT SUCCESS"
+          else
+            echo "Tests failed!"
+            exit 1
+          fi
