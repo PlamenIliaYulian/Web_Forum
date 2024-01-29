@@ -8,8 +8,9 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      # Commenting out this changes, for the moment to see if things will run normally:
+      # - name: Checkout repository
+      #   uses: actions/checkout@v4
       - name: Run Gradle Unit Tests
         run: |
           ./gradlew test
@@ -18,7 +19,7 @@ jobs:
           if [ $? -eq 0 ]; then
             cd ~/springboot_web_forum/Web_Forum
             git fetch origin
-            git reset --hard origin/main  # Assuming 'main' is your main branch, change it if needed
+            git reset --hard origin/main
             sh ./restart.sh
           else
             echo "Testfailed :o("
