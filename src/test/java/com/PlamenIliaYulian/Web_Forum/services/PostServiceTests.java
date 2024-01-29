@@ -7,7 +7,6 @@ import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
 import com.PlamenIliaYulian.Web_Forum.helpers.TestHelpers;
 import com.PlamenIliaYulian.Web_Forum.models.*;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.PostRepository;
-import com.PlamenIliaYulian.Web_Forum.repositories.contracts.TagRepository;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
