@@ -9,16 +9,18 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Run Gradle Unit Tests
         run: |
           ./gradlew test
-          
-      - name: Check test results and print message
+      - name: Update and restart
         run: |
           if [ $? -eq 0 ]; then
-            echo "GREAT SUCCESS"
+            cd ~/springboot_web_forum/Web_Forum
+            git fetch origin
+            git reset --hard origin/main  # Assuming 'main' is your main branch, change it if needed
+            sh ./restart.sh
           else
-            echo "Tests failed!"
+            echo "Testfailed :o("
             exit 1
           fi
