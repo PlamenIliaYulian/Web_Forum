@@ -1,0 +1,12 @@
+name: TelerikAcademy Web_Forum CI / CD
+on:
+  workflow_dispatch:
+jobs:
+  initial_testing:
+    runs-on:
+      - self-hosted
+    steps:
+      - name: Echo "Hello world."
+        run: |
+          echo "Hello world."
+
