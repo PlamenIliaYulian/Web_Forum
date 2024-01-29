@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "comments")
-public class Comment {
+public class Comment implements Comparable<Comment>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -137,5 +137,10 @@ public class Comment {
     @Override
     public int hashCode() {
         return Objects.hash(commentId);
+    }
+
+    @Override
+    public int compareTo(Comment o) {
+        return Integer.compare(this.getCommentId(), o.getCommentId());
     }
 }

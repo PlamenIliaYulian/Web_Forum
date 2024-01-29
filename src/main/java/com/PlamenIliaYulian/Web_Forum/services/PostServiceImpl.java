@@ -66,6 +66,8 @@ public class PostServiceImpl implements PostService {
         return postRepository.updatePost(post);
     }
 
+    /*TODO for Yuli - Ask Iliikata and Plamkata why we pass >>> User userExecutingTheRequest.
+    *  We do not use it anywhere.*/
     @Override
     public List<Post> getAllPosts(User userExecutingTheRequest, PostFilterOptions postFilterOptions) {
         return postRepository.getAllPosts(postFilterOptions);

@@ -170,4 +170,17 @@ public class TestHelpers {
         return mockComment;
     }
 
+    public static PostFilterOptions createPostFilterOptions() {
+        return new PostFilterOptions(
+                0,
+                0,
+                "Test title",
+                "Test content",
+                "2024-01-31 00:00:00",
+                "Test User",
+                null,
+                null
+        );
+    }
+
 }

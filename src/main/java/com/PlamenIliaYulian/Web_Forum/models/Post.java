@@ -5,12 +5,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "posts")
-public class Post {
+public class Post implements Comparable<Post> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -177,5 +178,10 @@ public class Post {
     @Override
     public int hashCode() {
         return Objects.hash(postId);
+    }
+
+    @Override
+    public int compareTo(Post o) {
+        return Integer.compare(this.getPostId(), o.getPostId());
     }
 }

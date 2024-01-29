@@ -10,7 +10,7 @@ import java.util.Set;
 @Table(name = "users")
 @SecondaryTable(name = "phone_numbers", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
 @SecondaryTable(name = "avatars", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
-public class User {
+public class User implements Comparable<User> {
 
     @Id
     @Column(name = "user_id")
@@ -153,5 +153,10 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(getUserId());
+    }
+
+    @Override
+    public int compareTo(User o) {
+        return Integer.compare(this.getUserId(), o.getUserId());
     }
 }

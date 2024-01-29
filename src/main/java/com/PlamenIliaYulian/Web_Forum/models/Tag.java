@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "tags")
-public class Tag {
+public class Tag implements Comparable<Tag> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -81,5 +81,10 @@ public class Tag {
     @Override
     public int hashCode() {
         return Objects.hash(tagId);
+    }
+
+    @Override
+    public int compareTo(Tag o) {
+        return Integer.compare(this.getTagId(), o.getTagId());
     }
 }
