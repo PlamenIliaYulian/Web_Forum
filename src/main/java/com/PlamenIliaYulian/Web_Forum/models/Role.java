@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "roles")
-public class Role {
+public class Role implements Comparable<Role> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,5 +52,11 @@ public class Role {
     @Override
     public int hashCode() {
         return Objects.hash(roleId);
+    }
+
+    /* TODO - Пламка, Илийка - тази имплементация ни трябва, за да могат да минават тестовете.*/
+    @Override
+    public int compareTo(Role o) {
+        return Integer.compare(this.roleId, o.roleId);
     }
 }
