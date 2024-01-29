@@ -16,10 +16,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PostServiceTests {
@@ -239,6 +236,115 @@ public class PostServiceTests {
         postService.removeCommentFromPost(postToRemoveCommentFrom, commentContent, nonBlockedUser);
         Mockito.verify(postRepository, Mockito.times(1))
                 .updatePost(postToRemoveCommentFrom);
+    }
+
+    @Test
+    public void deletePost_Should_Throw_When_UserIsBlocked(){
+        Post postToDelete = TestHelpers.createMockPost1();
+        User userWhoTriesToDelete = TestHelpers.createMockNoAdminUser();
+        userWhoTriesToDelete.setBlocked(true);
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                ()-> postService.deletePost(postToDelete, userWhoTriesToDelete));
+    }
+
+    @Test
+    public void deletePost_Should_Throw_When_UserIsNotAdminOrSameUser(){
+        Post postToDelete = TestHelpers.createMockPost1();
+        User nonBlockedUser = TestHelpers.createMockNoAdminUser();
+        nonBlockedUser.setUserId(777);
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                ()-> postService.deletePost(postToDelete, nonBlockedUser));
+
+    }
+
+    @Test
+    public void deletePost_Should_Pass_When_ArgumentsAreValid(){
+        Post postToDelete = TestHelpers.createMockPost1();
+        User nonBlockedUser = TestHelpers.createMockNoAdminUser();
+        postToDelete.setCreatedBy(nonBlockedUser);
+
+        postService.deletePost(postToDelete, nonBlockedUser);
+
+        Mockito.verify(postRepository,Mockito.times(1))
+                .softDeletePost(postToDelete);
+
+    }
+
+    @Test
+    public void getPostByTitle_Should_Return_When_PostExists(){
+        Post post = TestHelpers.createMockPost1();
+
+        Mockito.when(postRepository.getPostByTitle(Mockito.anyString()))
+                .thenReturn(post);
+
+        Post result = postService.getPostByTitle(post.getTitle());
+
+        Assertions.assertEquals(1, result.getPostId());
+        Assertions.assertEquals("Mock post title.", result.getTitle());
+        Assertions.assertEquals("Mock post random content.", result.getContent());
+        Assertions.assertEquals(1, result.getPostId());
+
+    }
+
+    @Test
+    public void dislikePost_Should_Throw_When_UserAlreadyDislikedPost(){
+        Post postToDislike = TestHelpers.createMockPost1();
+        User userToDislike = TestHelpers.createMockNoAdminUser();
+
+        Set<User> usersWhoDislikedPost = new HashSet<>();
+        usersWhoDislikedPost.add(userToDislike);
+        postToDislike.setUsersWhoDislikedPost(usersWhoDislikedPost);
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                ()-> postService.dislikePost(postToDislike, userToDislike));
+
+    }
+
+    @Test
+    public void dislikePost_Should_Pass_When_Valid(){
+        Post postToDislike = TestHelpers.createMockPost1();
+        User userToDislike = TestHelpers.createMockNoAdminUser();
+        userToDislike.setUserId(888);
+
+        Mockito.when(postRepository.updatePost(postToDislike))
+                .thenReturn(postToDislike);
+
+        postService.likePost(postToDislike, userToDislike);
+
+        Mockito.verify(postRepository, Mockito.times(1))
+                .updatePost(postToDislike);
+
+    }
+
+    @Test
+    public void addCommentToPost_Should_Throw_When_UserIsBlocked(){
+        Post postToAddComment = TestHelpers.createMockPost1();
+        User userToAddCommentToPost = TestHelpers.createMockNoAdminUser();
+        Comment comment = TestHelpers.createMockComment1();
+        userToAddCommentToPost.setBlocked(true);
+        postToAddComment.setCreatedBy(userToAddCommentToPost);
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                ()-> postService.addCommentToPost(postToAddComment, comment, userToAddCommentToPost));
+
+    }
+
+    @Test
+    public void addCommentToPost_Should_Pass_When_ArgumentsAreValid(){
+        Post postToAddComment = TestHelpers.createMockPost1();
+        User userToAddCommentToPost = TestHelpers.createMockNoAdminUser();
+        Comment comment = TestHelpers.createMockComment1();
+
+        Mockito.when(postRepository.updatePost(postToAddComment))
+                .thenReturn(postToAddComment);
+
+        postService.addCommentToPost(postToAddComment, comment, userToAddCommentToPost);
+
+        Mockito.verify(postRepository, Mockito.times(1))
+                .updatePost(postToAddComment);
+
     }
 
 }
