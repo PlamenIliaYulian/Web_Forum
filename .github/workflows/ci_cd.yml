@@ -14,14 +14,20 @@ jobs:
       - name: Run Gradle Unit Tests
         run: |
           ./gradlew test
-      - name: Update and restart
+      # - name: Update and restart
+      #   run: |
+      #     if [ $? -eq 0 ]; then
+      #       cd ~/springboot_web_forum/Web_Forum
+      #       git fetch origin
+      #       git reset --hard origin/main
+      #       sh ./restart.sh
+      #     else
+      #       echo "Testfailed :o("
+      #       exit 1
+      #     fi
+
+      - name: Debug
         run: |
-          if [ $? -eq 0 ]; then
-            cd ~/springboot_web_forum/Web_Forum
-            git fetch origin
-            git reset --hard origin/main
-            sh ./restart.sh
-          else
-            echo "Testfailed :o("
-            exit 1
-          fi
+          whoami
+          id
+          groups
