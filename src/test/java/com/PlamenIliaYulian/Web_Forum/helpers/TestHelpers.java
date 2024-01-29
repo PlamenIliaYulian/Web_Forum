@@ -11,7 +11,7 @@ public class TestHelpers {
 
     /*Yuli*/
     public static User createMockAdminUser() {
-        Set roles = new TreeSet<>();
+        Set<Role> roles = new TreeSet<>();
         roles.add(createMockRoleAdmin());
         roles.add(createMockRoleStaffMember());
         roles.add(createMockRoleMember());
