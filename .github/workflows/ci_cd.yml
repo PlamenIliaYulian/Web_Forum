@@ -22,7 +22,8 @@ jobs:
             cd /home/yuliadmin/springboot_web_forum/Web_Forum
             sudo git fetch origin
             sudo git reset --hard origin/main
-            sh ./restart.sh
+            sudo sh /home/yuliadmin/springboot_web_forum/Web_Forum/shutdown.sh
+            sudo sh /home/yuliadmin/springboot_web_forum/Web_Forum/start.sh
           else
             echo "Testfailed :o("
             exit 1
