@@ -1,36 +1,13 @@
 name: TelerikAcademy Web_Forum CI / CD
-
 on:
   workflow_dispatch:
-
 jobs:
   initial_testing:
     runs-on: self-hosted
-
     steps:
       # Commenting out this changes, for the moment to see if things will run normally:
       # - name: Checkout repository
       #   uses: actions/checkout@v4
-      
       - name: Run Gradle Unit Tests
         run: |
           ./gradlew test
-          
-      - name: Update and restart
-        run: |
-          if [ $? -eq 0 ]; then
-            cd /home/yuliadmin/springboot_web_forum/Web_Forum
-            sudo git fetch origin
-            sudo git reset --hard origin/main
-            sudo sh /home/yuliadmin/springboot_web_forum/Web_Forum/shutdown.sh
-            sudo sh /home/yuliadmin/springboot_web_forum/Web_Forum/start.sh
-          else
-            echo "Testfailed :o("
-            exit 1
-          fi
-
-      - name: Debug
-        run: |
-          whoami
-          id
-          groups
