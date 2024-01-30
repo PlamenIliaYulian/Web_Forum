@@ -15,6 +15,7 @@ public interface UserRepository {
     User getUserByUsername(String username);
     User getUserByEmail(String email);
     User getUserById(int id);
+    User getUserByPhoneNumber(String phoneNumber);
     User makeAdministrativeChanges(User userToBeUpdated);
 
 

@@ -1,5 +1,7 @@
 package com.PlamenIliaYulian.Web_Forum.services;
 
+import com.PlamenIliaYulian.Web_Forum.exceptions.DuplicateEntityException;
+import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
 import com.PlamenIliaYulian.Web_Forum.helpers.PermissionHelper;
 import com.PlamenIliaYulian.Web_Forum.models.Role;
@@ -28,6 +30,29 @@ public class UserServiceImpl implements UserService {
     public User createUser(User user) {
         /*Unique email validation.*/
         /*Unique username validation.*/
+        boolean duplicateExists = true;
+
+        try {
+        userRepository.getUserByUsername(user.getUserName());
+        } catch (EntityNotFoundException e){
+            duplicateExists = false;
+        }
+
+        if (duplicateExists) {
+            throw new DuplicateEntityException("User", "username", user.getUserName());
+        }
+
+
+        try {
+            userRepository.getUserByEmail(user.getEmail());
+        } catch (EntityNotFoundException e){
+            duplicateExists = false;
+        }
+
+        if (duplicateExists) {
+            throw new DuplicateEntityException("User", "username", user.getUserName());
+        }
+
         return userRepository.createUser(user);
     }
 
@@ -93,6 +118,18 @@ public class UserServiceImpl implements UserService {
         /*Check if the two users are one and the same. If not - throw exception.
         * If we want to let the admin set phone number to another admin we can set
         * it in administrative changes.*/
+        boolean duplicateExists = true;
+
+        try {
+            userRepository.getUserByPhoneNumber(userToBeUpdated.getPhoneNumber());
+        } catch (EntityNotFoundException e){
+            duplicateExists = false;
+        }
+
+        if(duplicateExists) {
+            throw new DuplicateEntityException("User", "Phone number", userToBeUpdated.getPhoneNumber());
+        }
+
         userToBeUpdated.setPhoneNumber(phoneNumber);
         return userRepository.updateUser(userToBeUpdated);
     }

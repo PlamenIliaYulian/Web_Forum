@@ -160,6 +160,21 @@ public class UserRepositoryImpl implements UserRepository {
             return result.get(0);
         }
     }
+
+    @Override
+    public User getUserByPhoneNumber(String phoneNumber) {
+        try(Session session = sessionFactory.openSession()) {
+            Query<User> query = session.createQuery("FROM User WHERE phoneNumber = :phoneNumber AND isDeleted = false ", User.class);
+            query.setParameter("phoneNumber", phoneNumber);
+            List<User> result = query.list();
+            if (result.isEmpty()) {
+                throw new EntityNotFoundException("User", "phoneNumber", phoneNumber);
+            }
+            return result.get(0);
+        }
+    }
+
+
     @Override
     public User makeAdministrativeChanges(User userToBeUpdated) {
         return updateUser(userToBeUpdated);

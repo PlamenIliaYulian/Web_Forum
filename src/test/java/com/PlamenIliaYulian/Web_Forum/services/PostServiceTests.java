@@ -319,6 +319,16 @@ public class PostServiceTests {
     }
 
     @Test
+    public void dislikePost_Should_Throw_When_UserIsPostCreator(){
+        Post postToBeDisliked = TestHelpers.createMockPost1();
+        User userTryingToDislike = TestHelpers.createMockNoAdminUser();
+        postToBeDisliked.setCreatedBy(userTryingToDislike);
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                ()-> postService.dislikePost(postToBeDisliked, userTryingToDislike));
+    }
+
+    @Test
     public void addCommentToPost_Should_Throw_When_UserIsBlocked(){
         Post postToAddComment = TestHelpers.createMockPost1();
         User userToAddCommentToPost = TestHelpers.createMockNoAdminUser();

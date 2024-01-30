@@ -1,5 +1,6 @@
 package com.PlamenIliaYulian.Web_Forum.services;
 
+import com.PlamenIliaYulian.Web_Forum.exceptions.DuplicateEntityException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
 import com.PlamenIliaYulian.Web_Forum.helpers.TestHelpers;
@@ -114,12 +115,37 @@ public class UserServiceTests {
 
     @Test
     public void createUser_Should_CallRepository(){
-        User userToCreate = TestHelpers.createMockNoAdminUser();
 
-        userService.createUser(userToCreate);
+        User userToBeCreated = TestHelpers.createMockNoAdminUser();
+
+        Mockito.when(userRepository.getUserByUsername(userToBeCreated.getUserName()))
+                        .thenThrow(new EntityNotFoundException("User", "username", userToBeCreated.getUserName()));
+
+        userService.createUser(TestHelpers.createMockNoAdminUser());
 
         Mockito.verify(userRepository, Mockito.times(1))
-                .createUser(userToCreate);
+                .createUser(Mockito.any(User.class));
+    }
+
+    @Test
+    public void createUser_Should_Throw_When_UsernameExists(){
+        User existingUser = TestHelpers.createMockNoAdminUser();
+        User userToBeCreated = TestHelpers.createMockNoAdminUser();
+
+        Assertions.assertThrows(DuplicateEntityException.class,
+                ()-> userService.createUser(userToBeCreated));
+
+    }
+
+    @Test
+    public void createUser_Should_Throw_When_EmailExists(){
+        User existingUser = TestHelpers.createMockNoAdminUser();
+        User userToBeCreated = TestHelpers.createMockNoAdminUser();
+        existingUser.setUserName("some new username");
+
+        Assertions.assertThrows(DuplicateEntityException.class,
+                ()-> userService.createUser(userToBeCreated));
+
     }
 
     @Test
@@ -185,10 +211,24 @@ public class UserServiceTests {
         User userTryingToAdd = TestHelpers.createMockAdminUser();
         User userToBeUpdated = TestHelpers.createMockAdminUser();
 
+        Mockito.when(userRepository.getUserByPhoneNumber(userToBeUpdated.getPhoneNumber()))
+                        .thenThrow(new EntityNotFoundException("User", "Phone number", userToBeUpdated.getPhoneNumber()));
+
         userService.addPhoneNumber(userToBeUpdated, phoneNumber, userTryingToAdd);
 
         Mockito.verify(userRepository, Mockito.times(1))
                 .updateUser(userToBeUpdated);
+
+    }
+
+    @Test
+    public void addPhoneNumber_Should_Throw_When_PhoneNumberExists(){
+        User userToBeUpdated = TestHelpers.createMockAdminUser();
+        User userToDoUpdates = TestHelpers.createMockAdminUser();
+        String phoneNumber = "0891234567";
+
+        Assertions.assertThrows(DuplicateEntityException.class,
+                ()-> userService.addPhoneNumber(userToBeUpdated, phoneNumber, userToDoUpdates));
 
     }
 }
