@@ -10,6 +10,7 @@ import com.PlamenIliaYulian.Web_Forum.models.CommentFilterOptions;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.CommentDto;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/comments")
+@Tag(name = "Comment")
 public class CommentRestController {
 
     private final AuthenticationHelper authenticationHelper;

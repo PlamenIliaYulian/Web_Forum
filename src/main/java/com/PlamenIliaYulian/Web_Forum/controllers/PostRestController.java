@@ -19,11 +19,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import com.PlamenIliaYulian.Web_Forum.models.Tag;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/posts")
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Post")
 public class PostRestController {
 
     private final PostService postService;

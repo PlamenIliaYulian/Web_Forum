@@ -9,11 +9,13 @@ import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.UserRepository;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -33,8 +35,8 @@ public class UserServiceImpl implements UserService {
         boolean duplicateExists = true;
 
         try {
-        userRepository.getUserByUsername(user.getUserName());
-        } catch (EntityNotFoundException e){
+            userRepository.getUserByUsername(user.getUserName());
+        } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
 
@@ -45,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
         try {
             userRepository.getUserByEmail(user.getEmail());
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
 
@@ -116,17 +118,17 @@ public class UserServiceImpl implements UserService {
         /*Unique phone number validation.*/
         PermissionHelper.isAdmin(userToBeUpdated, UNAUTHORIZED_OPERATION);
         /*Check if the two users are one and the same. If not - throw exception.
-        * If we want to let the admin set phone number to another admin we can set
-        * it in administrative changes.*/
+         * If we want to let the admin set phone number to another admin we can set
+         * it in administrative changes.*/
         boolean duplicateExists = true;
 
         try {
             userRepository.getUserByPhoneNumber(userToBeUpdated.getPhoneNumber());
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
 
-        if(duplicateExists) {
+        if (duplicateExists) {
             throw new DuplicateEntityException("User", "Phone number", userToBeUpdated.getPhoneNumber());
         }
 

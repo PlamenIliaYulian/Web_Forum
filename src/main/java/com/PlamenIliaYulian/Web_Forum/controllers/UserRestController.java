@@ -11,18 +11,28 @@ import com.PlamenIliaYulian.Web_Forum.models.dtos.UserDto;
 import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.UserDtoUpdate;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.sql.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@Tag(name = "User")
 public class UserRestController {
 
     private final UserService userService;
@@ -38,9 +48,12 @@ public class UserRestController {
     /*Plamen*/
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
+    @Operation(
+            tags = {"User"}
+    )
     public User createUser(@RequestBody @Valid UserDto userDto) {
-            User user = modelsMapper.userFromDto(userDto);
-            return userService.createUser(user);
+        User user = modelsMapper.userFromDto(userDto);
+        return userService.createUser(user);
     }
 
     /*Ilia*/
@@ -68,6 +81,51 @@ public class UserRestController {
 
     /*Yuli - implemented:*/
     @PutMapping("/{username}")
+    @Operation(
+            summary = "Updates the information of the user found by the provided username.",
+            description = "Used to update User's first name, last name, email or password.",
+            parameters = {
+                    @Parameter(name = "username",
+                            description = "Path variable.",
+                            example = "emily_jackson"),
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Username and password provided in the 'Authorization' header do not match any user in the database",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Invalid authentication.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Username trying to execute the request must be either admin OR the same user to which the profile belongs.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Unauthorized operation.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "There is no user with this 'username'.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "User with username 'username' not found.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    )
+            })
+    @SecurityRequirement(name = "BasicAuth")
     User updateUser(@RequestHeader HttpHeaders headers,
                     @PathVariable String username,
                     @Valid @RequestBody UserDtoUpdate userDtoUpdate) {
