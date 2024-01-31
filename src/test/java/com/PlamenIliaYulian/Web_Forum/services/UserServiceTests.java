@@ -4,9 +4,12 @@ import com.PlamenIliaYulian.Web_Forum.exceptions.DuplicateEntityException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
 import com.PlamenIliaYulian.Web_Forum.helpers.TestHelpers;
+import com.PlamenIliaYulian.Web_Forum.models.Comment;
+import com.PlamenIliaYulian.Web_Forum.models.Role;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.UserRepository;
+import org.hibernate.id.uuid.Helper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -232,5 +235,63 @@ public class UserServiceTests {
         Assertions.assertThrows(DuplicateEntityException.class,
                 ()-> userService.addPhoneNumber(userToBeUpdated, phoneNumber, userToDoUpdates));
 
+    }
+
+    /*Ilia*/
+    @Test
+    public void deleteUser_Throw_When_UserIsNotAdminAndNotSame() {
+        User user = TestHelpers.createMockNoAdminUser();
+        User userWhoDeletes = TestHelpers.createMockNoAdminUser();
+        userWhoDeletes.setUserId(30);
+
+        Assertions
+                .assertThrows(UnauthorizedOperationException.class,
+                        ()->userService.deleteUser(user,userWhoDeletes));
+    }
+    /*Ilia*/
+    @Test
+    public void deleteUser_Should_DeleteUser_When_UserValidParametersPassed() {
+        User user = TestHelpers.createMockNoAdminUser();
+
+        userService.deleteUser(user, user);
+
+        Mockito
+                .verify(userRepository, Mockito.times(1))
+                .updateUser(user);
+    }
+
+    /*Ilia*/
+    @Test
+    public void getUserByFirstName_Throw_When_UserIsNotAdmin() {
+        User user = TestHelpers.createMockNoAdminUser();
+
+        Assertions
+                .assertThrows(UnauthorizedOperationException.class,
+                        ()->userService.getUserByFirstName("firstName",user));
+    }
+
+    /*Ilia*/
+    @Test
+    public void getUserByFirstName_CallRepository_When_ValidParametersPassed() {
+        User user = TestHelpers.createMockAdminUser();
+
+        userService.getUserByFirstName("firstName", user);
+
+        Mockito
+                .verify(userRepository, Mockito.times(1))
+                .getUserByFirstName("firstName");
+    }
+
+    /*Ilia*/
+    @Test
+    public void getUsersById_Should_ReturnUser_When_MethodCalled() {
+        Mockito
+                .when(userRepository.getUserById(2))
+                .thenReturn(TestHelpers.createMockNoAdminUser());
+
+        User user = userService.getUserById(2);
+
+        Assertions
+                .assertEquals(2, user.getUserId());
     }
 }
