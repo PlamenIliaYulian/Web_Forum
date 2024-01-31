@@ -20,6 +20,7 @@ import java.util.Set;
 @ExtendWith(MockitoExtension.class)
 public class CommentServiceTests {
 
+    /*ToDO Change names to MockRepository and MockService*/
     @Mock
     CommentRepository commentRepository;
 
@@ -145,7 +146,7 @@ public class CommentServiceTests {
     }
     /*Ilia*/
     @Test
-    public void deleteComment_ShouldDeleteComment_When_UserIsNotBlocked() {
+    public void deleteComment_Should_DeleteComment_When_UserIsNotBlocked() {
         Comment comment = TestHelpers.createMockComment1();
 
         commentService.deleteComment(comment);
@@ -165,7 +166,7 @@ public class CommentServiceTests {
     }
     /*Ilia*/
     @Test
-    public void dislikeComment_Throw_When_User_AlreadyDislikedComment() {
+    public void dislikeComment_Throw_When_UserAlreadyDislikedComment() {
         Comment comment = TestHelpers.createMockComment1();
         User userDisliked = TestHelpers.createMockNoAdminUser();
         userDisliked.setUserId(20);
@@ -177,7 +178,7 @@ public class CommentServiceTests {
     }
     /*Ilia*/
     @Test
-    public void dislikeComment_Should_UpdateComment_When_PassedArgumentsAreValid () {
+    public void dislikeComment_Should_UpdateComment_When_ValidParametersPassed () {
         Comment comment = TestHelpers.createMockComment1();
         User userDisliked = TestHelpers.createMockNoAdminUser();
         userDisliked.setUserId(20);

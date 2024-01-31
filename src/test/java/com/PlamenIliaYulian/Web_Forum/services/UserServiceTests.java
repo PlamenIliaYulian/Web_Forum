@@ -21,6 +21,8 @@ import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTests {
+    /*ToDO Change names to MockRepository and MockService*/
+
     @Mock
     UserRepository userRepository;
 

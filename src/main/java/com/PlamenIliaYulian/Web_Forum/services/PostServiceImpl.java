@@ -167,6 +167,7 @@ public class PostServiceImpl implements PostService {
         return postRepository.updatePost(postToRemoveCommentFrom);
     }
 
+    /*Ilia*/
     @Override
     public List<Comment> getAllCommentsRelatedToPost(Post postWithComments) {
         return postWithComments.getRelatedComments()

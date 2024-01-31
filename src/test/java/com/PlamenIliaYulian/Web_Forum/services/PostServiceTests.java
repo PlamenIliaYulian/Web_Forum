@@ -8,6 +8,7 @@ import com.PlamenIliaYulian.Web_Forum.helpers.TestHelpers;
 import com.PlamenIliaYulian.Web_Forum.models.*;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.PostRepository;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,12 +22,14 @@ import java.util.*;
 @ExtendWith(MockitoExtension.class)
 public class PostServiceTests {
 
+    /*ToDO Change names to MockRepository and MockService*/
+
     @Mock
     PostRepository postRepository;
     @Mock
     CommentService commentService;
-
-
+    @Mock
+    TagService tagService;
     @InjectMocks
     PostServiceImpl postService;
 
@@ -356,5 +359,102 @@ public class PostServiceTests {
                 .updatePost(postToAddComment);
 
     }
+    /*Ilia*/
+    @Test
+    public void updatePost_Throw_When_UserIsBlocked() {
+        Post post = TestHelpers.createMockPost2();
+        User creator = post.getCreatedBy();
+        creator.setBlocked(true);
 
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                ()-> postService.updatePost(post, creator));
+    }
+
+    /*Ilia*/
+    @Test
+    public void updatePost_Throw_When_UserIsNotAdminAndNotCreator() {
+        Post post = TestHelpers.createMockPost2();
+        User userToUpdate = TestHelpers.createMockNoAdminUser();
+        userToUpdate.setUserId(100);
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                ()-> postService.updatePost(post, userToUpdate));
+    }
+
+    /*Ilia*/
+    @Test
+    public void updatePost_CallRepository_When_ValidParametersPassed() {
+        Post post = TestHelpers.createMockPost2();
+
+        Mockito
+                .when(postRepository.updatePost(post))
+                .thenReturn(post);
+        postService.updatePost(post, post.getCreatedBy());
+
+        Mockito
+                .verify(postRepository, Mockito.times(1))
+                .updatePost(post);
+    }
+    /*Ilia*/
+    @Test
+    public void getPostById_Should_ReturnPost_When_MethodCalled() {
+        Mockito
+                .when(postRepository.getPostById(1))
+                .thenReturn(TestHelpers.createMockPost1());
+
+        Post post = postService.getPostById(1);
+
+        Assertions
+                .assertEquals(1, post.getPostId());
+    }
+
+    /*Ilia*/
+    @Test
+    public void addTagToPost_Throw_When_UserIsBlocked() {
+        Post post = TestHelpers.createMockPost2();
+        Tag tag = TestHelpers.createMockTag();
+        User userToAddTag = post.getCreatedBy();
+        userToAddTag.setBlocked(true);
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                ()-> postService.addTagToPost(post, tag,userToAddTag));
+    }
+
+    /*Ilia*/
+    @Test
+    public void addTagToPost_Throw_When_UserIsNotAdminAndNotCreator() {
+        Post post = TestHelpers.createMockPost2();
+        Tag tag = TestHelpers.createMockTag();
+        User userToAddTag = TestHelpers.createMockNoAdminUser();
+        userToAddTag.setUserId(100);
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                ()-> postService.addTagToPost(post, tag,userToAddTag));
+    }
+
+    /*Ilia*/
+    @Test
+    public void addTagToPost_AddTag_When_ValidParametersPassed() {
+        Post post = TestHelpers.createMockPost2();
+        Tag tag = TestHelpers.createMockTag();
+
+        Mockito
+                .when(tagService.createTag(tag,post.getCreatedBy()))
+                .thenReturn(tag);
+        postService.addTagToPost(post,tag,post.getCreatedBy());
+
+        Mockito
+                .verify(postRepository, Mockito.times(1))
+                .updatePost(post);
+
+    }
+    /*Ilia*/
+    @Test
+    public void getAllCommentsRelatedToPost_ReturnsList_WhenCalled() {
+        Post post = TestHelpers.createMockPost1();
+
+        List<Comment> listComments = postService.getAllCommentsRelatedToPost(post);
+
+        Assertions.assertNotNull(listComments);
+    }
 }
