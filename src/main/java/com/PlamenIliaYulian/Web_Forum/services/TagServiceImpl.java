@@ -1,6 +1,7 @@
 package com.PlamenIliaYulian.Web_Forum.services;
 
-import com.PlamenIliaYulian.Web_Forum.helpers.PermissionHelper;
+import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
+import com.PlamenIliaYulian.Web_Forum.services.helpers.PermissionHelper;
 import com.PlamenIliaYulian.Web_Forum.models.Post;
 import com.PlamenIliaYulian.Web_Forum.models.Tag;
 import com.PlamenIliaYulian.Web_Forum.models.User;
@@ -33,8 +34,14 @@ public class TagServiceImpl implements TagService {
     @Override
     public Tag createTag(Tag tag, User userToCheckIfBlocked) {
         PermissionHelper.isBlocked(userToCheckIfBlocked, UNAUTHORIZED_OPERATION);
-        /*Unique tag validation.*/
-        return tagRepository.createTag(tag);
+
+        try {
+            tag = tagRepository.getTagByName(tag.getName());
+        } catch (EntityNotFoundException e) {
+            return tagRepository.createTag(tag);
+        }
+        return tag;
+
     }
 
     @Override

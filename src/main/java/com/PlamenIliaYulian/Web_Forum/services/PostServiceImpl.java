@@ -4,7 +4,7 @@ import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.InvalidOperationException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.InvalidUserInputException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
-import com.PlamenIliaYulian.Web_Forum.helpers.PermissionHelper;
+import com.PlamenIliaYulian.Web_Forum.services.helpers.PermissionHelper;
 import com.PlamenIliaYulian.Web_Forum.models.*;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.PostRepository;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
@@ -120,14 +120,8 @@ public class PostServiceImpl implements PostService {
     public Post addTagToPost(Post post, Tag tag, User authorizedUser) {
         PermissionHelper.isBlocked(authorizedUser, UNAUTHORIZED_OPERATION);
         PermissionHelper.isAdminOrSameUser(post.getCreatedBy(), authorizedUser, UNAUTHORIZED_OPERATION);
-        try {
-           tag = tagService.getTagByName(tag.getName());
-        } catch (EntityNotFoundException e) {
-           tag = tagService.createTag(tag, authorizedUser);
-        }
 
-        /*move validation to TagServiceImpl*/
-
+        tag = tagService.createTag(tag, authorizedUser);
         Set<Tag> postTags = post.getTags();
         postTags.add(tag);
         return postRepository.updatePost(post);

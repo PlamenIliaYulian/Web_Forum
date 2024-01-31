@@ -122,8 +122,72 @@ public class CommentServiceTests {
                 .updateComment(commentToLike);
     }
 
+    /*Ilia*/
+    @Test
+    public void getCommentByContent_Should_ReturnComment_When_MethodCalled() {
+        Mockito
+                .when(commentRepository.getCommentByContent(Mockito.anyString()))
+                .thenReturn(TestHelpers.createMockComment1());
 
+        Comment comment = commentService.getCommentByContent("Mock comment random content.");
 
+        Assertions
+                .assertEquals(1, comment.getCommentId());
+    }
+    /*Ilia*/
+    @Test
+    public void deleteComment_Throw_When_UserIsBlocked() {
+        Comment comment = TestHelpers.createMockComment1();
+        comment.getCreatedBy().setBlocked(true);
 
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                ()-> commentService.deleteComment(comment));
+    }
+    /*Ilia*/
+    @Test
+    public void deleteComment_ShouldDeleteComment_When_UserIsNotBlocked() {
+        Comment comment = TestHelpers.createMockComment1();
 
+        commentService.deleteComment(comment);
+
+        Mockito
+                .verify(commentRepository, Mockito.times(1))
+                .softDeleteComment(comment);
+    }
+    /*Ilia*/
+    @Test
+    public void dislikeComment_Throw_When_IsTheSameUser() {
+        Comment comment = TestHelpers.createMockComment1();
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                ()-> commentService.dislikeComment(comment, comment.getCreatedBy()));
+
+    }
+    /*Ilia*/
+    @Test
+    public void dislikeComment_Throw_When_User_AlreadyDislikedComment() {
+        Comment comment = TestHelpers.createMockComment1();
+        User userDisliked = TestHelpers.createMockNoAdminUser();
+        userDisliked.setUserId(20);
+        Set<User> dislikeUsers = comment.getUsersWhoDislikedComment();
+        dislikeUsers.add(userDisliked);
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                ()-> commentService.dislikeComment(comment, userDisliked));
+    }
+    /*Ilia*/
+    @Test
+    public void dislikeComment_Should_UpdateComment_When_PassedArgumentsAreValid () {
+        Comment comment = TestHelpers.createMockComment1();
+        User userDisliked = TestHelpers.createMockNoAdminUser();
+        userDisliked.setUserId(20);
+
+        Mockito.when(commentRepository.updateComment(comment))
+                .thenReturn(comment);
+        comment = commentService.dislikeComment(comment, userDisliked);
+
+        Mockito
+                .verify(commentRepository, Mockito.times(1))
+                .updateComment(comment);
+    }
 }

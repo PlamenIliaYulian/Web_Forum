@@ -2,19 +2,15 @@ package com.PlamenIliaYulian.Web_Forum.services;
 
 import com.PlamenIliaYulian.Web_Forum.exceptions.DuplicateEntityException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
-import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
-import com.PlamenIliaYulian.Web_Forum.helpers.PermissionHelper;
-import com.PlamenIliaYulian.Web_Forum.models.Role;
+import com.PlamenIliaYulian.Web_Forum.services.helpers.PermissionHelper;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.UserRepository;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
-import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 
 @Service
@@ -32,6 +28,8 @@ public class UserServiceImpl implements UserService {
     public User createUser(User user) {
         /*Unique email validation.*/
         /*Unique username validation.*/
+        /*Ilia -The validations has to be moved to a separate method in this class.
+        Otherwise, it is hard to read and to understand the logic behind the code*/
         boolean duplicateExists = true;
 
         try {
@@ -120,6 +118,10 @@ public class UserServiceImpl implements UserService {
         /*Check if the two users are one and the same. If not - throw exception.
          * If we want to let the admin set phone number to another admin we can set
          * it in administrative changes.*/
+
+        /*Ilia -The validations has to be moved to a separate method in this class.
+        Otherwise, it is hard to read and to understand the logic behind the code*/
+
         boolean duplicateExists = true;
 
         try {
