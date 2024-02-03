@@ -1,4 +1,4 @@
-package com.PlamenIliaYulian.Web_Forum.helpers;
+package com.PlamenIliaYulian.Web_Forum.controllers.helpers;
 
 import com.PlamenIliaYulian.Web_Forum.exceptions.AuthenticationException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;

@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
         if (duplicateExists) {
             throw new DuplicateEntityException("User", "username", user.getUserName());
         }
-
+        user.setAvatar(userRepository.getDefaultAvatar());
         return userRepository.createUser(user);
     }
 

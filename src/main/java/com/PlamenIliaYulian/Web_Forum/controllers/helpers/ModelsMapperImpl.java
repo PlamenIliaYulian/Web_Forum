@@ -1,6 +1,6 @@
-package com.PlamenIliaYulian.Web_Forum.helpers;
+package com.PlamenIliaYulian.Web_Forum.controllers.helpers;
 
-import com.PlamenIliaYulian.Web_Forum.helpers.contracts.ModelsMapper;
+import com.PlamenIliaYulian.Web_Forum.controllers.helpers.contracts.ModelsMapper;
 import com.PlamenIliaYulian.Web_Forum.models.*;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.*;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
@@ -79,17 +79,24 @@ public class ModelsMapperImpl implements ModelsMapper {
         return comment;
     }
 
+    @Override
+    public Comment commentFromDto(CommentDto commentDto, int id) {
+        Comment comment = commentService.getCommentById(id);
+        comment.setContent(commentDto.getComment());
+        return comment;
+    }
+
     /*TODO add # to tags.*/
     @Override
     public Tag tagFromDto(TagDto tagDto) {
         Tag tag = new Tag();
-        tag.setName(tagDto.getTag());
+        tag.setName(tagDto.getTag().toLowerCase());
         return tag;
     }
     @Override
     public Tag tagFromDto(TagDto tagDto, String name) {
         Tag tag = tagService.getTagByName(name);
-        tag.setName(tagDto.getTag());
+        tag.setName(tagDto.getTag().toLowerCase());
         return tag;
     }
 

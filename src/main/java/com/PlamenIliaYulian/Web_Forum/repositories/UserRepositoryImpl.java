@@ -1,13 +1,16 @@
 package com.PlamenIliaYulian.Web_Forum.repositories;
 
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
+import com.PlamenIliaYulian.Web_Forum.models.Avatar;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.UserRepository;
+import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.object.SqlQuery;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -16,6 +19,7 @@ import java.util.*;
 public class UserRepositoryImpl implements UserRepository {
 
     private final SessionFactory sessionFactory;
+
 
     @Autowired
     public UserRepositoryImpl(SessionFactory sessionFactory) {
@@ -44,7 +48,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public List<User> getAllUsers(UserFilterOptions userFilterOptions) {
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             List<String> filters = new ArrayList<>();
             Map<String, Object> params = new HashMap<>();
 
@@ -58,7 +62,7 @@ public class UserRepositoryImpl implements UserRepository {
                 params.put("email", String.format("%%%s%%", value));
             });
 
-            userFilterOptions.getFirstName().ifPresent(value ->{
+            userFilterOptions.getFirstName().ifPresent(value -> {
                 filters.add("firstName like :firstName");
                 params.put("firstName", String.format("%%%s%%", value));
             });
@@ -163,7 +167,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User getUserByPhoneNumber(String phoneNumber) {
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Query<User> query = session.createQuery("FROM User WHERE phoneNumber = :phoneNumber AND isDeleted = false ", User.class);
             query.setParameter("phoneNumber", phoneNumber);
             List<User> result = query.list();
@@ -174,9 +178,20 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-
     @Override
     public User makeAdministrativeChanges(User userToBeUpdated) {
         return updateUser(userToBeUpdated);
+    }
+
+    @Override
+    public byte[] getDefaultAvatar() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Avatar> query = session.createQuery("FROM Avatar WHERE avatarId = 1", Avatar.class);
+            List<Avatar> result = query.list();
+            if (result.isEmpty()) {
+                throw new EntityNotFoundException("Avatar", "avatar ID", "#1");
+            }
+            return result.get(0).getAvatar();
+        }
     }
 }

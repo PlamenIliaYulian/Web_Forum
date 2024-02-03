@@ -17,6 +17,5 @@ public interface UserRepository {
     User getUserById(int id);
     User getUserByPhoneNumber(String phoneNumber);
     User makeAdministrativeChanges(User userToBeUpdated);
-
-
+    byte[] getDefaultAvatar();
 }

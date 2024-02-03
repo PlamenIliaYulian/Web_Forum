@@ -1,4 +1,4 @@
-package com.PlamenIliaYulian.Web_Forum.helpers.contracts;
+package com.PlamenIliaYulian.Web_Forum.controllers.helpers.contracts;
 
 import com.PlamenIliaYulian.Web_Forum.models.*;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.*;
@@ -8,6 +8,7 @@ public interface ModelsMapper {
 
     Comment commentFromDto(CommentDto commentDto);
     Comment commentFromDto(CommentDto commentDto, String content);
+    Comment commentFromDto(CommentDto commentDto, int id);
 
     Tag tagFromDto(TagDto tagDto);
     Tag tagFromDto(TagDto tagDto, String name);

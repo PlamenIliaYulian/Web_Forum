@@ -3,17 +3,19 @@ package com.PlamenIliaYulian.Web_Forum.controllers.REST;
 import com.PlamenIliaYulian.Web_Forum.exceptions.AuthenticationException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
-import com.PlamenIliaYulian.Web_Forum.helpers.AuthenticationHelper;
-import com.PlamenIliaYulian.Web_Forum.helpers.contracts.ModelsMapper;
+import com.PlamenIliaYulian.Web_Forum.controllers.helpers.AuthenticationHelper;
+import com.PlamenIliaYulian.Web_Forum.controllers.helpers.contracts.ModelsMapper;
 import com.PlamenIliaYulian.Web_Forum.models.Tag;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.TagDto;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -33,7 +35,7 @@ public class TagRestController {
         this.modelsMapper = modelsMapper;
     }
 
-    @GetMapping
+    @GetMapping("/search")
     public List<Tag> getAllTags(@RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);

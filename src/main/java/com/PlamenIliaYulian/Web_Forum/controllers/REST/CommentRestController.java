@@ -3,14 +3,15 @@ package com.PlamenIliaYulian.Web_Forum.controllers.REST;
 import com.PlamenIliaYulian.Web_Forum.exceptions.AuthenticationException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
-import com.PlamenIliaYulian.Web_Forum.helpers.AuthenticationHelper;
-import com.PlamenIliaYulian.Web_Forum.helpers.contracts.ModelsMapper;
+import com.PlamenIliaYulian.Web_Forum.controllers.helpers.AuthenticationHelper;
+import com.PlamenIliaYulian.Web_Forum.controllers.helpers.contracts.ModelsMapper;
 import com.PlamenIliaYulian.Web_Forum.models.Comment;
 import com.PlamenIliaYulian.Web_Forum.models.CommentFilterOptions;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.CommentDto;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -38,8 +40,7 @@ public class CommentRestController {
         this.modelsMapper = modelsMapper;
     }
 
-
-    @GetMapping
+    @GetMapping("/search")
     public List<Comment> getAllComments(@RequestHeader HttpHeaders headers,
                                         @RequestParam(required = false) Integer likes,
                                         @RequestParam(required = false) Integer dislikes,
@@ -57,15 +58,13 @@ public class CommentRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-
-
-    @PutMapping("/{content}")
-    public Comment updateComment(@PathVariable String content,
+    @PutMapping("/{id}")
+    public Comment updateComment(@PathVariable int id,
                                  @RequestHeader HttpHeaders headers,
                                  @Valid @RequestBody CommentDto commentDto) {
         try {
             User userToAuthenticate = authenticationHelper.tryGetUser(headers);
-            Comment newComment = modelsMapper.commentFromDto(commentDto, content);
+            Comment newComment = modelsMapper.commentFromDto(commentDto, id);
             return commentService.updateComment(newComment, userToAuthenticate);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());

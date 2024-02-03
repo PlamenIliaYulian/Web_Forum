@@ -5,8 +5,8 @@ import com.PlamenIliaYulian.Web_Forum.exceptions.AuthenticationException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.InvalidUserInputException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
-import com.PlamenIliaYulian.Web_Forum.helpers.AuthenticationHelper;
-import com.PlamenIliaYulian.Web_Forum.helpers.contracts.ModelsMapper;
+import com.PlamenIliaYulian.Web_Forum.controllers.helpers.AuthenticationHelper;
+import com.PlamenIliaYulian.Web_Forum.controllers.helpers.contracts.ModelsMapper;
 import com.PlamenIliaYulian.Web_Forum.models.*;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.CommentDto;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.PostDto;
@@ -102,7 +102,7 @@ public class PostRestController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/search")
     public List<Post> getAllPosts(@RequestHeader HttpHeaders headers,
                                   @RequestParam(required = false) Integer likes,
                                   @RequestParam(required = false) Integer dislikes,
@@ -184,7 +184,7 @@ public class PostRestController {
     }
 
     /*Ilia*/
-    @PostMapping("/{title}/tags")
+    @PutMapping("/{title}/tags")
     public Post addTagToPost(@RequestHeader HttpHeaders headers,
                              @PathVariable String title,
                              @Valid @RequestBody TagDto tagDto) {
