@@ -1,4 +1,4 @@
-package com.PlamenIliaYulian.Web_Forum.controllers;
+package com.PlamenIliaYulian.Web_Forum.controllers.REST;
 
 import com.PlamenIliaYulian.Web_Forum.exceptions.AuthenticationException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
@@ -80,7 +80,6 @@ public class UserRestController {
     }
 
     /*Yuli - implemented:*/
-    @PutMapping("/{username}")
     @Operation(
             summary = "Updates the information of the user found by the provided username.",
             description = "Used to update User's first name, last name, email or password.",
@@ -126,6 +125,7 @@ public class UserRestController {
                     )
             })
     @SecurityRequirement(name = "BasicAuth")
+    @PutMapping("/{username}")
     User updateUser(@RequestHeader HttpHeaders headers,
                     @PathVariable String username,
                     @Valid @RequestBody UserDtoUpdate userDtoUpdate) {
@@ -185,6 +185,31 @@ public class UserRestController {
 
     /*TODO It is not the best way for this method.*/
     /*TODO to implement authentication required for this end point.*/
+
+    @Operation(
+            summary = "Retrieves information related to a specific user registered in the system.",
+            description = "Used to retrieve information related to a particular user registered in the system.",
+            parameters = {
+                    @Parameter(name = "username",
+                            description = "Path variable.",
+                            example = "emily_jackson"),
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "There is no user with this 'username'.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "User with username 'username' not found.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    )
+            })
     @GetMapping("/username/{username}")
     public User getUserByUsername(@PathVariable String username) {
         try {
@@ -228,6 +253,51 @@ public class UserRestController {
         }
     }
 
+    @Operation(
+            summary = "Uploads an avatar / profile picture to user's profile.",
+            description = "Used to update user's profile by updating their avatar / profile picture.",
+            parameters = {
+                    @Parameter(name = "userToBeUpdated",
+                            description = "ID of the user whose profile will be updated.",
+                            example = "1")
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Username and password provided in the 'Authorization' header do not match any user in the database",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Invalid authentication.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Username trying to execute the request must be either admin OR the same user to which the profile belongs.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Unauthorized operation.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "There is no user with this 'username'.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "User with username 'username' not found.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    )
+            })
+    @SecurityRequirement(name = "BasicAuth")
     @PutMapping("/{userToBeUpdated}/avatar")
     public User addAvatar(@PathVariable int userToBeUpdated, @RequestBody byte[] avatar, @RequestHeader HttpHeaders headers) {
         try {

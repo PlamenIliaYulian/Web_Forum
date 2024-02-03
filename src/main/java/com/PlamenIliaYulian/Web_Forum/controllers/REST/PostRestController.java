@@ -1,4 +1,4 @@
-package com.PlamenIliaYulian.Web_Forum.controllers;
+package com.PlamenIliaYulian.Web_Forum.controllers.REST;
 
 
 import com.PlamenIliaYulian.Web_Forum.exceptions.AuthenticationException;

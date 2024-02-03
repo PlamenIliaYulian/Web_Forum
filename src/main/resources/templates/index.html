@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home page</title>
+    <!--Google Icons start-->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
+    <!--Google Icons end-->
+
+
+    <link href="../static/css/reset.css" th:href="@{/css/reset.css}" rel="stylesheet"/>
+    <link href="../static/css/home.css" th:href="@{/css/home.css}" rel="stylesheet"/>
+</head>
+<body>
+<div class="webPage-container">
+
+    <header id="header">
+        <ul id="header-ul">
+            <li>Home</li>
+            <li>Login</li>
+            <li>Register</li>
+        </ul>
+    </header>
+
+    <div id="search-input">
+        <form action="">
+            <label for="search-field"></label>
+            <input type="search" id="search-field" placeholder="Search for a topic in the forum">
+            <label for="search-field"></label>
+            <input type="submit" id="search-button" value="Search">
+        </form>
+    </div>
+    <div id="forumContentContainer-container">
+        <div id="forumTotalUsersTotalPosts-container">
+            <div id="postIconPlusPostCount-container">
+                <span id="edit_square_icon_id" class="material-symbols-outlined">edit_square</span>
+                <p id="totalAmountOfPosts">12303</p>
+            </div>
+            <div id="usersIconPlusTotalRegisteredUsers-container">
+                <span id="group_icon_id" class="material-symbols-outlined">group</span>
+                <p id="totalAmountOfRegisteredUSers">1239</p>
+            </div>
+        </div>
+
+        <div id="forumHeader-container">
+            Our top 10 most commented posts
+        </div>
+        <div id="forumContent-container">
+
+            <div class="topicContent-container">
+                <div class="verticalColoredLine"></div>
+                <div class="topicContent">
+                    <p class="topic">Understanding Java Multithreading</p>
+                    <div class="userNameCreationDateLikesTags-container">
+                        <div class="userPlusCreationDate-container">
+                            <div class="userIconPlusUsername-container">
+                                <span class="material-symbols-outlined">account_circle</span>
+                                <p class="userName">Username</p>
+                            </div>
+                            <div class="calendarIconPlusDate-container">
+                                <span class="material-symbols-outlined">calendar_month</span>
+                                <p class="creationDate">24.01.31 07:00:00</p>
+                            </div>
+                        </div>
+
+
+                        <div class="likesPlusTag-container">
+                            <div class="likesIconPlusLikes-container">
+                                <span class="material-symbols-outlined">thumb_up</span>
+                                <p class="likesCount">123</p>
+                            </div>
+                            <div class="TagIconPlusTag-container">
+                                <span class="material-symbols-outlined">loyalty</span>
+                                <p class="tagName">#SomeVeryLongWord</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="topicContent-container">
+                <div class="verticalColoredLine"></div>
+                <div class="topicContent">
+                    <p class="topic">Concurrency Challenges in Java Programming</p>
+                    <div class="userNameCreationDateLikesTags-container">
+                        <div class="userPlusCreationDate-container">
+                            <div class="userIconPlusUsername-container">
+                                <span class="material-symbols-outlined">account_circle</span>
+                                <p class="userName">Username</p>
+                            </div>
+                            <div class="calendarIconPlusDate-container">
+                                <span class="material-symbols-outlined">calendar_month</span>
+                                <p class="creationDate">24.01.31 07:00:00</p>
+                            </div>
+                        </div>
+
+
+                        <div class="likesPlusTag-container">
+                            <div class="likesIconPlusLikes-container">
+                                <span class="material-symbols-outlined">thumb_up</span>
+                                <p class="likesCount">123</p>
+                            </div>
+                            <div class="TagIconPlusTag-container">
+                                <span class="material-symbols-outlined">loyalty</span>
+                                <p class="tagName">#SomeVeryLongWord</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="topicContent-container">
+                <div class="verticalColoredLine"></div>
+                <div class="topicContent">
+                    <p class="topic">JavaFX: Building Modern User Interfaces</p>
+                    <div class="userNameCreationDateLikesTags-container">
+                        <div class="userPlusCreationDate-container">
+                            <div class="userIconPlusUsername-container">
+                                <span class="material-symbols-outlined">account_circle</span>
+                                <p class="userName">Username</p>
+                            </div>
+                            <div class="calendarIconPlusDate-container">
+                                <span class="material-symbols-outlined">calendar_month</span>
+                                <p class="creationDate">24.01.31 07:00:00</p>
+                            </div>
+                        </div>
+
+
+                        <div class="likesPlusTag-container">
+                            <div class="likesIconPlusLikes-container">
+                                <span class="material-symbols-outlined">thumb_up</span>
+                                <p class="likesCount">123</p>
+                            </div>
+                            <div class="TagIconPlusTag-container">
+                                <span class="material-symbols-outlined">loyalty</span>
+                                <p class="tagName">#SomeVeryLongWord</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer id="webPage-footer">
+        <p>@Copyright PlamkataIliikataYulkata inc. 2024</p>
+    </footer>
+
+</div>
+</body>
+</html>
