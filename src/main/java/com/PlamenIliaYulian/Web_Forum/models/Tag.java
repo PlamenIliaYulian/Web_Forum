@@ -17,7 +17,7 @@ public class Tag implements Comparable<Tag> {
     private int tagId;
 
     @Column(name = "name")
-    private String name;
+    private String tag;
 
     @Column(name = "is_deleted")
     private boolean isDeleted;
@@ -32,9 +32,9 @@ public class Tag implements Comparable<Tag> {
     public Tag() {
     }
 
-    public Tag(int tagId, String name, boolean isDeleted) {
+    public Tag(int tagId, String tag, boolean isDeleted) {
         this.tagId = tagId;
-        this.name = name;
+        this.tag = tag;
         this.isDeleted = isDeleted;
     }
 
@@ -54,12 +54,12 @@ public class Tag implements Comparable<Tag> {
         this.tagId = tagId;
     }
 
-    public String getName() {
-        return name;
+    public String getTag() {
+        return tag;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTag(String name) {
+        this.tag = name;
     }
 
     public boolean isDeleted() {

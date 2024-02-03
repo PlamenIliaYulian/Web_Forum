@@ -1,7 +1,6 @@
 package com.PlamenIliaYulian.Web_Forum.helpers;
 
 import com.PlamenIliaYulian.Web_Forum.models.*;
-import org.antlr.v4.runtime.tree.Tree;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -58,7 +57,7 @@ public class TestHelpers {
         *  Set<Post> relatedPosts = new TreeSet<>();
         relatedPosts.add(createMockPost1());*/
         mockTag.setTagId(777);
-        mockTag.setName("#luckyNumber");
+        mockTag.setTag("#luckyNumber");
         mockTag.setDeleted(false);
         mockTag.setRelatedPosts(null);
         return mockTag;

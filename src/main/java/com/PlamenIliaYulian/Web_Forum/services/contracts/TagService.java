@@ -21,6 +21,6 @@ public interface TagService {
 
     /*July - 📌 DONE 📌- last updated 25.01.2024.*/
     List<Tag> getAllTags();
-
+    /* TODO Plamkata */
     Tag getTagById(int id);
 }

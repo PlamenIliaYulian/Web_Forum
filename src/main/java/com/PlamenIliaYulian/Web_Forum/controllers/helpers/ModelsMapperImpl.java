@@ -109,19 +109,19 @@ public class ModelsMapperImpl implements ModelsMapper {
     @Override
     public Tag tagFromDto(TagDto tagDto) {
         Tag tag = new Tag();
-        tag.setName(tagDto.getTag().toLowerCase());
+        tag.setTag(tagDto.getTag().toLowerCase());
         return tag;
     }
     @Override
     public Tag tagFromDto(TagDto tagDto, String name) {
         Tag tag = tagService.getTagByName(name);
-        tag.setName(tagDto.getTag().toLowerCase());
+        tag.setTag(tagDto.getTag().toLowerCase());
         return tag;
     }
     @Override
     public Tag tagFromDto(TagDto tagDto, int id) {
         Tag tag = tagService.getTagById(id);
-        tag.setName(tagDto.getTag().toLowerCase());
+        tag.setTag(tagDto.getTag().toLowerCase());
         return tag;
     }
 

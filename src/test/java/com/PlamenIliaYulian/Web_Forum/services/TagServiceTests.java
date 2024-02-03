@@ -29,6 +29,7 @@ public class TagServiceTests {
     @InjectMocks
     TagServiceImpl tagService;
 
+    /*TODO Yuli Update the test with the new logic.*/
     @Test
     public void createTag_Should_Pass_When_TagCreatorIsNotBlocked() {
         Tag tagToCreate = TestHelpers.createMockTag();

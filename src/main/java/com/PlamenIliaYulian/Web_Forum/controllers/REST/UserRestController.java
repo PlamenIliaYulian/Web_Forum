@@ -261,7 +261,7 @@ public class UserRestController {
             })
     @SecurityRequirement(name = "BasicAuth")
     @PutMapping("/{id}/avatar")
-    public User addAvatar(@PathVariable int id, @RequestBody byte[] avatar, @RequestHeader HttpHeaders headers) {
+    public User updateAvatar(@PathVariable int id, @RequestBody byte[] avatar, @RequestHeader HttpHeaders headers) {
         try {
             User userToDoChanges = authenticationHelper.tryGetUser(headers);
             return userService.addAvatar(id, avatar, userToDoChanges);
@@ -293,5 +293,5 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
-
+    /*TODO add change phone number method.*/
 }

@@ -27,7 +27,7 @@ public class TagRepositoryImpl implements TagRepository {
     @Override
     public Tag getTagByName(String name) {
         try (Session session = sessionFactory.openSession();) {
-            Query<Tag> query = session.createQuery("from Tag where name = :name AND isDeleted = false",
+            Query<Tag> query = session.createQuery("from Tag where tag = :name AND isDeleted = false",
                     Tag.class);
             query.setParameter("name", name);
             if (query.list().isEmpty()) {

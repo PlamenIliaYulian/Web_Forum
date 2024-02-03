@@ -26,35 +26,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
-        /*Unique email validation.*/
-        /*Unique username validation.*/
-        /*Ilia -The validations has to be moved to a separate method in this class.
-        Otherwise, it is hard to read and to understand the logic behind the code*/
-        boolean duplicateExists = true;
-
-        try {
-            userRepository.getUserByUsername(user.getUserName());
-        } catch (EntityNotFoundException e) {
-            duplicateExists = false;
-        }
-
-        if (duplicateExists) {
-            throw new DuplicateEntityException("User", "username", user.getUserName());
-        }
-
-
-        try {
-            userRepository.getUserByEmail(user.getEmail());
-        } catch (EntityNotFoundException e) {
-            duplicateExists = false;
-        }
-
-        if (duplicateExists) {
-            throw new DuplicateEntityException("User", "username", user.getUserName());
-        }
+        checkForUniqueUsername(user);
+        checkForUniqueEmail(user);
         user.setAvatar(userRepository.getDefaultAvatar());
         return userRepository.createUser(user);
     }
+
 
     /*Ilia*/
     @Override
@@ -66,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(User userToBeUpdated, User userIsAuthorized) {
-        /*Unique email validation.*/
+        checkForUniqueEmail(userToBeUpdated);
         PermissionHelper.isAdminOrSameUser(userToBeUpdated, userIsAuthorized, UNAUTHORIZED_OPERATION);
         return userRepository.updateUser(userToBeUpdated);
     }
@@ -143,6 +120,32 @@ public class UserServiceImpl implements UserService {
         PermissionHelper.isAdmin(userToMakeUpdates, UNAUTHORIZED_OPERATION);
         return userRepository.makeAdministrativeChanges(userToBeUpdated);
     }
+    private void checkForUniqueUsername(User user) {
+        boolean duplicateExists = true;
 
+        try {
+            userRepository.getUserByUsername(user.getUserName());
+        } catch (EntityNotFoundException e) {
+            duplicateExists = false;
+        }
+
+        if (duplicateExists) {
+            throw new DuplicateEntityException("User", "username", user.getUserName());
+        }
+    }
+
+    private void checkForUniqueEmail(User user) {
+        boolean duplicateExists = true;
+
+        try {
+            userRepository.getUserByEmail(user.getEmail());
+        } catch (EntityNotFoundException e) {
+            duplicateExists = false;
+        }
+
+        if (duplicateExists) {
+            throw new DuplicateEntityException("User", "username", user.getUserName());
+        }
+    }
 }
 

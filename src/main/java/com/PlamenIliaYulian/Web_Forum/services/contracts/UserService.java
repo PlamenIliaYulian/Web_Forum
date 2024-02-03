@@ -25,7 +25,7 @@ public interface UserService {
     /*July - 📌 DONE 📌 - last updated 25.01.2024*/
     User getUserByUsername(String username);
 
-    /*Plamen*/
+    /*TODO test Plamen*/
     User getUserByEmail(String email, User userIsAuthorized);
 
     /*✔  Ilia ✔ */
