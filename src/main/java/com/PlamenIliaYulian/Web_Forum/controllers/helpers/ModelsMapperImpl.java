@@ -47,8 +47,27 @@ public class ModelsMapperImpl implements ModelsMapper {
     }
 
     @Override
+    public User userFromAdministrativeDto(UserAdministrativeDto userAdministrativeDto, int id) {
+        User user = userService.getUserById(id);
+        user.setBlocked(userAdministrativeDto.isBlocked());
+        user.setDeleted(userAdministrativeDto.isDeleted());
+        user.setRoles(userAdministrativeDto.getRoles());
+        return user;
+    }
+
+    @Override
     public User userFromDtoUpdate(UserDtoUpdate userDtoUpdate, String username) {
         User user = userService.getUserByUsername(username);
+        user.setFirstName(userDtoUpdate.getFirstName());
+        user.setLastName(userDtoUpdate.getLastName());
+        user.setEmail(userDtoUpdate.getEmail());
+        user.setPassword(userDtoUpdate.getPassword());
+        return user;
+    }
+
+    @Override
+    public User userFromDtoUpdate(UserDtoUpdate userDtoUpdate, int id) {
+        User user = userService.getUserById(id);
         user.setFirstName(userDtoUpdate.getFirstName());
         user.setLastName(userDtoUpdate.getLastName());
         user.setEmail(userDtoUpdate.getEmail());
@@ -96,6 +115,12 @@ public class ModelsMapperImpl implements ModelsMapper {
     @Override
     public Tag tagFromDto(TagDto tagDto, String name) {
         Tag tag = tagService.getTagByName(name);
+        tag.setName(tagDto.getTag().toLowerCase());
+        return tag;
+    }
+    @Override
+    public Tag tagFromDto(TagDto tagDto, int id) {
+        Tag tag = tagService.getTagById(id);
         tag.setName(tagDto.getTag().toLowerCase());
         return tag;
     }

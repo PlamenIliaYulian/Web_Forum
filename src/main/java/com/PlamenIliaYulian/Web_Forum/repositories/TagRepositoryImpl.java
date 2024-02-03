@@ -65,4 +65,17 @@ public class TagRepositoryImpl implements TagRepository {
             return query.list();
         }
     }
+
+    @Override
+    public Tag getTagById(int tagId) {
+        try (Session session = sessionFactory.openSession();) {
+            Query<Tag> query = session.createQuery("from Tag where tagId = :id AND isDeleted = false",
+                    Tag.class);
+            query.setParameter("id", tagId);
+            if (query.list().isEmpty()) {
+                throw new EntityNotFoundException("Tag", tagId);
+            }
+            return query.list().get(0);
+        }
+    }
 }

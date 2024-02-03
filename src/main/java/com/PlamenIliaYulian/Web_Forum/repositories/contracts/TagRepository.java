@@ -14,4 +14,6 @@ public interface TagRepository {
     Tag updateTag(Tag tag);
 
     List<Tag> getAllTags();
+
+    Tag getTagById(int id);
 }

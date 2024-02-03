@@ -35,7 +35,9 @@ public class PostRestController {
 
     @Autowired
     public PostRestController(PostService postService,
-                              AuthenticationHelper authenticationHelper, ModelsMapper modelsMapper, TagService tagService) {
+                              AuthenticationHelper authenticationHelper,
+                              ModelsMapper modelsMapper,
+                              TagService tagService) {
         this.postService = postService;
         this.authenticationHelper = authenticationHelper;
         this.modelsMapper = modelsMapper;
@@ -61,12 +63,12 @@ public class PostRestController {
 
     /*Plamen*/
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{postTitle}")
-    public void deletePost(@PathVariable String postTitle,
+    @DeleteMapping("/{id}")
+    public void deletePost(@PathVariable int id,
                            @RequestHeader HttpHeaders headers) {
         try {
             User userMakingRequest = authenticationHelper.tryGetUser(headers);
-            Post post = postService.getPostByTitle(postTitle);
+            Post post = postService.getPostById(id);
             postService.deletePost(post, userMakingRequest);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
@@ -78,13 +80,13 @@ public class PostRestController {
     }
 
     /*Ilia*/
-    @PutMapping("/{title}")
-    public Post updatePost(@PathVariable String title,
+    @PutMapping("/{id}")
+    public Post updatePost(@PathVariable int id,
                            @RequestHeader HttpHeaders headers,
                            @Valid @RequestBody PostDto postDto) {
         try {
             User userMakingRequest = authenticationHelper.tryGetUser(headers);
-            Post postByTitle = postService.getPostByTitle(title);
+            Post postByTitle = postService.getPostById(id);
             Post postToUpdate = modelsMapper.postFromDto(postDto, postByTitle);
             return postService.updatePost(postToUpdate, userMakingRequest);
         } catch (AuthenticationException e) {
@@ -136,7 +138,7 @@ public class PostRestController {
     }
 
     /*Ilia*/
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public Post getPostById(@PathVariable int id, @RequestHeader HttpHeaders headers) {
         try {
             User authenticatedUser = authenticationHelper.tryGetUser(headers);
@@ -150,12 +152,12 @@ public class PostRestController {
         }
     }
 
-    @PutMapping("/{title}/likes")
+    @PutMapping("/{id}/likes")
     public Post likePost(@RequestHeader HttpHeaders headers,
-                         @PathVariable String title) {
+                         @PathVariable int id) {
         try {
             User authenticatedUser = authenticationHelper.tryGetUser(headers);
-            Post post = postService.getPostByTitle(title);
+            Post post = postService.getPostById(id);
             return postService.likePost(post, authenticatedUser);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
@@ -167,12 +169,12 @@ public class PostRestController {
     }
 
     /*Plamen*/
-    @PutMapping("/{title}/dislikes")
+    @PutMapping("/{id}/dislikes")
     public Post dislikePost(@RequestHeader HttpHeaders headers,
-                            @PathVariable String title) {
+                            @PathVariable int id) {
         try {
             User authenticatedUser = authenticationHelper.tryGetUser(headers);
-            Post post = postService.getPostByTitle(title);
+            Post post = postService.getPostById(id);
             return postService.dislikePost(post, authenticatedUser);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
@@ -184,13 +186,13 @@ public class PostRestController {
     }
 
     /*Ilia*/
-    @PutMapping("/{title}/tags")
+    @PutMapping("/{id}/tags")
     public Post addTagToPost(@RequestHeader HttpHeaders headers,
-                             @PathVariable String title,
+                             @PathVariable int id,
                              @Valid @RequestBody TagDto tagDto) {
         try {
             User authorizedUser = authenticationHelper.tryGetUser(headers);
-            Post post = postService.getPostByTitle(title);
+            Post post = postService.getPostById(id);
             Tag tag = modelsMapper.tagFromDto(tagDto);
             return postService.addTagToPost(post, tag, authorizedUser);
         } catch (UnauthorizedOperationException e) {
@@ -212,13 +214,13 @@ public class PostRestController {
         }
     }
 
-    @DeleteMapping("/{title}/tags/{tagName}")
+    @DeleteMapping("/{id}/tags/{tagName}")
     public Post removeTagFromPost(@RequestHeader HttpHeaders headers,
-                                  @PathVariable String title,
+                                  @PathVariable int id,
                                   @PathVariable String tagName) {
         try {
             User authenticatedUser = authenticationHelper.tryGetUser(headers);
-            Post post = postService.getPostByTitle(title);
+            Post post = postService.getPostById(id);
             Tag tag = tagService.getTagByName(tagName);
             return postService.removeTagFromPost(post, tag, authenticatedUser);
         } catch (UnauthorizedOperationException e) {
@@ -235,13 +237,13 @@ public class PostRestController {
 
     /*Plamen*/
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{title}/comments")
+    @PostMapping("/{id}/comments")
     public Post addCommentToPost(@RequestHeader HttpHeaders headers,
-                                 @PathVariable String title,
+                                 @PathVariable int id,
                                  @Valid @RequestBody CommentDto commentDto) {
         try {
             User authorizedUser = authenticationHelper.tryGetUser(headers);
-            Post postToComment = postService.getPostByTitle(title);
+            Post postToComment = postService.getPostById(id);
             Comment commentToAdd = modelsMapper.commentFromDto(commentDto);
             return postService.addCommentToPost(postToComment, commentToAdd, authorizedUser);
         } catch (AuthenticationException e) {
@@ -253,14 +255,14 @@ public class PostRestController {
         }
     }
 
-    @DeleteMapping("/{title}/comments/{comment}")
+    @DeleteMapping("/{id}/comments/{comment}")
     public Post removeCommentFromPost(@RequestHeader HttpHeaders headers,
-                                      @PathVariable String title,
+                                      @PathVariable int id,
                                       @PathVariable String comment) {
 
         try {
             User authorizedUser = authenticationHelper.tryGetUser(headers);
-            Post postToComment = postService.getPostByTitle(title);
+            Post postToComment = postService.getPostById(id);
             return postService.removeCommentFromPost(postToComment, comment, authorizedUser);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
@@ -274,12 +276,12 @@ public class PostRestController {
     }
 
     /*Ilia*/
-    @GetMapping("/{title}/comments")
+    @GetMapping("/{id}/comments")
     public List<Comment> getAllCommentsRelatedToPost(@RequestHeader HttpHeaders headers,
-                                                     @PathVariable String title) {
+                                                     @PathVariable int id) {
         try {
             User authorizedUser = authenticationHelper.tryGetUser(headers);
-            Post postWithComments = postService.getPostByTitle(title);
+            Post postWithComments = postService.getPostById(id);
             return postService.getAllCommentsRelatedToPost(postWithComments);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(

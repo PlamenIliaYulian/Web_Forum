@@ -57,11 +57,11 @@ public class UserRestController {
 
     /*Ilia*/
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{username}")
-    void deleteUser(@RequestHeader HttpHeaders headers, @PathVariable String username) {
+    @DeleteMapping("/{id}")
+    void deleteUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User userIsAuthenticated = authenticationHelper.tryGetUser(headers);
-            User userToBeDeleted = userService.getUserByUsername(username);
+            User userToBeDeleted = userService.getUserById(id);
             userService.deleteUser(userIsAuthenticated, userToBeDeleted);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(
@@ -124,13 +124,13 @@ public class UserRestController {
                     )
             })
     @SecurityRequirement(name = "BasicAuth")
-    @PutMapping("/{username}")
+    @PutMapping("/{id}")
     User updateUser(@RequestHeader HttpHeaders headers,
-                    @PathVariable String username,
+                    @PathVariable int id,
                     @Valid @RequestBody UserDtoUpdate userDtoUpdate) {
         try {
             User userToDoUpdates = authenticationHelper.tryGetUser(headers);
-            User userToBeUpdated = modelsMapper.userFromDtoUpdate(userDtoUpdate, username);
+            User userToBeUpdated = modelsMapper.userFromDtoUpdate(userDtoUpdate, id);
             return userService.updateUser(userToBeUpdated, userToDoUpdates);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
@@ -141,13 +141,13 @@ public class UserRestController {
         }
     }
 
-    @PutMapping("/administrative-changes/{username}")
-    public User updateAdministrativeChanges(@PathVariable String username,
+    @PutMapping("/administrative-changes/{id}")
+    public User updateAdministrativeChanges(@PathVariable int id,
                                             @RequestHeader HttpHeaders headers,
                                             @Valid @RequestBody UserAdministrativeDto userAdministrativeDto) {
         try {
             User userToDoUpdates = authenticationHelper.tryGetUser(headers);
-            User userToBeUpdated = modelsMapper.userFromAdministrativeDto(userAdministrativeDto, username);
+            User userToBeUpdated = modelsMapper.userFromAdministrativeDto(userAdministrativeDto, id);
             return userService.makeAdministrativeChanges(userToDoUpdates, userToBeUpdated);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
@@ -158,34 +158,9 @@ public class UserRestController {
         }
     }
 
-    /*Ilia*/
-    /*We have to delete this method!*/
-    /*TODO It is not the best way for this method.*/
-    @GetMapping("/first-name/{firstName}")
-    public User getUserByFirstName(@PathVariable String firstName,
-                                   @RequestHeader HttpHeaders headers) {
-        try {
-            User userToBeAuthorized = authenticationHelper.tryGetUser(headers);
-            return userService.getUserByFirstName(firstName, userToBeAuthorized);
-        } catch (AuthenticationException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED,
-                    e.getMessage());
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    e.getMessage());
-        } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN,
-                    e.getMessage());
-        }
-    }
+    /*Yuli swagger operation.*/
 
-    /*TODO It is not the best way for this method.*/
-    /*TODO to implement authentication required for this end point.*/
-
-    @Operation(
+/*    @Operation(
             summary = "Retrieves information related to a specific user registered in the system.",
             description = "Used to retrieve information related to a particular user registered in the system.",
             parameters = {
@@ -208,18 +183,7 @@ public class UserRestController {
                                             mediaType = "plain text")
                             }
                     )
-            })
-    @GetMapping("/username/{username}")
-    public User getUserByUsername(@PathVariable String username) {
-        try {
-            return userService.getUserByUsername(username);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    e.getMessage());
-        }
-    }
-
+            })*/
     /*Plamen*/
     @GetMapping("/search")
     public List<User> getAllUsers(@RequestHeader HttpHeaders headers,
@@ -239,9 +203,8 @@ public class UserRestController {
         }
     }
 
-    /*TODO It is not the best way for this method.*/
     /*Ilia*/
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public User getUserById(@PathVariable int id) {
         try {
             return userService.getUserById(id);
@@ -297,11 +260,11 @@ public class UserRestController {
                     )
             })
     @SecurityRequirement(name = "BasicAuth")
-    @PutMapping("/{userToBeUpdated}/avatar")
-    public User addAvatar(@PathVariable int userToBeUpdated, @RequestBody byte[] avatar, @RequestHeader HttpHeaders headers) {
+    @PutMapping("/{id}/avatar")
+    public User addAvatar(@PathVariable int id, @RequestBody byte[] avatar, @RequestHeader HttpHeaders headers) {
         try {
             User userToDoChanges = authenticationHelper.tryGetUser(headers);
-            return userService.addAvatar(userToBeUpdated, avatar, userToDoChanges);
+            return userService.addAvatar(id, avatar, userToDoChanges);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -314,13 +277,13 @@ public class UserRestController {
 
     /*Plamen*/
     /*We have to find a better way to set the phone number.*/
-    @PutMapping("/{username}/PhoneNumber")
-    public User addPhoneNumber(@PathVariable String username,
+    @PutMapping("/{id}/PhoneNumber")
+    public User addPhoneNumber(@PathVariable int id,
                                @RequestBody PhoneNumberDto phoneNumberDto,
                                @RequestHeader HttpHeaders headers) {
         try {
             User userToDoChanges = authenticationHelper.tryGetUser(headers);
-            User userToBeUpdated = userService.getUserByUsername(username);
+            User userToBeUpdated = userService.getUserById(id);
             return userService.addPhoneNumber(userToBeUpdated, phoneNumberDto.getPhone(), userToDoChanges);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());

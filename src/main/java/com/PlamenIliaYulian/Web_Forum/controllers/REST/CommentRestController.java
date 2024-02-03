@@ -75,11 +75,11 @@ public class CommentRestController {
         }
     }
 
-    @PutMapping("/{content}/likes")
-    public Comment likeComment(@PathVariable String content, @RequestHeader HttpHeaders headers) {
+    @PutMapping("/{id}/likes")
+    public Comment likeComment(@PathVariable int id, @RequestHeader HttpHeaders headers) {
         try {
             User userToAuthenticate = authenticationHelper.tryGetUser(headers);
-            Comment comment = commentService.getCommentByContent(content);
+            Comment comment = commentService.getCommentById(id);
             return commentService.likeComment(comment, userToAuthenticate);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
@@ -91,12 +91,12 @@ public class CommentRestController {
     }
 
     /*Ilia*/
-    @PutMapping("/{content}/dislikes")
-    public Comment dislikeComment(@PathVariable String content,
+    @PutMapping("/{id}/dislikes")
+    public Comment dislikeComment(@PathVariable int id,
                                   @RequestHeader HttpHeaders headers) {
         try {
             User userToDislikeComment = authenticationHelper.tryGetUser(headers);
-            Comment comment = commentService.getCommentByContent(content);
+            Comment comment = commentService.getCommentById(id);
             return commentService.dislikeComment(comment, userToDislikeComment);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(

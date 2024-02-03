@@ -9,13 +9,11 @@ import com.PlamenIliaYulian.Web_Forum.models.Tag;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.TagDto;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -48,13 +46,13 @@ public class TagRestController {
     }
 
     /*Ilia*/
-    @GetMapping("/{tagName}")
-    public Tag getTagByName(@PathVariable String tagName,
-                            @RequestHeader HttpHeaders headers) {
+    @GetMapping("/{id}")
+    public Tag getTagById(@PathVariable int id,
+                          @RequestHeader HttpHeaders headers) {
 
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            return tagService.getTagByName(tagName);
+            return tagService.getTagById(id);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED,
@@ -83,12 +81,12 @@ public class TagRestController {
 
     /*Plamen*/
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{tagName}")
+    @DeleteMapping("/{id}")
     public void deleteTag(@RequestHeader HttpHeaders headers,
-                          @PathVariable String tagName) {
+                          @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            Tag tag = tagService.getTagByName(tagName);
+            Tag tag = tagService.getTagById(id);
             tagService.deleteTag(tag, user);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
@@ -100,13 +98,13 @@ public class TagRestController {
     }
 
     /*Ilia*/
-    @PutMapping("/{tagName}")
+    @PutMapping("/{id}")
     public Tag updateTag(@RequestHeader HttpHeaders headers,
-                         @PathVariable String tagName,
+                         @PathVariable int id,
                          @RequestBody TagDto tagDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            Tag tagToBeUpdated = modelsMapper.tagFromDto(tagDto, tagName);
+            Tag tagToBeUpdated = modelsMapper.tagFromDto(tagDto, id);
             return tagService.updateTag(tagToBeUpdated, user);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(

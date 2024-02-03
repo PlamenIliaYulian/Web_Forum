@@ -4,7 +4,6 @@ import com.PlamenIliaYulian.Web_Forum.models.Tag;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 
 import java.util.List;
-import java.util.Set;
 
 public interface TagService {
 
@@ -22,4 +21,6 @@ public interface TagService {
 
     /*July - 📌 DONE 📌- last updated 25.01.2024.*/
     List<Tag> getAllTags();
+
+    Tag getTagById(int id);
 }
