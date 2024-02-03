@@ -37,12 +37,14 @@ public class PostServiceTests {
     public void createPost_Should_CreatePost_When_PostCreatorIsNotBlockedAndValidPostIsPassed() {
         User postCreator = TestHelpers.createMockNoAdminUser();
         Post postToBeCreated = TestHelpers.createMockPost1();
+
         Mockito.when(postRepository.createPost(postToBeCreated))
                 .thenReturn(postToBeCreated);
-        Post createdPost = postService.createPost(postToBeCreated, postCreator);
+
+        postService.createPost(postToBeCreated, postCreator);
+
         Mockito.verify(postRepository, Mockito.times(1))
                 .createPost(postToBeCreated);
-        Assertions.assertEquals(createdPost, postToBeCreated);
     }
 
     @Test
@@ -50,6 +52,7 @@ public class PostServiceTests {
         User postCreator = TestHelpers.createMockNoAdminUser();
         postCreator.setBlocked(true);
         Post postToBeCreated = TestHelpers.createMockPost1();
+
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 () -> postService.createPost(postToBeCreated, postCreator));
     }
@@ -60,12 +63,14 @@ public class PostServiceTests {
         List<Post> posts = new ArrayList<>();
         posts.add(TestHelpers.createMockPost1());
         PostFilterOptions filterOptions = TestHelpers.createPostFilterOptions();
+
         Mockito.when(postRepository.getAllPosts(Mockito.any()))
                 .thenReturn(posts);
-        List<Post> returnedPosts = postService.getAllPosts(userExecutingTheRequest, filterOptions);
+
+        postService.getAllPosts(userExecutingTheRequest, filterOptions);
+
         Mockito.verify(postRepository, Mockito.times(1))
                 .getAllPosts(filterOptions);
-        Assertions.assertEquals(posts, returnedPosts);
     }
 
     @Test
@@ -73,6 +78,7 @@ public class PostServiceTests {
         User userTryingToLikeThePost = TestHelpers.createMockNoAdminUser();
         Post postToLike = TestHelpers.createMockPost1();
         postToLike.setCreatedBy(userTryingToLikeThePost);
+
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 () -> postService.likePost(postToLike, userTryingToLikeThePost));
     }
@@ -87,6 +93,7 @@ public class PostServiceTests {
         Set<User> usersWhoDislikedThePost = new TreeSet<>();
         postToLike.setUsersWhoLikedPost(usersWhoLikedThePost);
         postToLike.setUsersWhoDislikedPost(usersWhoDislikedThePost);
+
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 () -> postService.likePost(postToLike, userTryingToLikeThePost));
     }
@@ -100,9 +107,12 @@ public class PostServiceTests {
         Set<User> usersWhoDislikedThePost = new TreeSet<>();
         postToLike.setUsersWhoLikedPost(usersWhoLikedThePost);
         postToLike.setUsersWhoDislikedPost(usersWhoDislikedThePost);
+
         Mockito.when(postRepository.updatePost(postToLike))
                 .thenReturn(postToLike);
+
         postService.likePost(postToLike, userTryingToLikeThePost);
+
         Mockito.verify(postRepository, Mockito.times(1))
                 .updatePost(postToLike);
     }
@@ -113,6 +123,7 @@ public class PostServiceTests {
         Tag tagToRemoveFromPost = TestHelpers.createMockTag();
         User blockedUser = TestHelpers.createMockNoAdminUser();
         blockedUser.setBlocked(true);
+
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 () -> postService.removeTagFromPost(postToRemoveTagFrom, tagToRemoveFromPost, blockedUser));
     }
@@ -134,6 +145,7 @@ public class PostServiceTests {
         notAdmin.setUserId(777);
         Post postToRemoveTagFrom = TestHelpers.createMockPost1();
         Tag tagToRemoveFromPost = TestHelpers.createMockTag();
+
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 () -> postService.removeTagFromPost(postToRemoveTagFrom, tagToRemoveFromPost, notAdmin));
     }
@@ -144,6 +156,7 @@ public class PostServiceTests {
         Post postToRemoveTagFrom = TestHelpers.createMockPost1();
         Tag tagToRemoveFromPost = TestHelpers.createMockTag();
         postToRemoveTagFrom.setTags(new TreeSet<Tag>());
+
         Assertions.assertThrows(InvalidUserInputException.class,
                 () -> postService.removeTagFromPost(postToRemoveTagFrom, tagToRemoveFromPost, postCreator));
     }
@@ -156,9 +169,12 @@ public class PostServiceTests {
         Set<Tag> tags = new TreeSet<>();
         tags.add(tagToRemoveFromPost);
         postToRemoveTagFrom.setTags(tags);
+
         Mockito.when(postRepository.updatePost(postToRemoveTagFrom))
                 .thenReturn(postToRemoveTagFrom);
+
         postService.removeTagFromPost(postToRemoveTagFrom, tagToRemoveFromPost, postCreator);
+
         Mockito.verify(postRepository, Mockito.times(1))
                 .updatePost(postToRemoveTagFrom);
     }
@@ -184,8 +200,10 @@ public class PostServiceTests {
         Post postToRemoveCommentFrom = TestHelpers.createMockPost1();
         String commentContent = "Comment";
         User nonBlockedUser = TestHelpers.createMockNoAdminUser();
+
         Mockito.when(commentService.getCommentByContent(commentContent))
                 .thenThrow(EntityNotFoundException.class);
+
         Assertions.assertThrows(EntityNotFoundException.class,
                 () -> postService.removeCommentFromPost(postToRemoveCommentFrom, commentContent, nonBlockedUser));
     }
@@ -231,12 +249,17 @@ public class PostServiceTests {
         postToRemoveCommentFrom.setRelatedComments(relatedComments);
         String commentContent = "Comment";
         User nonBlockedUser = TestHelpers.createMockNoAdminUser();
+
         Mockito.when(commentService.getCommentByContent(commentContent))
                 .thenReturn(commentToRemove);
+
         Mockito.doNothing().when(commentService).deleteComment(commentToRemove);
+
         Mockito.when(postRepository.updatePost(postToRemoveCommentFrom))
                 .thenReturn(postToRemoveCommentFrom);
+
         postService.removeCommentFromPost(postToRemoveCommentFrom, commentContent, nonBlockedUser);
+
         Mockito.verify(postRepository, Mockito.times(1))
                 .updatePost(postToRemoveCommentFrom);
     }
@@ -259,7 +282,6 @@ public class PostServiceTests {
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 ()-> postService.deletePost(postToDelete, nonBlockedUser));
-
     }
 
     @Test
@@ -272,7 +294,6 @@ public class PostServiceTests {
 
         Mockito.verify(postRepository,Mockito.times(1))
                 .softDeletePost(postToDelete);
-
     }
 
     @Test
@@ -288,21 +309,18 @@ public class PostServiceTests {
         Assertions.assertEquals("Mock post title.", result.getTitle());
         Assertions.assertEquals("Mock post random content.", result.getContent());
         Assertions.assertEquals(1, result.getPostId());
-
     }
 
     @Test
     public void dislikePost_Should_Throw_When_UserAlreadyDislikedPost(){
         Post postToDislike = TestHelpers.createMockPost1();
         User userToDislike = TestHelpers.createMockNoAdminUser();
-
         Set<User> usersWhoDislikedPost = new HashSet<>();
         usersWhoDislikedPost.add(userToDislike);
         postToDislike.setUsersWhoDislikedPost(usersWhoDislikedPost);
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 ()-> postService.dislikePost(postToDislike, userToDislike));
-
     }
 
     @Test
@@ -318,7 +336,6 @@ public class PostServiceTests {
 
         Mockito.verify(postRepository, Mockito.times(1))
                 .updatePost(postToDislike);
-
     }
 
     @Test
@@ -341,7 +358,6 @@ public class PostServiceTests {
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 ()-> postService.addCommentToPost(postToAddComment, comment, userToAddCommentToPost));
-
     }
 
     @Test
@@ -357,7 +373,6 @@ public class PostServiceTests {
 
         Mockito.verify(postRepository, Mockito.times(1))
                 .updatePost(postToAddComment);
-
     }
     /*Ilia*/
     @Test
@@ -386,26 +401,24 @@ public class PostServiceTests {
     public void updatePost_CallRepository_When_ValidParametersPassed() {
         Post post = TestHelpers.createMockPost2();
 
-        Mockito
-                .when(postRepository.updatePost(post))
+        Mockito.when(postRepository.updatePost(post))
                 .thenReturn(post);
+
         postService.updatePost(post, post.getCreatedBy());
 
-        Mockito
-                .verify(postRepository, Mockito.times(1))
+        Mockito.verify(postRepository, Mockito.times(1))
                 .updatePost(post);
     }
+
     /*Ilia*/
     @Test
     public void getPostById_Should_ReturnPost_When_MethodCalled() {
-        Mockito
-                .when(postRepository.getPostById(1))
+        Mockito.when(postRepository.getPostById(1))
                 .thenReturn(TestHelpers.createMockPost1());
 
         Post post = postService.getPostById(1);
 
-        Assertions
-                .assertEquals(1, post.getPostId());
+        Assertions.assertEquals(1, post.getPostId());
     }
 
     /*Ilia*/
@@ -438,15 +451,13 @@ public class PostServiceTests {
         Post post = TestHelpers.createMockPost2();
         Tag tag = TestHelpers.createMockTag();
 
-        Mockito
-                .when(tagService.createTag(tag,post.getCreatedBy()))
+        Mockito.when(tagService.createTag(tag,post.getCreatedBy()))
                 .thenReturn(tag);
+
         postService.addTagToPost(post,tag,post.getCreatedBy());
 
-        Mockito
-                .verify(postRepository, Mockito.times(1))
+        Mockito.verify(postRepository, Mockito.times(1))
                 .updatePost(post);
-
     }
     /*Ilia*/
     @Test

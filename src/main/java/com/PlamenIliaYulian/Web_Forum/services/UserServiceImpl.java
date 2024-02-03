@@ -144,7 +144,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (duplicateExists) {
-            throw new DuplicateEntityException("User", "username", user.getUserName());
+            throw new DuplicateEntityException("User", "email", user.getEmail());
         }
     }
 }

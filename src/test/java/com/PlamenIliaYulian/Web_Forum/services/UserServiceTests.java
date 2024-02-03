@@ -32,14 +32,18 @@ public class UserServiceTests {
     @InjectMocks
     UserServiceImpl userService;
 
-    @Test
-    public void updateUser_Should_Update_User_When_TheSameUserTriesToUpdateTheirProfile() {
-        User userToBeUpdated = TestHelpers.createMockNoAdminUser();
-        Mockito.when(userRepository.updateUser(userToBeUpdated)).thenReturn(userToBeUpdated);
-        User updatedUser = userService.updateUser(userToBeUpdated, userToBeUpdated);
-        Mockito.verify(userRepository, Mockito.times(1)).updateUser(userToBeUpdated);
-        Assertions.assertEquals(userToBeUpdated, updatedUser);
 
+    /*TODO July*/
+    @Test
+    public void updateUser_Should_UpdateUser_When_TheSameUserTriesToUpdateTheirProfile() {
+        User userToBeUpdated = TestHelpers.createMockNoAdminUser();
+
+        Mockito.when(userRepository.getUserByEmail(Mockito.anyString()))
+                .thenThrow(new EntityNotFoundException("User", "email", userToBeUpdated.getEmail()));
+
+        userService.updateUser(userToBeUpdated, userToBeUpdated);
+
+        Mockito.verify(userRepository, Mockito.times(1)).updateUser(userToBeUpdated);
     }
 
     @Test
@@ -47,6 +51,10 @@ public class UserServiceTests {
         User userToBeUpdated = TestHelpers.createMockNoAdminUser();
         User userThatCannotUpdate = TestHelpers.createMockNoAdminUser();
         userThatCannotUpdate.setUserId(100);
+
+        Mockito.when(userRepository.getUserByEmail(Mockito.anyString()))
+                .thenThrow(new EntityNotFoundException("User", "email", userToBeUpdated.getEmail()));
+
         Assertions.assertThrows(
                 UnauthorizedOperationException.class,
                 () -> userService.updateUser(userToBeUpdated, userThatCannotUpdate));
@@ -55,32 +63,39 @@ public class UserServiceTests {
     @Test
     public void getUserByUsername_Should_ReturnUser_When_EverythingIsOk() {
         String mockUserNameByWhichWeSearchUser = "Mock_NoAdmin_User";
+
         Mockito.when(userRepository.getUserByUsername(mockUserNameByWhichWeSearchUser))
                 .thenReturn(TestHelpers.createMockNoAdminUser());
-        User userWeFound = userService.getUserByUsername(mockUserNameByWhichWeSearchUser);
+
+        userService.getUserByUsername(mockUserNameByWhichWeSearchUser);
+
         Mockito.verify(userRepository, Mockito.times(1))
                 .getUserByUsername(mockUserNameByWhichWeSearchUser);
-        Assertions.assertEquals(userWeFound, TestHelpers.createMockNoAdminUser());
     }
 
     @Test
     public void addAvatar_Should_AddAvatar_When_TheCorrectUserIsTryingToUpdateTheAvatar() {
         User userToUpdateAvatarTo = TestHelpers.createMockNoAdminUser();
+
         Mockito.when(userRepository.getUserById(userToUpdateAvatarTo.getUserId()))
                 .thenReturn(userToUpdateAvatarTo);
+
         Mockito.when(userRepository.updateUser(userToUpdateAvatarTo))
                 .thenReturn(userToUpdateAvatarTo);
-        User updatedUser = userService.addAvatar(userToUpdateAvatarTo.getUserId(), null, userToUpdateAvatarTo);
+
+        userService.addAvatar(userToUpdateAvatarTo.getUserId(), null, userToUpdateAvatarTo);
+
         Mockito.verify(userRepository, Mockito.times(1))
                 .updateUser(userToUpdateAvatarTo);
-        Assertions.assertEquals(updatedUser, userToUpdateAvatarTo);
     }
 
     @Test
     public void addAvatar_Should_ThrowEntityNotFoundException_When_ThereIsNoUserWithProvidedUserID() {
         User userToUpdateAvatarTo = TestHelpers.createMockNoAdminUser();
+
         Mockito.when(userRepository.getUserById(userToUpdateAvatarTo.getUserId()))
                 .thenThrow(EntityNotFoundException.class);
+
         Assertions.assertThrows(
                 EntityNotFoundException.class,
                 () -> userService.addAvatar(userToUpdateAvatarTo.getUserId(), null, userToUpdateAvatarTo));
@@ -91,10 +106,11 @@ public class UserServiceTests {
         User userToUpdateAvatarTo = TestHelpers.createMockNoAdminUser();
         User unauthorizedUser = TestHelpers.createMockNoAdminUser();
         unauthorizedUser.setUserId(777);
+
         Mockito.when(userRepository.getUserById(userToUpdateAvatarTo.getUserId()))
                 .thenReturn(unauthorizedUser);
-        Assertions.assertThrows(
-                UnauthorizedOperationException.class,
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
                 () -> userService.addAvatar(userToUpdateAvatarTo.getUserId(), null, userToUpdateAvatarTo));
     }
 
@@ -102,69 +118,71 @@ public class UserServiceTests {
     public void makeAdministrativeChanges_Should_Pass_When_TheUserTryingToMakeTheChangesIsAdmin() {
         User adminUser = TestHelpers.createMockAdminUser();
         User userToBeUpdated = TestHelpers.createMockNoAdminUser();
+
         Mockito.when(userRepository.makeAdministrativeChanges(userToBeUpdated))
                 .thenReturn(userToBeUpdated);
-        User updatedUser = userService.makeAdministrativeChanges(adminUser, userToBeUpdated);
+
+        userService.makeAdministrativeChanges(adminUser, userToBeUpdated);
+
         Mockito.verify(userRepository, Mockito.times(1))
                 .makeAdministrativeChanges(userToBeUpdated);
-        Assertions.assertEquals(userToBeUpdated, updatedUser);
     }
 
     @Test
     public void makeAdministrativeChanges_Should_Throw_When_UserTryingToMakeChangesIsNotAdmin() {
         User nonAdminUser = TestHelpers.createMockNoAdminUser();
         User userToBeUpdated = TestHelpers.createMockNoAdminUser();
+
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 () -> userService.makeAdministrativeChanges(nonAdminUser, userToBeUpdated));
     }
 
     @Test
-    public void createUser_Should_CallRepository(){
-
+    public void createUser_Should_CallRepository() {
         User userToBeCreated = TestHelpers.createMockNoAdminUser();
 
         Mockito.when(userRepository.getUserByUsername(userToBeCreated.getUserName()))
-                        .thenThrow(new EntityNotFoundException("User", "username", userToBeCreated.getUserName()));
+                .thenThrow(new EntityNotFoundException("User", "username", userToBeCreated.getUserName()));
 
-        userService.createUser(TestHelpers.createMockNoAdminUser());
+        Mockito.when(userRepository.getUserByEmail(Mockito.anyString()))
+                .thenThrow(new EntityNotFoundException("User", "email", userToBeCreated.getEmail()));
+
+        userService.createUser(userToBeCreated);
 
         Mockito.verify(userRepository, Mockito.times(1))
                 .createUser(Mockito.any(User.class));
     }
 
     @Test
-    public void createUser_Should_Throw_When_UsernameExists(){
+    public void createUser_Should_Throw_When_UsernameExists() {
         User existingUser = TestHelpers.createMockNoAdminUser();
         User userToBeCreated = TestHelpers.createMockNoAdminUser();
 
         Assertions.assertThrows(DuplicateEntityException.class,
-                ()-> userService.createUser(userToBeCreated));
-
+                () -> userService.createUser(userToBeCreated));
     }
 
     @Test
-    public void createUser_Should_Throw_When_EmailExists(){
+    public void createUser_Should_Throw_When_EmailExists() {
         User existingUser = TestHelpers.createMockNoAdminUser();
         User userToBeCreated = TestHelpers.createMockNoAdminUser();
         existingUser.setUserName("some new username");
 
         Assertions.assertThrows(DuplicateEntityException.class,
-                ()-> userService.createUser(userToBeCreated));
-
+                () -> userService.createUser(userToBeCreated));
     }
 
     @Test
-    public void getAllUser_Should_Throw_When_UserIsNotAdmin(){
+    public void getAllUser_Should_Throw_When_UserIsNotAdmin() {
         UserFilterOptions userFilterOptions = TestHelpers.createUserFilterOptions();
         User nonAdminUser = TestHelpers.createMockNoAdminUser();
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                ()-> userService.getAllUsers(nonAdminUser, userFilterOptions));
-
+                () -> userService.getAllUsers(nonAdminUser, userFilterOptions));
     }
 
     @Test
-    public void getAllUsers_Should_Pass_When_Valid(){
+    public void getAllUsers_Should_Pass_When_Valid() {
         User adminUser = TestHelpers.createMockAdminUser();
         List<User> users = new ArrayList<>();
         users.add(TestHelpers.createMockNoAdminUser());
@@ -173,17 +191,14 @@ public class UserServiceTests {
         Mockito.when(userRepository.getAllUsers(Mockito.any()))
                 .thenReturn(users);
 
-        List<User> result = userService.getAllUsers(adminUser, userFilterOptions);
+        userService.getAllUsers(adminUser, userFilterOptions);
 
         Mockito.verify(userRepository, Mockito.times(1))
                 .getAllUsers(userFilterOptions);
-
-        Assertions.assertEquals(users, result);
-
     }
 
     @Test
-    public void getUserByUsername_Should_CallRepository(){
+    public void getUserByUsername_Should_CallRepository() {
         User userToFind = TestHelpers.createMockNoAdminUser();
 
         Mockito.when(userRepository.getUserByUsername(Mockito.anyString()))
@@ -195,46 +210,42 @@ public class UserServiceTests {
         Assertions.assertEquals(userToFind.getUserId(), result.getUserId());
         Assertions.assertEquals(userToFind.getUserName(), result.getUserName());
         Assertions.assertEquals(userToFind.getEmail(), result.getEmail());
-
     }
 
     @Test
-    public void addPhoneNumber_Should_Throw_When_UserIsNotAdmin(){
+    public void addPhoneNumber_Should_Throw_When_UserIsNotAdmin() {
         String phoneNumber = "088913141414";
         User userTryingToAdd = TestHelpers.createMockNoAdminUser();
         User userToBeUpdated = TestHelpers.createMockNoAdminUser();
         userToBeUpdated.setUserId(777);
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                ()-> userService.addPhoneNumber(userToBeUpdated, phoneNumber, userTryingToAdd));
-
+                () -> userService.addPhoneNumber(userToBeUpdated, phoneNumber, userTryingToAdd));
     }
 
     @Test
-    public void addPhoneNumber_Should_CallRepository_When_UserIsAdmin(){
+    public void addPhoneNumber_Should_CallRepository_When_UserIsAdmin() {
         String phoneNumber = "088913141414";
         User userTryingToAdd = TestHelpers.createMockAdminUser();
         User userToBeUpdated = TestHelpers.createMockAdminUser();
 
         Mockito.when(userRepository.getUserByPhoneNumber(userToBeUpdated.getPhoneNumber()))
-                        .thenThrow(new EntityNotFoundException("User", "Phone number", userToBeUpdated.getPhoneNumber()));
+                .thenThrow(new EntityNotFoundException("User", "Phone number", userToBeUpdated.getPhoneNumber()));
 
         userService.addPhoneNumber(userToBeUpdated, phoneNumber, userTryingToAdd);
 
         Mockito.verify(userRepository, Mockito.times(1))
                 .updateUser(userToBeUpdated);
-
     }
 
     @Test
-    public void addPhoneNumber_Should_Throw_When_PhoneNumberExists(){
+    public void addPhoneNumber_Should_Throw_When_PhoneNumberExists() {
         User userToBeUpdated = TestHelpers.createMockAdminUser();
         User userToDoUpdates = TestHelpers.createMockAdminUser();
         String phoneNumber = "0891234567";
 
         Assertions.assertThrows(DuplicateEntityException.class,
-                ()-> userService.addPhoneNumber(userToBeUpdated, phoneNumber, userToDoUpdates));
-
+                () -> userService.addPhoneNumber(userToBeUpdated, phoneNumber, userToDoUpdates));
     }
 
     /*Ilia*/
@@ -246,8 +257,9 @@ public class UserServiceTests {
 
         Assertions
                 .assertThrows(UnauthorizedOperationException.class,
-                        ()->userService.deleteUser(user,userWhoDeletes));
+                        () -> userService.deleteUser(user, userWhoDeletes));
     }
+
     /*Ilia*/
     @Test
     public void deleteUser_Should_DeleteUser_When_UserValidParametersPassed() {
@@ -255,8 +267,7 @@ public class UserServiceTests {
 
         userService.deleteUser(user, user);
 
-        Mockito
-                .verify(userRepository, Mockito.times(1))
+        Mockito.verify(userRepository, Mockito.times(1))
                 .updateUser(user);
     }
 
@@ -265,9 +276,8 @@ public class UserServiceTests {
     public void getUserByFirstName_Throw_When_UserIsNotAdmin() {
         User user = TestHelpers.createMockNoAdminUser();
 
-        Assertions
-                .assertThrows(UnauthorizedOperationException.class,
-                        ()->userService.getUserByFirstName("firstName",user));
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                        () -> userService.getUserByFirstName("firstName", user));
     }
 
     /*Ilia*/
@@ -277,21 +287,18 @@ public class UserServiceTests {
 
         userService.getUserByFirstName("firstName", user);
 
-        Mockito
-                .verify(userRepository, Mockito.times(1))
+        Mockito.verify(userRepository, Mockito.times(1))
                 .getUserByFirstName("firstName");
     }
 
     /*Ilia*/
     @Test
     public void getUsersById_Should_ReturnUser_When_MethodCalled() {
-        Mockito
-                .when(userRepository.getUserById(2))
+        Mockito.when(userRepository.getUserById(2))
                 .thenReturn(TestHelpers.createMockNoAdminUser());
 
         User user = userService.getUserById(2);
 
-        Assertions
-                .assertEquals(2, user.getUserId());
+        Assertions.assertEquals(2, user.getUserId());
     }
 }

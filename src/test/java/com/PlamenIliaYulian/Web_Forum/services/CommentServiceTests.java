@@ -41,7 +41,6 @@ public class CommentServiceTests {
         Assertions.assertEquals(0, result.getLikes());
         Assertions.assertEquals(0, result.getDislikes());
         Assertions.assertEquals("Mock comment random content.", result.getContent());
-
     }
 
     @Test
@@ -52,7 +51,6 @@ public class CommentServiceTests {
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 ()-> commentService.updateComment(commentToUpdate, blockedUser));
-
     }
 
     @Test
@@ -63,7 +61,6 @@ public class CommentServiceTests {
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 ()-> commentService.updateComment(commentToUpdate, blockedUser));
-
     }
 
     @Test
@@ -75,7 +72,6 @@ public class CommentServiceTests {
 
         Mockito.verify(commentRepository, Mockito.times(1))
                 .updateComment(commentToUpdate);
-
     }
 
     @Test
@@ -86,7 +82,6 @@ public class CommentServiceTests {
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 ()-> commentService.likeComment(commentToLike, userWhoCreatedTheComment));
-
     }
 
     @Test
@@ -108,15 +103,14 @@ public class CommentServiceTests {
         Comment commentToLike = TestHelpers.createMockComment1();
         User userWhoLikeComment = TestHelpers.createMockNoAdminUser();
         userWhoLikeComment.setUserId(777);
-
         Set<User> usersWhoLikedComment = new HashSet<>();
         Set<User> usersWhoDislikedComment = new HashSet<>();
-
         commentToLike.setUsersWhoLikedComment(usersWhoLikedComment);
         commentToLike.setUsersWhoDislikedComment(usersWhoDislikedComment);
 
         Mockito.when(commentRepository.updateComment(commentToLike))
                 .thenReturn(commentToLike);
+
         commentService.likeComment(commentToLike, userWhoLikeComment);
 
         Mockito.verify(commentRepository, Mockito.times(1))
@@ -126,14 +120,12 @@ public class CommentServiceTests {
     /*Ilia*/
     @Test
     public void getCommentByContent_Should_ReturnComment_When_MethodCalled() {
-        Mockito
-                .when(commentRepository.getCommentByContent(Mockito.anyString()))
+        Mockito.when(commentRepository.getCommentByContent(Mockito.anyString()))
                 .thenReturn(TestHelpers.createMockComment1());
 
         Comment comment = commentService.getCommentByContent("Mock comment random content.");
 
-        Assertions
-                .assertEquals(1, comment.getCommentId());
+        Assertions.assertEquals(1, comment.getCommentId());
     }
     /*Ilia*/
     @Test
@@ -151,8 +143,7 @@ public class CommentServiceTests {
 
         commentService.deleteComment(comment);
 
-        Mockito
-                .verify(commentRepository, Mockito.times(1))
+        Mockito.verify(commentRepository, Mockito.times(1))
                 .softDeleteComment(comment);
     }
     /*Ilia*/
@@ -162,7 +153,6 @@ public class CommentServiceTests {
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 ()-> commentService.dislikeComment(comment, comment.getCreatedBy()));
-
     }
     /*Ilia*/
     @Test
@@ -185,10 +175,10 @@ public class CommentServiceTests {
 
         Mockito.when(commentRepository.updateComment(comment))
                 .thenReturn(comment);
-        comment = commentService.dislikeComment(comment, userDisliked);
 
-        Mockito
-                .verify(commentRepository, Mockito.times(1))
+        commentService.dislikeComment(comment, userDisliked);
+
+        Mockito.verify(commentRepository, Mockito.times(1))
                 .updateComment(comment);
     }
 }

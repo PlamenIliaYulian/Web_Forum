@@ -53,6 +53,7 @@ public class PostServiceImpl implements PostService {
     public void deletePost(Post post, User authorizedUser) {
         PermissionHelper.isBlocked(authorizedUser, UNAUTHORIZED_OPERATION);
         PermissionHelper.isAdminOrSameUser(post.getCreatedBy(), authorizedUser, UNAUTHORIZED_OPERATION);
+
         post.getRelatedComments().forEach(commentService::deleteComment);
         post.setDeleted(true);
         postRepository.softDeletePost(post);
@@ -63,6 +64,7 @@ public class PostServiceImpl implements PostService {
     public Post updatePost(Post post, User authorizedUser) {
         PermissionHelper.isBlocked(authorizedUser, UNAUTHORIZED_OPERATION);
         PermissionHelper.isAdminOrSameUser(post.getCreatedBy(), authorizedUser, UNAUTHORIZED_OPERATION);
+
         return postRepository.updatePost(post);
     }
 
