@@ -275,6 +275,21 @@ public class UserRestController {
 
     }
 
+    @DeleteMapping("/{id}/avatar")
+    public User deleteAvatar(@PathVariable int id,
+                             @RequestHeader HttpHeaders headers) {
+        try {
+            User userToDoChanges = authenticationHelper.tryGetUser(headers);
+            return userService.deleteAvatar(id, userToDoChanges);
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+
+    }
     /*Plamen*/
     /*We have to find a better way to set the phone number.*/
     @PutMapping("/{id}/PhoneNumber")

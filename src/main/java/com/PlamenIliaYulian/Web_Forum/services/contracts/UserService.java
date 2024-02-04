@@ -39,4 +39,7 @@ public interface UserService {
 
     /*July - 📌 DONE 📌- last updated 25.01.2024*/
     User makeAdministrativeChanges(User userToMakeUpdates, User userToBeUpdated);
+
+    /*Ilia TODO tests*/
+    User deleteAvatar(int id, User userToDoChanges);
 }

@@ -2,6 +2,8 @@ package com.PlamenIliaYulian.Web_Forum.services;
 
 import com.PlamenIliaYulian.Web_Forum.exceptions.DuplicateEntityException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
+import com.PlamenIliaYulian.Web_Forum.models.Avatar;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.AvatarService;
 import com.PlamenIliaYulian.Web_Forum.services.helpers.PermissionHelper;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
@@ -10,7 +12,9 @@ import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -19,16 +23,19 @@ public class UserServiceImpl implements UserService {
     public static final String UNAUTHORIZED_OPERATION = "Unauthorized operation.";
     private final UserRepository userRepository;
 
+    private final AvatarService avatarService;
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, AvatarService avatarService) {
         this.userRepository = userRepository;
+        this.avatarService = avatarService;
     }
 
     @Override
     public User createUser(User user) {
         checkForUniqueUsername(user);
         checkForUniqueEmail(user);
-        user.setAvatar(userRepository.getDefaultAvatar());
+        user.setAvatar(avatarService.getDefaultAvatar());
         return userRepository.createUser(user);
     }
 
@@ -81,10 +88,15 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User addAvatar(int userToBeUpdated, byte[] avatar, User userIsAuthorized) {
+    public User addAvatar(int userToBeUpdated, byte[] avatarByteArray, User userIsAuthorized) {
         User userToUpdateAvatarTo = userRepository.getUserById(userToBeUpdated);
         PermissionHelper.isSameUser(userToUpdateAvatarTo, userIsAuthorized, UNAUTHORIZED_OPERATION);
-        userToUpdateAvatarTo.setAvatar(avatar);
+
+        Avatar avatarToAdd = new Avatar();
+        avatarToAdd.setAvatar(avatarByteArray);
+        avatarToAdd = avatarService.createAvatar(avatarToAdd);
+
+        userToUpdateAvatarTo.setAvatar(avatarToAdd);
         return userRepository.updateUser(userToUpdateAvatarTo);
     }
 
@@ -120,6 +132,14 @@ public class UserServiceImpl implements UserService {
         PermissionHelper.isAdmin(userToMakeUpdates, UNAUTHORIZED_OPERATION);
         return userRepository.makeAdministrativeChanges(userToBeUpdated);
     }
+
+    @Override
+    public User deleteAvatar(int id, User userToDoChanges) {
+        PermissionHelper.isAdminOrSameUser(userRepository.getUserById(id),userToDoChanges,UNAUTHORIZED_OPERATION);
+        userToDoChanges.setAvatar(avatarService.getDefaultAvatar());
+        return userToDoChanges;
+    }
+
     private void checkForUniqueUsername(User user) {
         boolean duplicateExists = true;
 

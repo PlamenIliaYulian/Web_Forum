@@ -14,9 +14,6 @@ public class Avatar {
     @Column(name = "avatar")
     private byte[] avatar;
 
-    @Column(name = "user_id")
-    private int userId;
-
     public Avatar() {
     }
 
@@ -36,11 +33,4 @@ public class Avatar {
         this.avatar = avatar;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 }

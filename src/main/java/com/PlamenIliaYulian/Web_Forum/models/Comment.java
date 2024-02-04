@@ -23,6 +23,7 @@ public class Comment implements Comparable<Comment>{
     @Column(name = "dislikes")
     private int dislikes;
 
+    @JsonIgnore
     @Column(name = "is_deleted")
     private boolean isDeleted;
 

@@ -1,5 +1,6 @@
 package com.PlamenIliaYulian.Web_Forum.repositories.contracts;
 
+import com.PlamenIliaYulian.Web_Forum.models.Avatar;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
 
@@ -17,5 +18,4 @@ public interface UserRepository {
     User getUserById(int id);
     User getUserByPhoneNumber(String phoneNumber);
     User makeAdministrativeChanges(User userToBeUpdated);
-    byte[] getDefaultAvatar();
 }

@@ -183,15 +183,4 @@ public class UserRepositoryImpl implements UserRepository {
         return updateUser(userToBeUpdated);
     }
 
-    @Override
-    public byte[] getDefaultAvatar() {
-        try (Session session = sessionFactory.openSession()) {
-            Query<Avatar> query = session.createQuery("FROM Avatar WHERE avatarId = 1", Avatar.class);
-            List<Avatar> result = query.list();
-            if (result.isEmpty()) {
-                throw new EntityNotFoundException("Avatar", "avatar ID", "#1");
-            }
-            return result.get(0).getAvatar();
-        }
-    }
 }

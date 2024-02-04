@@ -19,6 +19,7 @@ public class Tag implements Comparable<Tag> {
     @Column(name = "name")
     private String tag;
 
+    @JsonIgnore
     @Column(name = "is_deleted")
     private boolean isDeleted;
 

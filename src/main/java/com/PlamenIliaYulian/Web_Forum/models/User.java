@@ -10,7 +10,6 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @SecondaryTable(name = "phone_numbers", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
-@SecondaryTable(name = "avatars", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
 public class User implements Comparable<User> {
 
     @Id
@@ -33,15 +32,18 @@ public class User implements Comparable<User> {
     @Column(name = "username")
     private String userName;
 
+    @JsonIgnore
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
     @Column(name = "is_blocked")
     private boolean isBlocked;
 
-    @Lob
-    @Column(name = "avatar", table = "avatars")
-    private byte[] avatar;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinTable(name = "avatars_users",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "avatar_id"))
+    private Avatar avatar;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
@@ -120,11 +122,11 @@ public class User implements Comparable<User> {
         isBlocked = blocked;
     }
 
-    public byte[] getAvatar() {
+    public Avatar getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(byte[] avatar) {
+    public void setAvatar(Avatar avatar) {
         this.avatar = avatar;
     }
 
