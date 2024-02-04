@@ -3,6 +3,7 @@ package com.PlamenIliaYulian.Web_Forum.services.contracts;
 import com.PlamenIliaYulian.Web_Forum.models.*;
 
 import java.util.List;
+import java.util.Set;
 
 public interface PostService {
     /*📌 July 📌- DONE - last updated 25.01.2024*/
@@ -43,4 +44,11 @@ public interface PostService {
 
     /*📌 July 📌- DONE - last updated 25.01.2025*/
     Post removeCommentFromPost(Post postToComment, String comment, User authorizedUser);
+
+    Long getAllPostsCount();
+
+    List<Post> getMostCommentedPosts();
+    List<Post> getMostLikedPosts();
+    List<Post> getMostRecentlyCreatedPosts();
+
 }

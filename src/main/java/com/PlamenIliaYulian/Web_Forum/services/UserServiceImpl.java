@@ -140,6 +140,11 @@ public class UserServiceImpl implements UserService {
         return userToDoChanges;
     }
 
+    @Override
+    public long getAllUsersCount() {
+        return userRepository.getAllUsersCount();
+    }
+
     private void checkForUniqueUsername(User user) {
         boolean duplicateExists = true;
 

@@ -169,6 +169,26 @@ public class PostServiceImpl implements PostService {
         return postRepository.updatePost(postToRemoveCommentFrom);
     }
 
+    @Override
+    public Long getAllPostsCount() {
+        return postRepository.getAllPostsCount();
+    }
+
+    @Override
+    public List<Post> getMostCommentedPosts() {
+        return postRepository.getMostCommentedPosts();
+    }
+
+    @Override
+    public List<Post> getMostLikedPosts() {
+        return postRepository.getMostLikedPosts();
+    }
+
+    @Override
+    public List<Post> getMostRecentlyCreatedPosts() {
+        return postRepository.getMostRecentlyCreatedPosts();
+    }
+
     /*Ilia*/
     @Override
     public List<Comment> getAllCommentsRelatedToPost(Post postWithComments) {

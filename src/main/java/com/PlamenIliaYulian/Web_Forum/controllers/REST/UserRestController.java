@@ -160,30 +160,30 @@ public class UserRestController {
 
     /*Yuli swagger operation.*/
 
-/*    @Operation(
-            summary = "Retrieves information related to a specific user registered in the system.",
-            description = "Used to retrieve information related to a particular user registered in the system.",
-            parameters = {
-                    @Parameter(name = "username",
-                            description = "Path variable.",
-                            example = "emily_jackson"),
-            },
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "There is no user with this 'username'.",
-                            content = {
-                                    @Content(examples = {
-                                            @ExampleObject(value = "User with username 'username' not found.")
-                                    },
-                                            mediaType = "plain text")
-                            }
-                    )
-            })*/
+    /*    @Operation(
+                summary = "Retrieves information related to a specific user registered in the system.",
+                description = "Used to retrieve information related to a particular user registered in the system.",
+                parameters = {
+                        @Parameter(name = "username",
+                                description = "Path variable.",
+                                example = "emily_jackson"),
+                },
+                responses = {
+                        @ApiResponse(
+                                responseCode = "200",
+                                content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+                        ),
+                        @ApiResponse(
+                                responseCode = "404",
+                                description = "There is no user with this 'username'.",
+                                content = {
+                                        @Content(examples = {
+                                                @ExampleObject(value = "User with username 'username' not found.")
+                                        },
+                                                mediaType = "plain text")
+                                }
+                        )
+                })*/
     /*Plamen*/
     @GetMapping("/search")
     public List<User> getAllUsers(@RequestHeader HttpHeaders headers,
@@ -290,6 +290,7 @@ public class UserRestController {
         }
 
     }
+
     /*Plamen*/
     /*We have to find a better way to set the phone number.*/
     @PutMapping("/{id}/PhoneNumber")
@@ -308,5 +309,13 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
+    @GetMapping("/count")
+    public Long getAllUsersCount() {
+       return userService.getAllUsersCount();
+    }
+
+
+
     /*TODO add change phone number method.*/
 }

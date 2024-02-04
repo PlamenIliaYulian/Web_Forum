@@ -22,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.PlamenIliaYulian.Web_Forum.models.Tag;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -292,5 +293,23 @@ public class PostRestController {
                     HttpStatus.NOT_FOUND,
                     e.getMessage());
         }
+    }
+
+    @GetMapping("/count")
+    public Long getAllPostCount() {
+        return postService.getAllPostsCount();
+    }
+
+    @GetMapping("/top10mostcommented")
+    public List<Post> getMostCommentedPosts() {
+        return postService.getMostCommentedPosts();
+    }
+    @GetMapping("/top10mostliked")
+    public List<Post> getMostLikedPosts() {
+        return postService.getMostCommentedPosts();
+    }
+    @GetMapping("/top10mostrecentlycreated")
+    public List<Post> getMostRecentlyCreatedPosts() {
+        return postService.getMostCommentedPosts();
     }
 }

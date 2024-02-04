@@ -4,11 +4,19 @@ import java.util.Optional;
 
 public class UserFilterOptions {
 
-    private Optional<String> username;
-    private Optional<String> email;
-    private Optional<String> firstName;
-    private Optional<String> sortBy;
-    private Optional<String> sortOrder;
+    private final Optional<String> username;
+    private final Optional<String> email;
+    private final Optional<String> firstName;
+    private final Optional<String> sortBy;
+    private final Optional<String> sortOrder;
+
+    public UserFilterOptions() {
+        this.username = Optional.empty();
+        this.email = Optional.empty();
+        this.firstName = Optional.empty();
+        this.sortBy = Optional.empty();
+        this.sortOrder = Optional.empty();
+    }
 
     public UserFilterOptions(String username, String email, String firstName, String sortBy, String sortOrder) {
         this.username = Optional.ofNullable(username);

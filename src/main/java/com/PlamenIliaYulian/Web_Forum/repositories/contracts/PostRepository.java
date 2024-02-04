@@ -5,6 +5,7 @@ import com.PlamenIliaYulian.Web_Forum.models.Post;
 import com.PlamenIliaYulian.Web_Forum.models.PostFilterOptions;
 
 import java.util.List;
+import java.util.Set;
 
 public interface PostRepository {
 
@@ -19,6 +20,12 @@ public interface PostRepository {
     Post getPostByTitle(String title);
 
     Post getPostById(int id);
+
+    Long getAllPostsCount();
+
+    List<Post> getMostCommentedPosts();
+    List<Post> getMostLikedPosts();
+    List<Post> getMostRecentlyCreatedPosts();
 
 
 }

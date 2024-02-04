@@ -42,4 +42,6 @@ public interface UserService {
 
     /*Ilia TODO tests*/
     User deleteAvatar(int id, User userToDoChanges);
+
+    long getAllUsersCount();
 }
