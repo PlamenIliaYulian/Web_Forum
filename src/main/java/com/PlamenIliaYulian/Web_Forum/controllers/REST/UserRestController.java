@@ -194,7 +194,7 @@ public class UserRestController {
                     )
             })
     @SecurityRequirement(name = "Authorization")
-    @PutMapping("/administrative-changes/{id}")
+    @PutMapping("/{id}/administrative-changes")
     public User updateAdministrativeChanges(@PathVariable int id,
                                             @RequestHeader HttpHeaders headers,
                                             @Valid @RequestBody UserAdministrativeDto userAdministrativeDto) {

@@ -1,7 +1,9 @@
 package com.PlamenIliaYulian.Web_Forum.controllers.MVC;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -9,6 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/posts")
 
 public class PostMvcController {
+
+
+    @ModelAttribute("isAuthenticated")
+    public boolean populateIsAuthenticated(HttpSession httpSession){
+        return httpSession.getAttribute("currentUser")!=null;
+    }
+
     /*Plamka*/
     /*User must  be already logged*/
     @GetMapping
@@ -63,8 +72,23 @@ public class PostMvcController {
 
     /*Iliika*/
     /*This is the endpoint which will be taking care of adding the comment to the respective post*/
-    @PostMapping("/{id}/comment")
+    @PostMapping("/{id}/addComment")
     public String addCommentToPost() {
+        return null;
+    }
+
+    @PostMapping("/{id}/deleteComment")
+    public String removeCommentFromPost() {
+        return null;
+    }
+
+    @GetMapping("/{postId}/comments/{commentId}/edit")
+    public String showEditCommentPage(){
+        return null;
+    }
+
+    @PostMapping("/{postId}/comments/{commentId}/edit")
+    public String handleEditCommentPage(){
         return null;
     }
 
@@ -75,5 +99,27 @@ public class PostMvcController {
     public String deletePost() {
         return null;
     }
+
+    @PostMapping("/{id}/like")
+    public String likePost(){
+        return null;
+    }
+
+    @PostMapping("/{id}/dislike")
+    public String dislikePost(){
+        return null;
+    }
+
+    @PostMapping("/{id}/edit/addTag")
+    public String addTagToPost(){
+        return null;
+    }
+
+    @PostMapping("/{id}/edit/removeTag/{tagId}")
+    public String remmoveTagToPost(){
+        return null;
+    }
+
+
 
 }

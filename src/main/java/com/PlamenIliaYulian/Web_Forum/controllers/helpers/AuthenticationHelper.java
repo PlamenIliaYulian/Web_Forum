@@ -4,6 +4,7 @@ import com.PlamenIliaYulian.Web_Forum.exceptions.AuthenticationException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ public class AuthenticationHelper {
 
     public static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     public static final String INVALID_AUTHENTICATION_ERROR = "Invalid authentication.";
+    public static final String LOGGED_USER_ERROR = "No user logged in.";
 
     private final UserService userService;
 
@@ -64,4 +66,13 @@ public class AuthenticationHelper {
         return userInfo.substring(0, firstSpaceIndex);
     }
 
+    public User tryGetUserFromSession(HttpSession httpSession) {
+        String currentUser = (String) httpSession.getAttribute("currentUser");
+
+        if(currentUser == null){
+            throw new AuthenticationException(LOGGED_USER_ERROR);
+        }
+
+        return userService.getUserByUsername(currentUser);
+    }
 }
