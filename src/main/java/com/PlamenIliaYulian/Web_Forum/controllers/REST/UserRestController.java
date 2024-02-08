@@ -141,6 +141,51 @@ public class UserRestController {
         }
     }
 
+    @Operation(
+            summary = "Updates a more specific information (deleting user, blocking user etc.) of the user found by the provided id.",
+            description = "Used by the system's administrators to delete, block / unblock etc. a specific user.",
+            parameters = {
+                    @Parameter(name = "id",
+                            description = "Path variable (the id of the user whose profile will be updated.",
+                            example = "1"),
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Username and password provided in the 'Authorization' header do not match any of the admins' login credentials.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Invalid authentication.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Username trying to execute the request must be an admin.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Unauthorized operation.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "There is no user with this 'id'.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "User with username 'username' not found.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    )
+            })
+    @SecurityRequirement(name = "BasicAuth")
     @PutMapping("/administrative-changes/{id}")
     public User updateAdministrativeChanges(@PathVariable int id,
                                             @RequestHeader HttpHeaders headers,
@@ -312,7 +357,7 @@ public class UserRestController {
 
     @GetMapping("/count")
     public Long getAllUsersCount() {
-       return userService.getAllUsersCount();
+        return userService.getAllUsersCount();
     }
 
 
