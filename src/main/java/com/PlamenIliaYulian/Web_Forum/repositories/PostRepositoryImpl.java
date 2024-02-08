@@ -4,6 +4,7 @@ import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.models.Post;
 import com.PlamenIliaYulian.Web_Forum.models.PostFilterOptions;
 import com.PlamenIliaYulian.Web_Forum.models.Tag;
+import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.PostRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -19,6 +20,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Repository
 public class PostRepositoryImpl implements PostRepository {
@@ -167,6 +170,16 @@ public class PostRepositoryImpl implements PostRepository {
     public List<Post> getMostRecentlyCreatedPosts() {
         try (Session session = sessionFactory.openSession()) {
             Query<Post> query = session.createQuery("FROM Post WHERE isDeleted = false ORDER BY createdOn DESC LIMIT 10", Post.class);
+            return query.list();
+        }
+    }
+
+    @Override
+    public List<Post> getPostsByCreator(User user) {
+        try (Session session = sessionFactory.openSession();) {
+            Query<Post> query = session.createQuery("from Post where createdBy = :creatorId AND isDeleted = false",
+                    Post.class);
+            query.setParameter("creatorId", user.getUserId());
             return query.list();
         }
     }

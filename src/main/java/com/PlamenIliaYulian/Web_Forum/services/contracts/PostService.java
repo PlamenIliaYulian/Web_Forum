@@ -50,5 +50,6 @@ public interface PostService {
     List<Post> getMostCommentedPosts();
     List<Post> getMostLikedPosts();
     List<Post> getMostRecentlyCreatedPosts();
+    List<Post> getPostsByCreator(User user);
 
 }

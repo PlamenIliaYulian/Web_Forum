@@ -189,6 +189,11 @@ public class PostServiceImpl implements PostService {
         return postRepository.getMostRecentlyCreatedPosts();
     }
 
+    @Override
+    public List<Post> getPostsByCreator(User user) {
+        return postRepository.getPostsByCreator(user);
+    }
+
     /*Ilia*/
     @Override
     public List<Comment> getAllCommentsRelatedToPost(Post postWithComments) {

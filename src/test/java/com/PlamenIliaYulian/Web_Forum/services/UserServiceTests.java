@@ -4,11 +4,11 @@ import com.PlamenIliaYulian.Web_Forum.exceptions.DuplicateEntityException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
 import com.PlamenIliaYulian.Web_Forum.helpers.TestHelpers;
-import com.PlamenIliaYulian.Web_Forum.models.Comment;
-import com.PlamenIliaYulian.Web_Forum.models.Role;
-import com.PlamenIliaYulian.Web_Forum.models.User;
-import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
+import com.PlamenIliaYulian.Web_Forum.models.*;
+import com.PlamenIliaYulian.Web_Forum.repositories.AvatarRepositoryImpl;
+import com.PlamenIliaYulian.Web_Forum.repositories.contracts.AvatarRepository;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.UserRepository;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.AvatarService;
 import org.hibernate.id.uuid.Helper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,8 @@ public class UserServiceTests {
 
     @Mock
     UserRepository userRepository;
-
+    @Mock
+    AvatarService avatarService;
     @InjectMocks
     UserServiceImpl userService;
 
@@ -76,6 +77,7 @@ public class UserServiceTests {
     @Test
     public void addAvatar_Should_AddAvatar_When_TheCorrectUserIsTryingToUpdateTheAvatar() {
         User userToUpdateAvatarTo = TestHelpers.createMockNoAdminUser();
+        byte[] mockAvatarByte = new byte[5];
 
         Mockito.when(userRepository.getUserById(userToUpdateAvatarTo.getUserId()))
                 .thenReturn(userToUpdateAvatarTo);
@@ -83,7 +85,7 @@ public class UserServiceTests {
         Mockito.when(userRepository.updateUser(userToUpdateAvatarTo))
                 .thenReturn(userToUpdateAvatarTo);
 
-        userService.addAvatar(userToUpdateAvatarTo.getUserId(), null, userToUpdateAvatarTo);
+        userService.addAvatar(userToUpdateAvatarTo.getUserId(), mockAvatarByte, userToUpdateAvatarTo);
 
         Mockito.verify(userRepository, Mockito.times(1))
                 .updateUser(userToUpdateAvatarTo);
@@ -146,6 +148,9 @@ public class UserServiceTests {
 
         Mockito.when(userRepository.getUserByEmail(Mockito.anyString()))
                 .thenThrow(new EntityNotFoundException("User", "email", userToBeCreated.getEmail()));
+
+        Mockito.when(avatarService.getDefaultAvatar())
+                .thenReturn(new Avatar());
 
         userService.createUser(userToBeCreated);
 

@@ -104,4 +104,9 @@ public class CommentServiceImpl implements CommentService {
 
         return commentRepository.updateComment(comment);
     }
+
+    @Override
+    public List<Comment> getCommentsByCreator(User user) {
+        return commentRepository.getCommentsByCreator(user);
+    }
 }

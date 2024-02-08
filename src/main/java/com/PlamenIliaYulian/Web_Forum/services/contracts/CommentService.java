@@ -32,4 +32,5 @@ public interface CommentService {
 
     /*✔ Iliya ✔*/
     Comment dislikeComment(Comment comment, User authorizedUser);
+    List<Comment> getCommentsByCreator(User user);
 }

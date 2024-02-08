@@ -1,10 +1,7 @@
 package com.PlamenIliaYulian.Web_Forum.repositories;
 
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
-import com.PlamenIliaYulian.Web_Forum.models.Comment;
-import com.PlamenIliaYulian.Web_Forum.models.CommentFilterOptions;
-import com.PlamenIliaYulian.Web_Forum.models.Post;
-import com.PlamenIliaYulian.Web_Forum.models.PostFilterOptions;
+import com.PlamenIliaYulian.Web_Forum.models.*;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.CommentRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -125,6 +122,15 @@ public class CommentRepositoryImpl implements CommentRepository {
             query.setProperties(parameters);
             return query.list();
 
+        }
+    }
+
+    @Override
+    public List<Comment> getCommentsByCreator(User user) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Comment> query = session.createQuery("from Comment where createdBy = :id and isDeleted = false ", Comment.class);
+            query.setParameter("id", user.getUserId());
+            return query.list();
         }
     }
 

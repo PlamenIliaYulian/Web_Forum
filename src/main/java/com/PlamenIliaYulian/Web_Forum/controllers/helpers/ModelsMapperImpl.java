@@ -85,6 +85,16 @@ public class ModelsMapperImpl implements ModelsMapper {
     }
 
     @Override
+    public User userFromMvcDtoUpdate(UserMvcDtoUpdate userMvcDtoUpdate, int id) {
+        User user = userService.getUserById(id);
+        user.setFirstName(userMvcDtoUpdate.getFirstName());
+        user.setLastName(userMvcDtoUpdate.getLastName());
+        user.setEmail(userMvcDtoUpdate.getEmail());
+        user.setPassword(userMvcDtoUpdate.getPassword());
+        return user;
+    }
+
+    @Override
     public UserFilterOptions userFilterOptionsFromDto(UserFilterOptionsDto dto) {
         return new UserFilterOptions(
                 dto.getUsername(),
@@ -106,6 +116,16 @@ public class ModelsMapperImpl implements ModelsMapper {
                 dto.getSortBy(),
                 dto.getSortOrder()
         );
+    }
+
+    @Override
+    public UserFilterOptions userFilterOptionsFromUsernameOptionsDto(UserFilterByUsernameOptionsDto dto) {
+        return new UserFilterOptions(dto.getUsername(),
+                null,
+                null,
+                null,
+                null);
+
     }
 
     @Override

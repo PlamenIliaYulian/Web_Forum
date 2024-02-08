@@ -11,7 +11,8 @@ public class RegisterDto {
     @NotEmpty(message = "Password should not be empty.")
     @Size(min = 6, max = 20, message = "Password should be between 6 and 20 symbols.")
     private String password;
-    @NotEmpty
+    @NotEmpty(message = "Confirmation password should not be empty.")
+    @Size(min = 6, max = 20, message = "Password should be between 6 and 20 symbols.")
     private String passwordConfirm;
     @NotEmpty(message = "First name should not be empty.")
     @Size(min = 4, max = 32, message = "First name should be between 4 and 32 symbols.")
