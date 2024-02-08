@@ -158,7 +158,7 @@ public class PostRestController {
                     )
             })
     /*Plamen*/
-    @SecurityRequirement(name = "BasicAuth")
+    @SecurityRequirement(name = "Authorization")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void deletePost(@PathVariable int id,
@@ -266,7 +266,7 @@ public class PostRestController {
                             }
                     )
             })
-    @SecurityRequirement(name = "BasicAuth")
+    @SecurityRequirement(name = "Authorization")
     @GetMapping("/title/{title}")
     public Post getPostByTitle(@PathVariable String title, @RequestHeader HttpHeaders headers) {
         try {
@@ -345,7 +345,7 @@ public class PostRestController {
                             }
                     )
             })
-    @SecurityRequirement(name = "BasicAuth")
+    @SecurityRequirement(name = "Authorization")
     /*Plamen*/
     @PutMapping("/{id}/dislikes")
     public Post dislikePost(@RequestHeader HttpHeaders headers,
@@ -457,7 +457,7 @@ public class PostRestController {
                             }
                     )
             })
-    @SecurityRequirement(name = "BasicAuth")
+    @SecurityRequirement(name = "Authorization")
     /*Plamen*/
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{id}/comments")

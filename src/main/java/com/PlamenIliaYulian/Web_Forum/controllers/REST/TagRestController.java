@@ -200,7 +200,7 @@ public class TagRestController {
                             }
                     )
             })
-    @SecurityRequirement(name = "BasicAuth")
+    @SecurityRequirement(name = "Authorization")
     /*Plamen*/
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")

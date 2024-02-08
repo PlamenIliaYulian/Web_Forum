@@ -112,7 +112,7 @@ public class CommentRestController {
                             }
                     )
             })
-    @SecurityRequirement(name = "BasicAuth")
+    @SecurityRequirement(name = "Authorization")
     @PutMapping("/{id}")
     public Comment updateComment(@PathVariable int id,
                                  @RequestHeader HttpHeaders headers,

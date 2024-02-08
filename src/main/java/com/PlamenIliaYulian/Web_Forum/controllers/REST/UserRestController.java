@@ -260,7 +260,7 @@ public class UserRestController {
                         )
                 })
     /*Plamen*/
-    @SecurityRequirement(name = "BasicAuth")
+    @SecurityRequirement(name = "Authorization")
     @GetMapping("/search")
     public List<User> getAllUsers(@RequestHeader HttpHeaders headers,
                                   @RequestParam(required = false) String username,
@@ -411,7 +411,7 @@ public class UserRestController {
                             }
                     )
             })
-    @SecurityRequirement(name = "BasicAuth")
+    @SecurityRequirement(name = "Authorization")
     @PutMapping("/{id}/PhoneNumber")
     public User addPhoneNumber(@PathVariable int id,
                                @RequestBody PhoneNumberDto phoneNumberDto,
