@@ -14,6 +14,7 @@ import com.PlamenIliaYulian.Web_Forum.models.dtos.UserDtoUpdate;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -63,7 +64,53 @@ public class UserRestController {
         return userService.createUser(user);
     }
 
-    /*Ilia*/
+    @Operation(
+            summary = "Delete a single user by numeric ID.",
+            description = "Delete a user by providing numeric ID in the endpoint. You need to be either admin or the user itself.",
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "ID must be numeric. For example '/api/v1/users/3'.",
+                            example = "3"
+                    )
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "Success Response"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not Found status.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(name = "Missing user", value = "User with ID '200' not found.",
+                                                    description = "There is no such user with the provided ID.")
+                                    },
+                                    mediaType = "Plain text")
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Missing Authentication.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(
+                                                    name = "Not authenticated", value = "The requested resource requires authentication.",
+                                                    description = "You need to be authenticated to view a User.")
+                                    },
+                                    mediaType = "Plain text")
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Not authorized.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(name = "Not authorized", value = "Unauthorized operation.",
+                                                    description = "Only admin or user itself can view User info.")
+                                    },
+                                    mediaType = "Plain text")
+                    )
+            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     void deleteUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
@@ -279,7 +326,33 @@ public class UserRestController {
         }
     }
 
-    /*Ilia*/
+    @Operation(
+            summary = "View a single user info by numeric ID.",
+            description = "Get a user info by providing numeric ID in the endpoint. You need to be either admin or the user itself.",
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "ID must be numeric. For example '/api/v1/users/3'.",
+                            example = "3"
+                    )
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success Response"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not Found status.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(
+                                                    name = "Missing user", value = "User with ID '200' not found.",
+                                                    description = "There is no such user with the provided ID.")
+                                    },
+                                    mediaType = "Plain text")
+                    )
+            })
     @GetMapping("/{id}")
     public User getUserById(@PathVariable int id) {
         try {
@@ -350,6 +423,54 @@ public class UserRestController {
         }
     }
 
+    @Operation(
+            summary = "Deletes an avatar / profile picture to user's profile and puts the default one.",
+            description = "Used to update user's profile by deleting its avatar / profile picture.",
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "ID of the user must be numeric. For example '/api/v1/users/3/avatar'.",
+                            example = "3"
+                    )
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not Found status.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(name = "Missing user", value = "User with ID '200' not found.",
+                                                    description = "There is no such user with the provided ID.")
+                                    },
+                                    mediaType = "Plain text")
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Missing Authentication.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(
+                                                    name = "Not authenticated", value = "The requested resource requires authentication.",
+                                                    description = "You need to be authenticated to view a User.")
+                                    },
+                                    mediaType = "Plain text")
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Not authorized.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(name = "Not authorized", value = "Unauthorized operation.",
+                                                    description = "Only admin or user itself can delete user avatar photo.")
+                                    },
+                                    mediaType = "Plain text")
+                    )
+            })
+    @SecurityRequirement(name = "Authorization")
     @DeleteMapping("/{id}/avatar")
     public User deleteAvatar(@PathVariable int id,
                              @RequestHeader HttpHeaders headers) {
@@ -433,8 +554,4 @@ public class UserRestController {
     public Long getAllUsersCount() {
         return userService.getAllUsersCount();
     }
-
-
-
-    /*TODO add change phone number method.*/
 }

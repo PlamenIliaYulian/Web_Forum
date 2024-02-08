@@ -176,7 +176,8 @@ public class CommentRestController {
             })
     @SecurityRequirement(name = "Authorization")
     @PutMapping("/{id}/likes")
-    public Comment likeComment(@PathVariable int id, @RequestHeader HttpHeaders headers) {
+    public Comment likeComment(@PathVariable int id,
+                               @RequestHeader HttpHeaders headers) {
         try {
             User userToAuthenticate = authenticationHelper.tryGetUser(headers);
             Comment comment = commentService.getCommentById(id);
@@ -190,7 +191,52 @@ public class CommentRestController {
         }
     }
 
-    /*Ilia*/
+
+    @Operation(
+            summary = "Puts dislike to a specific comment",
+            description = "Used to dislike the content of a specific comment.",
+            parameters = {
+                    @Parameter(name = "id",
+                            description = "Specific id to search in the system",
+                            example = "3"),
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = Comment.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Username and password provided in the 'Authorization' header do not match any user in the database",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Invalid authentication.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "There is no comment with this 'id'.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Post with id '2' not found.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "User trying to execute the request must be either admin OR the same user to which the profile belongs.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Unauthorized operation.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    )
+            })
+    @SecurityRequirement(name = "Authorization")
     @PutMapping("/{id}/dislikes")
     public Comment dislikeComment(@PathVariable int id,
                                   @RequestHeader HttpHeaders headers) {
@@ -208,6 +254,8 @@ public class CommentRestController {
                     HttpStatus.NOT_FOUND,
                     e.getMessage()
             );
+        }catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 }

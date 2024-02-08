@@ -11,6 +11,7 @@ import com.PlamenIliaYulian.Web_Forum.models.dtos.TagDto;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -93,7 +94,46 @@ public class TagRestController {
         }
     }
 
-    /*Ilia*/
+    @Operation(
+            summary = "Get a single tag by numeric ID.",
+            description = "Get only one tag info by providing numeric ID in the endpoint.",
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "ID must be numeric. For example '/api/v1/tags/3'.",
+                            example = "2")
+
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success Response",
+                            content = @Content(
+                                    schema = @Schema(implementation = Tag.class),
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not Found status.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(name = "Missing tag", value = "Tag with ID '200' not found.",
+                                                    description = "There is no such tag with the provided ID.")
+                                    },
+                                    mediaType = "Plain text")
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Missing Authentication.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(name = "Not authenticated", value = "The requested resource requires authentication.",
+                                                    description = "You need to be authenticated to get a tag by ID.")
+                                    },
+                                    mediaType = "Plain text")
+                    ),
+            })
+    @SecurityRequirement(name = "Authorization")
     @GetMapping("/{id}")
     public Tag getTagById(@PathVariable int id,
                           @RequestHeader HttpHeaders headers) {
@@ -153,8 +193,6 @@ public class TagRestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
-
-    /*Ilia*/
 
     @Operation(
             summary = "Deletes tag by the provided tag ID.",
@@ -219,7 +257,57 @@ public class TagRestController {
         }
     }
 
-    /*Ilia*/
+    @Operation(
+            summary = "Modify Tag by numeric ID.",
+            description = "Use numeric ID to change a tag.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Body is consisted of a tag as text."),
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "A numeric path variable.",
+                            example = "1")
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success Response",
+                            content = @Content(
+                                    schema = @Schema(implementation = Tag.class),
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "There is no tag with this 'ID'.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Tag with ID '2' not found.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Missing Authentication.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(name = "Not authenticated", value = "The requested resource requires authentication.",
+                                                    description = "You need to be authenticated to modify a Beer.")
+                                    },
+                                    mediaType = "Plain text")
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Not authorized.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(name = "Not authorized", value = "Unauthorized operation.",
+                                                    description = "Only admin or beer creator can modify the Beer.")
+                                    },
+                                    mediaType = "Plain text")
+                    )
+            })
+    @SecurityRequirement(name = "Authorization")
     @PutMapping("/{id}")
     public Tag updateTag(@RequestHeader HttpHeaders headers,
                          @PathVariable int id,

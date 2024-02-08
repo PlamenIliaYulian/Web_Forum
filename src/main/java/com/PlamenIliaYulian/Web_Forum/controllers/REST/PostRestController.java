@@ -15,6 +15,7 @@ import com.PlamenIliaYulian.Web_Forum.services.contracts.PostService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -176,7 +177,52 @@ public class PostRestController {
         }
     }
 
-    /*Ilia*/
+
+    @Operation(
+            summary = "Updates an existing post using the details provided in the body of the post request and a giver ID.",
+            description = "Used to update an existing post in the system.",
+            parameters = {
+                    @Parameter(name = "id",
+                            description = "Specific ID to search in the system",
+                            example = "2"),
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = Post.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "The user trying to update the post has been blocked or it is not creator or admin.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Unauthorized operation.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Username and password provided in the 'Authorization' header do not match the credentials of any of the users registered in the system.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Invalid authentication.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "There is no username with the specific 'username' provided in the headers. ",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "User with username 'username' not found.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    )
+            })
+    @SecurityRequirement(name = "Authorization")
     @PutMapping("/{id}")
     public Post updatePost(@PathVariable int id,
                            @RequestHeader HttpHeaders headers,
@@ -279,11 +325,46 @@ public class PostRestController {
         }
     }
 
-    /*Ilia*/
+    @Operation(
+            summary = "Retrieves specific post in the system by its ID.",
+            description = "Used to find a post by given ID in the system.",
+            parameters = {
+                    @Parameter(name = "Id",
+                            description = "Specific ID to search in the system",
+                            example = "5"),
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = Post.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Username and password provided in the 'Authorization' header do not match any user in the database",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Invalid authentication.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "There is no post with this 'ID'.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Post with ID '5' not found.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    )
+            })
+    @SecurityRequirement(name = "Authorization")
     @GetMapping("/{id}")
-    public Post getPostById(@PathVariable int id, @RequestHeader HttpHeaders headers) {
+    public Post getPostById(@PathVariable int id,
+                            @RequestHeader HttpHeaders headers) {
         try {
-            User authenticatedUser = authenticationHelper.tryGetUser(headers);
+            authenticationHelper.tryGetUser(headers);
             return postService.getPostById(id);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(
@@ -363,7 +444,54 @@ public class PostRestController {
         }
     }
 
-    /*Ilia*/
+
+    @Operation(
+            summary = "Add a tag to a specific Post",
+            description = "Used to find a post by given Id and add a tag to id.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Body is consisted of a tag as text."),
+            parameters = {
+                    @Parameter(name = "id",
+                            description = "Specific id to search in the system",
+                            example = "3"),
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = Post.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Username and password provided in the 'Authorization' header do not match any user in the database",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Invalid authentication.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "There is no post with this 'id'.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Post with id '2' not found.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "User trying to execute the request must be the creator of the post.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Unauthorized operation.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    )
+            })
+    @SecurityRequirement(name = "Authorization")
     @PutMapping("/{id}/tags")
     public Post addTagToPost(@RequestHeader HttpHeaders headers,
                              @PathVariable int id,
@@ -384,10 +512,6 @@ public class PostRestController {
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED,
-                    e.getMessage());
-        } catch (InvalidUserInputException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
                     e.getMessage());
         }
     }
@@ -498,12 +622,51 @@ public class PostRestController {
         }
     }
 
-    /*Ilia*/
+
+    @Operation(
+            summary = "View all comments from a single post by the post ID.",
+            description = "Get comments from a certain post by providing its ID.",
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "ID must be numeric. For example '/api/v1/posts/3/comments'.",
+                            example = "3"
+                    )
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success Response"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not Found status.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(
+                                                    name = "Missing user", value = "Post with ID '200' not found.",
+                                                    description = "There is no such post with the provided ID.")
+                                    },
+                                    mediaType = "Plain text")
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Missing Authentication.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(
+                                                    name = "Not authenticated", value = "The requested resource requires authentication.",
+                                                    description = "You need to be authenticated to view a Post's comments.")
+                                    },
+                                    mediaType = "Plain text")
+                    )
+            })
+    @SecurityRequirement(name = "Authorization")
     @GetMapping("/{id}/comments")
     public List<Comment> getAllCommentsRelatedToPost(@RequestHeader HttpHeaders headers,
                                                      @PathVariable int id) {
         try {
-            User authorizedUser = authenticationHelper.tryGetUser(headers);
+            authenticationHelper.tryGetUser(headers);
             Post postWithComments = postService.getPostById(id);
             return postService.getAllCommentsRelatedToPost(postWithComments);
         } catch (AuthenticationException e) {
