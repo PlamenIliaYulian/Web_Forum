@@ -78,16 +78,6 @@ public class TagRestController {
             description = "Used to create a new tag in the system.",
             responses = {
                     @ApiResponse(
-                            responseCode = "403",
-                            description = "Username and password provided in the 'Authorization' header do not match any of the admins' login credentials.",
-                            content = {
-                                    @Content(examples = {
-                                            @ExampleObject(value = "Invalid authentication.")
-                                    },
-                                            mediaType = "plain text")
-                            }
-                    ),
-                    @ApiResponse(
                             responseCode = "401",
                             description = "The login credentials of the user trying to execute the creation do not match the respective record in the database.",
                             content = {
