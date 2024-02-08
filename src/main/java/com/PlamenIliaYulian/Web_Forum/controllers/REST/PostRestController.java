@@ -13,6 +13,11 @@ import com.PlamenIliaYulian.Web_Forum.models.dtos.PostDto;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.TagDto;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.PostService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -45,6 +50,43 @@ public class PostRestController {
         this.tagService = tagService;
     }
 
+
+    @Operation(
+            summary = "Creates a new post using the details provided in the body of the post request.",
+            description = "Used to create a new post in the system.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "The user trying to create the post has been blocked by the administrators of the system.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Unauthorized operation.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Username and password provided in the 'Authorization' header do not match the credentials of any of the users registered in the system.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Invalid authentication.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "There is no username with the specific 'username' provided in the headers. ",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "User with username 'username' not found.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    )
+            })
+    @SecurityRequirement(name = "BasicAuth")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Post createPost(@Valid @RequestBody PostDto postDto,
