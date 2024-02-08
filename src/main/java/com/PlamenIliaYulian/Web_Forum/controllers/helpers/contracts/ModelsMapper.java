@@ -22,4 +22,11 @@ public interface ModelsMapper {
     User userFromAdministrativeDto(UserAdministrativeDto userAdministrativeDto, int id);
     User userFromDtoUpdate(UserDtoUpdate userDtoUpdate, String username);
     User userFromDtoUpdate(UserDtoUpdate userDtoUpdate, int id);
+
+
+    UserFilterOptions userFilterOptionsFromDto(UserFilterOptionsDto dto);
+
+    PostFilterOptions postFilterOptionsFromDto(PostFilterOptionsDto dto);
+
+
 }

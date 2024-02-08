@@ -3,7 +3,14 @@ package com.PlamenIliaYulian.Web_Forum.models;
 import java.util.Optional;
 
 public class PostFilterOptions {
-
+    private Optional<Integer> likes;
+    private Optional<Integer> dislikes;
+    private Optional<String> title;
+    private Optional<String> content;
+    private Optional<String> createdBefore;
+    private Optional<String> createdBy;
+    private Optional<String> sortBy;
+    private Optional<String> sortOrder;
 
     public PostFilterOptions(Integer likes, Integer dislikes, String title,
                              String content, String createdBefore, String createdBy,
@@ -17,16 +24,7 @@ public class PostFilterOptions {
         this.sortBy = Optional.ofNullable(sortBy);
         this.sortOrder = Optional.ofNullable(sortOrder);
     }
-
-    private Optional<Integer> likes;
-    private Optional<Integer> dislikes;
-    private Optional<String> title;
-    private Optional<String> content;
-    private Optional<String> createdBefore;
-    private Optional<String> createdBy;
-    private Optional<String> sortBy;
-    private Optional<String> sortOrder;
-
+    
     public Optional<Integer> getLikes() {
         return likes;
     }

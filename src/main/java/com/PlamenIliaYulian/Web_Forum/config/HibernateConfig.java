@@ -21,6 +21,7 @@ public class HibernateConfig {
     private final String dbUsername;
     private final String dbPassword;
 
+
     @Autowired
     public HibernateConfig(Environment env) {
         this.dbUrl = env.getProperty("database.url");

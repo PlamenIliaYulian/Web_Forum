@@ -76,6 +76,30 @@ public class ModelsMapperImpl implements ModelsMapper {
     }
 
     @Override
+    public UserFilterOptions userFilterOptionsFromDto(UserFilterOptionsDto dto) {
+        return new UserFilterOptions(
+                dto.getUsername(),
+                dto.getEmail(),
+                dto.getFirstName(),
+                dto.getSortBy(),
+                dto.getSortOrder());
+    }
+
+    @Override
+    public PostFilterOptions postFilterOptionsFromDto(PostFilterOptionsDto dto) {
+        return new PostFilterOptions(
+                dto.getLikes(),
+                dto.getDislikes(),
+                dto.getTitle(),
+                dto.getContent(),
+                dto.getCreatedBefore(),
+                dto.getCreatedBy(),
+                dto.getSortBy(),
+                dto.getSortOrder()
+        );
+    }
+
+    @Override
     public Post postFromDto(PostDto postDto) {
         Post post = new Post();
         post.setTitle(postDto.getTitle());
@@ -112,12 +136,14 @@ public class ModelsMapperImpl implements ModelsMapper {
         tag.setTag(tagDto.getTag().toLowerCase());
         return tag;
     }
+
     @Override
     public Tag tagFromDto(TagDto tagDto, String name) {
         Tag tag = tagService.getTagByName(name);
         tag.setTag(tagDto.getTag().toLowerCase());
         return tag;
     }
+
     @Override
     public Tag tagFromDto(TagDto tagDto, int id) {
         Tag tag = tagService.getTagById(id);

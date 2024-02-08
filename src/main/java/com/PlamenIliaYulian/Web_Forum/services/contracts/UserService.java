@@ -16,6 +16,7 @@ public interface UserService {
     /*July - 📌 DONE 📌 - last updated 25.01.2024*/
     User updateUser(User userToBeUpdated, User userIsAuthorized);
 
+    List<User> getAllUsers(UserFilterOptions userFilterOptions);
     /*Plamen*/
     List<User> getAllUsers(User user, UserFilterOptions userFilterOptions);
 
