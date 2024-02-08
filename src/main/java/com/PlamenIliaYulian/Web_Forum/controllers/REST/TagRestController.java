@@ -11,6 +11,7 @@ import com.PlamenIliaYulian.Web_Forum.models.dtos.TagDto;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -41,6 +42,38 @@ public class TagRestController {
         this.modelsMapper = modelsMapper;
     }
 
+    @Operation(
+            summary = "Pulls from the database the details of all tags created in the system.",
+            description = "Used to obtain the information of all tags available in the system.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "The details of all tags available in the system.",
+                            content = @Content(array = @ArraySchema(
+                                    schema = @Schema(implementation = Tag.class)))
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "The login credentials of the user trying to execute the creation do not match the respective record in the database.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Unauthorized operation.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "There is no username with the specific 'username' provided in the headers. ",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "User with username 'username' not found.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    )
+            })
+    @SecurityRequirement(name = "BasicAuth")
     @GetMapping("/search")
     public List<Tag> getAllTags(@RequestHeader HttpHeaders headers) {
         try {
