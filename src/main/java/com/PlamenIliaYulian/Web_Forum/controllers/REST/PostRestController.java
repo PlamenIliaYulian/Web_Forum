@@ -86,7 +86,7 @@ public class PostRestController {
                             }
                     )
             })
-    @SecurityRequirement(name = "BasicAuth")
+    @SecurityRequirement(name = "Authorization")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Post createPost(@Valid @RequestBody PostDto postDto,

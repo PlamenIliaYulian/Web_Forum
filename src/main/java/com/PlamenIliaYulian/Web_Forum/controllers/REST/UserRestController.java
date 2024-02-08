@@ -123,7 +123,7 @@ public class UserRestController {
                             }
                     )
             })
-    @SecurityRequirement(name = "BasicAuth")
+    @SecurityRequirement(name = "Authorization")
     @PutMapping("/{id}")
     User updateUser(@RequestHeader HttpHeaders headers,
                     @PathVariable int id,
@@ -185,7 +185,7 @@ public class UserRestController {
                             }
                     )
             })
-    @SecurityRequirement(name = "BasicAuth")
+    @SecurityRequirement(name = "Authorization")
     @PutMapping("/administrative-changes/{id}")
     public User updateAdministrativeChanges(@PathVariable int id,
                                             @RequestHeader HttpHeaders headers,
@@ -304,7 +304,7 @@ public class UserRestController {
                             }
                     )
             })
-    @SecurityRequirement(name = "BasicAuth")
+    @SecurityRequirement(name = "Authorization")
     @PutMapping("/{id}/avatar")
     public User updateAvatar(@PathVariable int id, @RequestBody byte[] avatar, @RequestHeader HttpHeaders headers) {
         try {

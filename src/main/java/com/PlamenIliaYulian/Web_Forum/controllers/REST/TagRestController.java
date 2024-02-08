@@ -19,7 +19,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -73,7 +72,7 @@ public class TagRestController {
                             }
                     )
             })
-    @SecurityRequirement(name = "BasicAuth")
+    @SecurityRequirement(name = "Authorization")
     @GetMapping("/search")
     public List<Tag> getAllTags(@RequestHeader HttpHeaders headers) {
         try {
@@ -131,7 +130,7 @@ public class TagRestController {
                             }
                     )
             })
-    @SecurityRequirement(name = "BasicAuth")
+    @SecurityRequirement(name = "Authorization")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
     public Tag createTag(@RequestBody TagDto tagDto,

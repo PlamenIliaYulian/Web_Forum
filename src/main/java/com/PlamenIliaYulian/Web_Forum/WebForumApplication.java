@@ -27,7 +27,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         }
 )
 @SecurityScheme(
-        name = "BasicAuth",
+        name = "Authorization",
         /*Това се прави по този начин само, за да работи в нашия проект, защото
         * нашата Basic authentication имплементация не отговаря на 100% на стандарта. Пример
         * не encode-ваме.*/
