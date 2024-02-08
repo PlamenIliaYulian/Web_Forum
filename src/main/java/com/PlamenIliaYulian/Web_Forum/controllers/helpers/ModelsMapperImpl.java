@@ -3,12 +3,12 @@ package com.PlamenIliaYulian.Web_Forum.controllers.helpers;
 import com.PlamenIliaYulian.Web_Forum.controllers.helpers.contracts.ModelsMapper;
 import com.PlamenIliaYulian.Web_Forum.models.*;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.*;
-import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
-import com.PlamenIliaYulian.Web_Forum.services.contracts.PostService;
-import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
-import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class ModelsMapperImpl implements ModelsMapper {
@@ -20,13 +20,22 @@ public class ModelsMapperImpl implements ModelsMapper {
     private final PostService postService;
 
     private final UserService userService;
+    private final AvatarService avatarService;
+    private final RoleService roleService;
 
     @Autowired
-    public ModelsMapperImpl(TagService tagService, CommentService commentService, PostService postService, UserService userService) {
+    public ModelsMapperImpl(TagService tagService,
+                            CommentService commentService,
+                            PostService postService,
+                            UserService userService,
+                            AvatarService avatarService,
+                            RoleService roleService) {
         this.tagService = tagService;
         this.commentService = commentService;
         this.postService = postService;
         this.userService = userService;
+        this.avatarService = avatarService;
+        this.roleService = roleService;
     }
 
 
@@ -100,6 +109,21 @@ public class ModelsMapperImpl implements ModelsMapper {
     }
 
     @Override
+    public User userFromRegisterDto(RegisterDto registerDto) {
+        User user = new User();
+        user.setUserName(registerDto.getUsername());
+        user.setPassword(registerDto.getPassword());
+        user.setFirstName(registerDto.getFirstName());
+        user.setLastName(registerDto.getLastName());
+        user.setEmail(registerDto.getEmail());
+        user.setAvatar(avatarService.getDefaultAvatar());
+        Set<Role> roleSet = new HashSet<>();
+        roleSet.add(roleService.getRoleById(2));
+        user.setRoles(roleSet);
+        return user;
+    }
+
+    @Override
     public Post postFromDto(PostDto postDto) {
         Post post = new Post();
         post.setTitle(postDto.getTitle());
@@ -170,6 +194,10 @@ public class ModelsMapperImpl implements ModelsMapper {
         user.setUserName(userDto.getUserName());
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword());
+        user.setAvatar(avatarService.getDefaultAvatar());
+        Set<Role> roleSet = new HashSet<>();
+        roleSet.add(roleService.getRoleById(2));
+        user.setRoles(roleSet);
         return user;
     }
 

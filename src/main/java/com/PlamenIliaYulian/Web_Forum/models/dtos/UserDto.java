@@ -21,6 +21,7 @@ public class UserDto {
     private String email;
 
     /*TODO how to implement regex validation*/
+    @NotNull
     @Size(min = 6, max = 20, message = "Password should be between 6 and 20 symbols.")
     private String password;
 

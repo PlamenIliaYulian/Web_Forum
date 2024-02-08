@@ -75,4 +75,16 @@ public class AuthenticationHelper {
 
         return userService.getUserByUsername(currentUser);
     }
+    public User verifyAuthentication(String username, String password) {
+        try {
+            User user = userService.getUserByUsername(username);
+            if (!user.getPassword().equals(password)) {
+                throw new AuthenticationException(INVALID_AUTHENTICATION_ERROR);
+            }
+            return user;
+
+        } catch (EntityNotFoundException e) {
+            throw new AuthenticationException(INVALID_AUTHENTICATION_ERROR);
+        }
+    }
 }
