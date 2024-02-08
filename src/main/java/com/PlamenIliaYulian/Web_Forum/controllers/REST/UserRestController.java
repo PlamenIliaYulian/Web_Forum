@@ -45,11 +45,19 @@ public class UserRestController {
     }
 
     /*Plamen*/
+
+    @Operation(
+            summary = "Creates new user in the system.",
+            description = "Used to created new user with given username, first name, last name, password and email",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    )
+            }
+    )
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    @Operation(
-            tags = {"User"}
-    )
     public User createUser(@RequestBody @Valid UserDto userDto) {
         User user = modelsMapper.userFromDto(userDto);
         return userService.createUser(user);
@@ -205,13 +213,25 @@ public class UserRestController {
 
     /*Yuli swagger operation.*/
 
-    /*    @Operation(
-                summary = "Retrieves information related to a specific user registered in the system.",
-                description = "Used to retrieve information related to a particular user registered in the system.",
+        @Operation(
+                summary = "Retrieves information related to a specific users registered in the system.",
+                description = "Used to retrieve information about users with optional filtering applied.",
                 parameters = {
                         @Parameter(name = "username",
-                                description = "Path variable.",
+                                description = "Username to apply filtering with.",
                                 example = "emily_jackson"),
+                        @Parameter(name = "email",
+                                description = "Email to apply filtering with",
+                                example = "emily_jackson@email.com"),
+                        @Parameter(name = "first_name",
+                                description = "First name of the user to apply filtering with",
+                                example = "Emily"),
+                        @Parameter(name = "sortBy",
+                                description = "Sort users by specific condition",
+                                example = "emily"),
+                        @Parameter(name = "sortOrder",
+                                description = "Sort order of the filtering",
+                                example = "desc")
                 },
                 responses = {
                         @ApiResponse(
@@ -219,17 +239,28 @@ public class UserRestController {
                                 content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
                         ),
                         @ApiResponse(
-                                responseCode = "404",
-                                description = "There is no user with this 'username'.",
+                                responseCode = "403",
+                                description = "Username and password provided in the 'Authorization' header do not match any user in the database",
                                 content = {
                                         @Content(examples = {
-                                                @ExampleObject(value = "User with username 'username' not found.")
+                                                @ExampleObject(value = "Invalid authentication.")
+                                        },
+                                                mediaType = "plain text")
+                                }
+                        ),
+                        @ApiResponse(
+                                responseCode = "401",
+                                description = "Username trying to execute the request must be either admin OR the same user to which the profile belongs.",
+                                content = {
+                                        @Content(examples = {
+                                                @ExampleObject(value = "Unauthorized operation.")
                                         },
                                                 mediaType = "plain text")
                                 }
                         )
-                })*/
+                })
     /*Plamen*/
+    @SecurityRequirement(name = "BasicAuth")
     @GetMapping("/search")
     public List<User> getAllUsers(@RequestHeader HttpHeaders headers,
                                   @RequestParam(required = false) String username,
@@ -317,7 +348,6 @@ public class UserRestController {
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
-
     }
 
     @DeleteMapping("/{id}/avatar")
@@ -333,11 +363,55 @@ public class UserRestController {
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
-
     }
 
     /*Plamen*/
     /*We have to find a better way to set the phone number.*/
+    @Operation(
+            summary = "Uploads a phone number to user's profile.",
+            description = "Used to update user's profile by updating their phone number.",
+            parameters = {
+                    @Parameter(name = "userToBeUpdated",
+                            description = "ID of the user whose profile will be updated.",
+                            example = "1")
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Username and password provided in the 'Authorization' header do not match any user in the database",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Invalid authentication.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "User trying to execute the request must be either admin OR the same user to which the profile belongs.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Unauthorized operation.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "There is no user with this 'ID'.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "User with ID 1 not found.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    )
+            })
+    @SecurityRequirement(name = "BasicAuth")
     @PutMapping("/{id}/PhoneNumber")
     public User addPhoneNumber(@PathVariable int id,
                                @RequestBody PhoneNumberDto phoneNumberDto,

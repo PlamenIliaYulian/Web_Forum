@@ -14,6 +14,13 @@ import com.PlamenIliaYulian.Web_Forum.models.dtos.TagDto;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.PostService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,6 +29,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import com.PlamenIliaYulian.Web_Forum.models.Tag;
@@ -105,6 +113,52 @@ public class PostRestController {
     }
 
     /*Plamen*/
+    @Operation(
+            summary = "Deletes specific post from the system.",
+            description = "Used to soft delete specific post from the system by given ID.",
+            parameters = {
+                    @Parameter(name = "id",
+                            description = "Specific ID to search in the system",
+                            example = "2"),
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = Post.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Username and password provided in the 'Authorization' header do not match any user in the database",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Invalid authentication.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "User trying to execute the request must be either admin OR the same user to which the profile belongs.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Unauthorized operation.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "There is no post with this 'ID'.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Post with ID '2' not found.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    )
+            })
+    /*Plamen*/
+    @SecurityRequirement(name = "BasicAuth")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void deletePost(@PathVariable int id,
@@ -168,6 +222,51 @@ public class PostRestController {
     }
 
     /*Plamen*/
+    @Operation(
+            summary = "Retrieves specific post in the system.",
+            description = "Used to find a post by given title in the system.",
+            parameters = {
+                    @Parameter(name = "title",
+                            description = "Specific title to search in the system",
+                            example = "Java Basics"),
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = Post.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Username and password provided in the 'Authorization' header do not match any user in the database",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Invalid authentication.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "There is no post with this 'title'.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Post with title 'Java Basics' not found.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "User trying to execute the request must be either admin OR the same user to which the profile belongs.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Unauthorized operation.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    )
+            })
+    @SecurityRequirement(name = "BasicAuth")
     @GetMapping("/title/{title}")
     public Post getPostByTitle(@PathVariable String title, @RequestHeader HttpHeaders headers) {
         try {
@@ -211,6 +310,42 @@ public class PostRestController {
         }
     }
 
+
+    @Operation(
+            summary = "Dislikes specific post.",
+            description = "Used to dislike a post by given id in the system.",
+            parameters = {
+                    @Parameter(name = "id",
+                            description = "Specific id to search in the system",
+                            example = "2"),
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = Post.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Username and password provided in the 'Authorization' header do not match any user in the database",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Invalid authentication.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "There is no post with this 'title'.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Post with title 'Java Basics' not found.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    )
+            })
+    @SecurityRequirement(name = "BasicAuth")
     /*Plamen*/
     @PutMapping("/{id}/dislikes")
     public Post dislikePost(@RequestHeader HttpHeaders headers,
@@ -278,6 +413,51 @@ public class PostRestController {
     }
 
 
+    @Operation(
+            summary = "Add comment to a specific Post",
+            description = "Used to find a post by given Id and add comment to id.",
+            parameters = {
+                    @Parameter(name = "id",
+                            description = "Specific id to search in the system",
+                            example = "3"),
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = Post.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Username and password provided in the 'Authorization' header do not match any user in the database",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Invalid authentication.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "There is no post with this 'id'.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Post with id '2' not found.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "User trying to execute the request must be either admin OR the same user to which the profile belongs.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Unauthorized operation.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    )
+            })
+    @SecurityRequirement(name = "BasicAuth")
     /*Plamen*/
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{id}/comments")
