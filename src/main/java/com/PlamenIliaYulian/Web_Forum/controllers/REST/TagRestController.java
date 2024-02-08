@@ -9,8 +9,16 @@ import com.PlamenIliaYulian.Web_Forum.models.Tag;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.TagDto;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -64,6 +72,43 @@ public class TagRestController {
         }
     }
 
+
+    @Operation(
+            summary = "Creates a new tag using the details provided in the body of the post request.",
+            description = "Used to create a new tag in the system.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Username and password provided in the 'Authorization' header do not match any of the admins' login credentials.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Invalid authentication.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "The login credentials of the user trying to execute the creation do not match the respective record in the database.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Unauthorized operation.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "There is no username with the specific 'username' provided in the headers. ",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "User with username 'username' not found.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    )
+            })
+    @SecurityRequirement(name = "BasicAuth")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
     public Tag createTag(@RequestBody TagDto tagDto,
