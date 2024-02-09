@@ -18,19 +18,19 @@
             <form action="" th:object="${login}" method="post" th:action="@{/auth/login}">
                 <label th:text="#{loginpage.username}">Username</label>
                 <br>
-                <input type="text" placeholder="Username" th:field="*{username}">
+                <input class="register-and-login-general-input" type="text" placeholder="Username" th:field="*{username}">
                 <br>
                 <label class="error" th:errors="*{username}"> User error placeholder. </label>
                 <br>
                 <br>
                 <label th:text="#{loginpage.password}">Password</label>
                 <br>
-                <input type="password" placeholder="Password" th:field="*{password}">
+                <input class="register-and-login-general-input" type="password" placeholder="Password" th:field="*{password}">
                 <br>
                 <label class="error" th:errors="*{password}"> Password error placeholder. </label>
                 <br>
                 <br>
-                <input type="submit" th:value="Login" id="login-button" value="Login" >
+                <input class="register-and-login-general-button" type="submit" th:value="Login" id="login-button" value="Login" >
             </form>
         </div>
 
