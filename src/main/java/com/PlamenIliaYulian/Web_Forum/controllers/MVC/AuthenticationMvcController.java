@@ -9,6 +9,7 @@ import com.PlamenIliaYulian.Web_Forum.models.dtos.LoginDto;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.RegisterDto;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.RoleService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -35,6 +36,12 @@ public class AuthenticationMvcController {
         this.roleService = roleService;
     }
 
+    @ModelAttribute("requestURI")
+    public String requestURI(final HttpServletRequest request) {
+        return request.getRequestURI();
+    }
+
+
     @GetMapping("/login")
     public String showLoginPage(Model model) {
         model.addAttribute("login", new LoginDto());
@@ -59,7 +66,7 @@ public class AuthenticationMvcController {
         }
     }
 
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public String handleLogout(HttpSession session) {
         session.removeAttribute("currentUser");
         return "redirect:/home";

@@ -6,41 +6,105 @@
 
 }
 
+/*CSS FOR DIFFERENT FRAGMENTS - START*/
+/*FRAGMENT - "header" - START*/
 #header {
     width: 100%;
 }
-
-#header-ul {
+#header-links-container{
     width: 100%;
+    min-height: 100%;
     display: flex;
-    list-style-type: none;
     justify-content: space-evenly;
 }
-
-#header-ul li {
+#header-links-container a {
     text-align: center;
-    font-weight: bold;
-    width: 100%;
-}
-
-#header-ul li a {
-    text-align: center;
+    padding-bottom: 15px;
     padding-top: 15px;
-    padding-bottom: 3px;
     text-decoration: none;
     color: black;
-    display: block;
-    min-width: 100%;
-    min-height: 100%;
+    width: 100%;
+    font-weight: bold;
 }
-
-#header-ul li:hover, #header-ul li a:hover {
-    display: block;
+#header-links-container a:hover {
     background-color: black;
     color: white;
 }
+/*FRAGMENT - "header" - END*/
 
-#search-input {
+
+/*FRAGMENT - "footer" - START*/
+#webPage-footer {
+    min-height: 10vh;
+    background: rgb(93, 2, 112);
+    background: linear-gradient(360deg, rgba(93, 2, 112, 1) 0%, rgba(201, 65, 174, 1) 100%);
+    color: white;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#webPage-footer p {
+translateY()
+}
+/*FRAGMENT - "footer" - END*/
+
+
+/*CSS FOR DIFFERENT FRAGMENTS - START*/
+
+
+#main-content-container{
+    min-height: 100vh;
+}
+
+#main-register-and-loginpage-content-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: rgba(60,59,59,.15);
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+#register-and-login-form-container{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    min-width: 50vw;
+    min-height: 50vh;
+    background-color: white;
+    box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.75);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+#register-and-login-form-container form label{
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#register-and-login-form-container form input{
+    font-size: 20px;
+    padding: 10px 10px;
+}
+
+#register-and-login-form-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.error{
+    color: red;
+}
+
+
+#search-bar-and-welcome-message-container {
     min-height: 30vh;
     width: 100%;
     background-image: url("https://images.unsplash.com/photo-1580927752452-89d86da3fa0a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
@@ -55,6 +119,21 @@
 
 }
 
+#welcome-message-container{
+    max-width: 80%;
+    min-height: 80%;
+    font-size: 20px;
+    background-color: rgba(0, 0, 0, .1);
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 20px;
+    backdrop-filter: blur(6px);
+}
+
+#welcome-message-container p{
+    text-align: center;
+}
 #search-field {
     width: 30vw;
     height: 5vh;
@@ -62,11 +141,20 @@
     border: none;
     padding-left: 20px;
     box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.75);
+    margin-right: 20px;
+    font-size: 15px;
 }
 
+#search-container form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 #search-button {
     height: 5vh;
     width: 6vw;
+    font-weight: bold;
+    font-size: 15px;
     border-radius: 100px;
     border: none;
     box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.75);
@@ -195,23 +283,6 @@
     padding-right: 2px;
 }
 
-#webPage-footer {
-    min-height: 10vh;
-    /*background: rgb(137,26,148);
-    background: linear-gradient(360deg, rgba(137,26,148,1) 0%, rgba(255,146,119,1) 100%);*/
-    /*background: rgb(5,55,129);
-    background: linear-gradient(360deg, rgba(5,55,129,1) 0%, rgba(38,192,232,1) 100%);*/
-    background: rgb(93, 2, 112);
-    background: linear-gradient(360deg, rgba(93, 2, 112, 1) 0%, rgba(201, 65, 174, 1) 100%);
-    color: white;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
-#webPage-footer p {
-translateY()
-}
 
 

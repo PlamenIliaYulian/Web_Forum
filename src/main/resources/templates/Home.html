@@ -6,27 +6,51 @@
     <link href="../static/css/reset.css" th:href="@{/css/reset.css}" rel="stylesheet"/>
     <link href="../static/css/home.css" th:href="@{/css/home.css}" rel="stylesheet"/>
 </head>
-
-
 <body>
-<div class="webPage-container">
+
+    <div class="webPage-container">
+
+        <div th:replace="~{Fragments.html :: header}"></div>
+
+        <div id="main-content-container">
+
+            <div id="search-bar-and-welcome-message-container">
+                <div th:unless="${isAuthenticated}" id="welcome-message-container">
+                    <p>
+                        🚀 Welcome to our forum - Your Java Junction! 🚀
+                        <br>
+                        <br>
+                        Hello Java enthusiasts! learn-springboot.com is your go-to spot for all things Java—connect, learn, and share with like-minded coders. Explore Java fundamentals, get help, share projects, and stay updated on the latest in the Java world. Ready to code and connect? Join us at www.learn-springboot.com for a happy coding experience!
+                    </p>
+                </div>
+
+                <div th:if="${isAuthenticated}" id="search-container">
+                    <form action="">
+                        <input id="search-field" type="text" placeholder="Search our forum for your favourite topics">
+                        <input id="search-button" type="submit" value="Search">
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div th:replace="~{Fragments.html :: footer}"></div>
 
 
-    <header th:fragment="header-header" id="header">
-        <ul id="header-ul">
-            <li><a href="#" th:href="@{/home}" th:text="#{homepage.home}">Home</a></li>
-            <li th:if="${isAuthenticated}" th:text="#{homepage.createpost}"><a href="#" th:href="@{/posts/new}"></a>Create post</li>
-            <li th:if="${isAuthenticated}" th:text="#{homepage.browseAllPosts}"><a href="#" th:href="@{/posts}"></a>Browse post</li>
-            <li th:if="${isAuthenticated}" th:text="#{homepage.browseAllusers}"><a href="#" th:href="@{/users}"></a>Browse users</li>
-            <li th:unless="${isAuthenticated}"><a href="#" th:href="@{/auth/login}" th:text="#{homepage.login}">Login</a></li>
-            <li th:unless="${isAuthenticated}"><a href="#" th:href="@{/auth/register}" th:text="#{homepage.register}">Register</a></li>
-            <li th:if="${isAdmin}"><a href="#" th:href="@{/admin-panel/main}" th:text="#{homepage.adminPanel}">Admin panel</a></li>
-            <li><a href="#" th:href="@{/home/about}" th:text="#{homepage.about}">About</a></li>
-            <li th:if="${isAuthenticated}" th:text="${session.currentUser}">Profile</li>
-            <li th:if="${isAuthenticated}" th:text="#{homepage.logout}"><a href="#" th:href="@{/auth/logout}"></a>Logout</li>
-        </ul>
-    </header>
 
-</div>
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
 </body>
 </html>

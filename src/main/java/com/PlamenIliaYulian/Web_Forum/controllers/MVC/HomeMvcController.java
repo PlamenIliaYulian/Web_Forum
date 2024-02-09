@@ -4,6 +4,7 @@ import com.PlamenIliaYulian.Web_Forum.controllers.helpers.AuthenticationHelper;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.PostService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.RoleService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +33,13 @@ public class HomeMvcController {
     public boolean populateIsAuthenticated(HttpSession httpSession) {
         return httpSession.getAttribute("currentUser") != null;
     }
+
+    @ModelAttribute("requestURI")
+    public String requestURI(final HttpServletRequest request) {
+        return request.getRequestURI();
+    }
+
+
     @ModelAttribute("isAdmin")
     public boolean populateIsLoggedAndAdmin(HttpSession httpSession) {
         return (httpSession.getAttribute("currentUser") != null &&
