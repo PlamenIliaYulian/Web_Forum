@@ -55,6 +55,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.updateUser(userToBeUpdated);
     }
 
+    /*TODO JULY */
     @Override
     public List<User> getAllUsers(UserFilterOptions userFilterOptions) {
         return userRepository.getAllUsers(userFilterOptions);
@@ -79,6 +80,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.getUserByUsername(username);
     }
 
+    /*TODO PLAMEN */
     @Override
     public User getUserByEmail(String email,
                                User userIsAuthorized) {
@@ -137,7 +139,7 @@ public class UserServiceImpl implements UserService {
         PermissionHelper.isAdmin(userToMakeUpdates, UNAUTHORIZED_OPERATION);
         return userRepository.makeAdministrativeChanges(userToBeUpdated);
     }
-
+    /*TODO ILIQ */
     @Override
     public User deleteAvatar(int id, User userToDoChanges) {
         PermissionHelper.isAdminOrSameUser(userRepository.getUserById(id),userToDoChanges,UNAUTHORIZED_OPERATION);
@@ -145,6 +147,7 @@ public class UserServiceImpl implements UserService {
         return userToDoChanges;
     }
 
+    /*TODO JULY */
     @Override
     public long getAllUsersCount() {
         return userRepository.getAllUsersCount();

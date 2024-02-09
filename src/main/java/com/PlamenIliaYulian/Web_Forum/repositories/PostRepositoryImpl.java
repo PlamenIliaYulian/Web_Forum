@@ -64,6 +64,8 @@ public class PostRepositoryImpl implements PostRepository {
         return post;
     }
 
+
+    /*TODO Plamen adjust the filtering regarding the likes/dislikes + tags + createdAfter*/
     @Override
     public List<Post> getAllPosts(PostFilterOptions postFilterOptions) {
 
@@ -96,7 +98,7 @@ public class PostRepositoryImpl implements PostRepository {
                 parameters.put("createdBefore", date);
             });
 
-            /*TODO CRATED AFTER IMPL YULI*/
+
             postFilterOptions.getCreatedBy().ifPresent(value -> {
                 filters.add(" createdBy.userName like :createdBy ");
                 parameters.put("createdBy", String.format("%%%s%%", value));

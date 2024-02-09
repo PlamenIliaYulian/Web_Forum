@@ -35,13 +35,13 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.getCommentById(id);
     }
 
-    /*Ilia*/
+
     @Override
     public Comment getCommentByContent(String content) {
         return commentRepository.getCommentByContent(content);
     }
 
-    /*Yuli - DONE. Last updated on 26.01.2024.*/
+    /*TODO PLAMEN */
     @Override
     public Comment createComment(Comment comment, User commentCreator) {
         PermissionHelper.isBlocked(commentCreator, UNAUTHORIZED_OPERATION);
@@ -57,7 +57,7 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.updateComment(comment);
     }
 
-    /*Ilia.*/
+
     @Override
     public void deleteComment(Comment comment) {
         PermissionHelper.isBlocked(comment.getCreatedBy(), UNAUTHORIZED_OPERATION);
@@ -65,11 +65,13 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.softDeleteComment(comment);
     }
 
+    /*TODO ILIQ */
     @Override
     public List<Comment> getAllComments(User userExecutingTheRequest, CommentFilterOptions commentFilterOptions) {
         return commentRepository.getAllComments(commentFilterOptions);
     }
 
+    /*TODO JULY */
     @Override
     public Comment likeComment(Comment comment, User authorizedUser) {
         PermissionHelper.isNotSameUser(comment.getCreatedBy(), authorizedUser, UNAUTHORIZED_OPERATION);
@@ -105,6 +107,7 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.updateComment(comment);
     }
 
+    /*TODO PLAMEn */
     @Override
     public List<Comment> getCommentsByCreator(User user) {
         return commentRepository.getCommentsByCreator(user);

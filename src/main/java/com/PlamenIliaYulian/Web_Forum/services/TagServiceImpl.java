@@ -25,12 +25,13 @@ public class TagServiceImpl implements TagService {
         this.tagRepository = tagRepository;
     }
 
-    /*Ilia*/
+    /*TODO ILIQ */
     @Override
     public Tag getTagByName(String name) {
         return tagRepository.getTagByName(name);
     }
 
+    /*TODO JULY */
     @Override
     public Tag createTag(Tag tag, User userToCheckIfBlocked) {
         PermissionHelper.isBlocked(userToCheckIfBlocked, UNAUTHORIZED_OPERATION);
@@ -53,6 +54,7 @@ public class TagServiceImpl implements TagService {
         tagRepository.updateTag(tag);
     }
 
+    /*TODO PLAMEN */
     @Override
     public Tag updateTag(Tag tag, User userToCheckIfBlocked) {
         PermissionHelper.isBlocked(userToCheckIfBlocked, UNAUTHORIZED_OPERATION);
@@ -64,6 +66,7 @@ public class TagServiceImpl implements TagService {
         return tagRepository.getAllTags();
     }
 
+    /*TODO ILIQ */
     @Override
     public Tag getTagById(int id) {
         return tagRepository.getTagById(id);

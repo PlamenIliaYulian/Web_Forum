@@ -79,6 +79,7 @@ public class CommentRepositoryImpl implements CommentRepository {
         }
     }
 
+    /*TODO Iliikata adjust the filtering regarding the likes/dislikes + tags + createdAfter + check for SWAGGER ANNOTATIONS*/
     @Override
     public List<Comment> getAllComments(CommentFilterOptions commentFilterOptions) {
         try (Session session = sessionFactory.openSession();) {
@@ -98,7 +99,6 @@ public class CommentRepositoryImpl implements CommentRepository {
                 parameters.put("content", String.format("%%%s%%", value));
             });
 
-            /*TODO create createAfter for filtering purpose*/
             commentFilterOptions.getCreatedBefore().ifPresent(value -> {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 LocalDateTime date = LocalDateTime.parse(value, formatter);

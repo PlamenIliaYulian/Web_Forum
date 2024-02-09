@@ -99,7 +99,7 @@ public class PostServiceImpl implements PostService {
         return postRepository.updatePost(post);
     }
 
-    /*why do we make the first authorization*/
+    /*TODO ILIQ */
     @Override
     public Post dislikePost(Post post, User authorizedUser) {
         PermissionHelper.isNotSameUser(post.getCreatedBy(), authorizedUser, UNAUTHORIZED_OPERATION);
@@ -167,26 +167,31 @@ public class PostServiceImpl implements PostService {
         return postRepository.updatePost(postToRemoveCommentFrom);
     }
 
+    /*TODO JULY */
     @Override
     public Long getAllPostsCount() {
         return postRepository.getAllPostsCount();
     }
 
+    /*TODO PLAMEN */
     @Override
     public List<Post> getMostCommentedPosts() {
         return postRepository.getMostCommentedPosts();
     }
 
+    /*TODO ILIQ */
     @Override
     public List<Post> getMostLikedPosts() {
         return postRepository.getMostLikedPosts();
     }
 
+    /*TODO JULY */
     @Override
     public List<Post> getMostRecentlyCreatedPosts() {
         return postRepository.getMostRecentlyCreatedPosts();
     }
 
+    /*TODO PLAMEN */
     @Override
     public List<Post> getPostsByCreator(User user) {
         return postRepository.getPostsByCreator(user);
