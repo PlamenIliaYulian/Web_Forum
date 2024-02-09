@@ -6,17 +6,24 @@
 
 }
 
+#login-and-register-webPage-container {
+    background: #3A0090;
+}
+
 /*CSS FOR DIFFERENT FRAGMENTS - START*/
 /*FRAGMENT - "header" - START*/
 #header {
     width: 100%;
+    background: white;
 }
-#header-links-container{
+
+#header-links-container {
     width: 100%;
     min-height: 100%;
     display: flex;
     justify-content: space-evenly;
 }
+
 #header-links-container a {
     text-align: center;
     padding-bottom: 15px;
@@ -26,10 +33,12 @@
     width: 100%;
     font-weight: bold;
 }
+
 #header-links-container a:hover {
     background-color: black;
     color: white;
 }
+
 /*FRAGMENT - "header" - END*/
 
 
@@ -45,36 +54,60 @@
     align-items: center;
 }
 
+#white-webPage-footer {
+    min-height: 10vh;
+    background: white;
+    color: black;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 #webPage-footer p {
 translateY()
 }
+
 /*FRAGMENT - "footer" - END*/
 
 
 /*CSS FOR DIFFERENT FRAGMENTS - START*/
 
 
-#main-content-container{
+#main-content-container {
     min-height: 100vh;
 }
 
-#main-register-and-loginpage-content-container{
+#main-register-and-loginpage-content-container {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: rgba(60,59,59,.15);
+    background: radial-gradient(
+            farthest-side at bottom left,
+            #AF00C2,
+            transparent
+    ),
+    radial-gradient(
+            farthest-corner at top right,
+            #900056,
+            transparent
+    ),
+    radial-gradient(
+            #C24700,
+            transparent
+    );
     padding-top: 30px;
     padding-bottom: 30px;
 }
 
-#register-and-login-form-container{
+#register-and-login-form-container {
     padding-top: 20px;
     padding-bottom: 20px;
-    min-width: 50vw;
+    min-width: 30vw;
     min-height: 50vh;
     background-color: white;
-    box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 4px 3px 0px rgba(0, 0, 0, 0.75);
     border-radius: 10px;
     display: flex;
     justify-content: center;
@@ -82,12 +115,12 @@ translateY()
 }
 
 
-#register-and-login-form-container form label{
+#register-and-login-form-container form label {
     font-weight: bold;
     font-size: 20px;
 }
 
-#register-and-login-form-container form input{
+#register-and-login-form-container form input {
     font-size: 20px;
     padding: 10px 10px;
 }
@@ -99,7 +132,7 @@ translateY()
     justify-content: center;
 }
 
-.error{
+.error {
     color: red;
 }
 
@@ -119,7 +152,7 @@ translateY()
 
 }
 
-#welcome-message-container{
+#welcome-message-container {
     max-width: 80%;
     min-height: 80%;
     font-size: 20px;
@@ -131,9 +164,11 @@ translateY()
     backdrop-filter: blur(6px);
 }
 
-#welcome-message-container p{
+#welcome-message-container p {
+    line-height: 35px;
     text-align: center;
 }
+
 #search-field {
     width: 30vw;
     height: 5vh;
@@ -145,11 +180,12 @@ translateY()
     font-size: 15px;
 }
 
-#search-container form{
+#search-container form {
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 #search-button {
     height: 5vh;
     width: 6vw;
