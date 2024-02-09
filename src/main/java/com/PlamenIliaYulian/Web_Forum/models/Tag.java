@@ -88,4 +88,9 @@ public class Tag implements Comparable<Tag> {
     public int compareTo(Tag o) {
         return Integer.compare(this.getTagId(), o.getTagId());
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s", getTag());
+    }
 }

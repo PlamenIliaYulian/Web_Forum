@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
-    <link href="../static/css/reset.css" th:href="@{/css/reset.css}" rel="stylesheet"/>
-    <link href="../static/css/home.css" th:href="@{/css/home.css}" rel="stylesheet"/>
+    <link href="../static/css/css/reset.css" th:href="@{/css/css/reset.css}" rel="stylesheet"/>
+    <link href="../static/css/css/home.css" th:href="@{/css/css/home.css}" rel="stylesheet"/>
 </head>
 <body>
 
@@ -30,7 +30,7 @@
                     <label class="error" th:errors="*{password}"> Password error placeholder. </label>
                     <br>
 
-                    <label th:text="#{register.confirmpassword}">Confirm password</label>
+                    <label th:text="#{register.confirmPassword}">Confirm password</label>
                     <br>
                     <input class="register-and-login-general-input" type="password" placeholder="Confirm password" th:field="*{passwordConfirm}">
                     <br>

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link href="../static/css/reset.css" th:href="@{/css/reset.css}" rel="stylesheet"/>
-    <link href="../static/css/home.css" th:href="@{/css/home.css}" rel="stylesheet"/>
+    <link href="../static/css/css/reset.css" th:href="@{/css/css/reset.css}" rel="stylesheet"/>
+    <link href="../static/css/css/home.css" th:href="@{/css/css/home.css}" rel="stylesheet"/>
 </head>
 <body>
 
@@ -16,14 +16,14 @@
 
         <div id="register-and-login-form-container">
             <form action="" th:object="${login}" method="post" th:action="@{/auth/login}">
-                <label th:text="#{loginpage.username}">Username</label>
+                <label th:text="#{loginPage.username}">Username</label>
                 <br>
                 <input class="register-and-login-general-input" type="text" placeholder="Username" th:field="*{username}">
                 <br>
                 <label class="error" th:errors="*{username}"> User error placeholder. </label>
                 <br>
                 <br>
-                <label th:text="#{loginpage.password}">Password</label>
+                <label th:text="#{loginPage.password}">Password</label>
                 <br>
                 <input class="register-and-login-general-input" type="password" placeholder="Password" th:field="*{password}">
                 <br>

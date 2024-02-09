@@ -43,8 +43,8 @@ public class TagRepositoryImpl implements TagRepository {
             session.beginTransaction();
             session.persist(tag);
             session.getTransaction().commit();
-            return tag;
         }
+        return tag;
     }
 
     /*Ilia*/
@@ -54,8 +54,8 @@ public class TagRepositoryImpl implements TagRepository {
             session.beginTransaction();
             session.merge(tag);
             session.getTransaction().commit();
-            return tag;
         }
+        return tag;
     }
 
     @Override

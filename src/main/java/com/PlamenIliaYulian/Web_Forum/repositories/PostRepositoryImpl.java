@@ -39,8 +39,8 @@ public class PostRepositoryImpl implements PostRepository {
             session.beginTransaction();
             session.persist(post);
             session.getTransaction().commit();
-            return post;
         }
+        return post;
     }
 
     /*Ilia - I did not implement this method*/
@@ -50,8 +50,8 @@ public class PostRepositoryImpl implements PostRepository {
             session.beginTransaction();
             session.merge(post);
             session.getTransaction().commit();
-            return getPostById(post.getPostId());
         }
+        return getPostById(post.getPostId());
     }
 
     @Override
@@ -60,8 +60,8 @@ public class PostRepositoryImpl implements PostRepository {
             session.beginTransaction();
             session.merge(post);
             session.getTransaction().commit();
-            return post;
         }
+        return post;
     }
 
     @Override

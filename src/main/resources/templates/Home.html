@@ -5,6 +5,7 @@
     <title>Home</title>
     <link href="../static/css/reset.css" th:href="@{/css/reset.css}" rel="stylesheet"/>
     <link href="../static/css/home.css" th:href="@{/css/home.css}" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
 <body>
 
@@ -30,8 +31,65 @@
                         <input id="search-button" type="submit" value="Search">
                     </form>
                 </div>
-
             </div>
+
+            <div id="forumTotalUsersTotalPosts-container">
+                <div id="postIconPlusPostCount-container">
+                    <p><span class="material-symbols-outlined">edit_square</span></p>
+                    <p th:text="${totalPostsCount}">Total Posts Counts</p>
+                </div>
+                <div id="usersIconPlusTotalRegisteredUsers-container">
+                    <p><span class="material-symbols-outlined">person</span></p>
+                    <p th:text="${totalUsersCount}">Total User Counts</p>
+                </div>
+            </div>
+
+            <div class="topTen-container">
+                <p class="topTen" th:text="#{homepage.top10mostCommentedPosts}">Top ten most commented posts</p>
+            </div>
+
+            <div class="topTen-posts-container" >
+                <div class="posts-preview" th:each="post : ${mostCommentedPosts}" >
+                    <div class="post-title-container">
+                        <a href="" th:text="${post.title}">Title Content</a>
+                    </div>
+                    <div class="userNameCreationDateLikesTags-container">
+                        <div class="userPlusCreationDate-container">
+                            <div class="userIconPlusUsername-container">
+                                <span class="material-symbols-outlined">account_circle</span>
+                                <p class="userName" th:text="${post.createdBy.getUserName()}">Username</p>
+                            </div>
+                            <div class="calendarIconPlusDate-container">
+                                <span class="material-symbols-outlined" >calendar_month</span>
+                                <p class="creationDate" th:text="${post.getCreatedOn()}">24.01.31 07:00:00</p>
+                            </div>
+                        </div>
+
+
+                        <div class="likesPlusTag-container">
+                            <div class="likesIconPlusLikes-container">
+                                <span class="material-symbols-outlined">thumb_up</span>
+                                <p class="likesCount" th:text="${post.getLikes()}">123</p>
+                            </div>
+                            <div class="likesIconPlusLikes-container">
+                                <span class="material-symbols-outlined">thumb_down</span>
+                                <p class="likesCount" th:text="${post.getDislikes()}">123</p>
+                            </div>
+                            <div class="TagIconPlusTag-container">
+                                <span class="material-symbols-outlined">loyalty</span>
+                                <p class="tagName" th:text="${post.getTags().stream().findAny()}">#SomeVeryLongWord</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="topTen-container">
+                <p class="topTen" th:text="#{homepage.top10mostRecentlyCreatedPosts}">Top ten most recently created posts</p>
+            </div>
+
+
 
         </div>
 

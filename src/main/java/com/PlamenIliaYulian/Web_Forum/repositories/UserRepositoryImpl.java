@@ -32,8 +32,8 @@ public class UserRepositoryImpl implements UserRepository {
             session.beginTransaction();
             session.persist(user);
             session.getTransaction().commit();
-            return user;
         }
+        return user;
     }
 
     @Override
@@ -42,8 +42,8 @@ public class UserRepositoryImpl implements UserRepository {
             session.beginTransaction();
             session.merge(user);
             session.getTransaction().commit();
-            return user;
         }
+        return user;
     }
 
     @Override
