@@ -7,22 +7,35 @@
 }
 
 #header {
+    width: 100%;
 }
 
 #header-ul {
-    display: grid;
-    grid-template-columns: auto auto auto;
+    width: 100%;
+    display: flex;
     list-style-type: none;
+    justify-content: space-evenly;
 }
 
 #header-ul li {
     text-align: center;
     font-weight: bold;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    width: 100%;
 }
 
-#header-ul li:hover {
+#header-ul li a {
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 3px;
+    text-decoration: none;
+    color: black;
+    display: block;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+#header-ul li:hover, #header-ul li a:hover {
+    display: block;
     background-color: black;
     color: white;
 }

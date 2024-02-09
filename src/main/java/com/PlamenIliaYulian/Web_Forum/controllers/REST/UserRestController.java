@@ -77,7 +77,7 @@ public class UserRestController {
             responses = {
                     @ApiResponse(
                             responseCode = "204",
-                            description = "Success Response"
+                            description = "Success response when the user has been deleted."
                     ),
                     @ApiResponse(
                             responseCode = "404",
@@ -145,6 +145,7 @@ public class UserRestController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
+                            description = "Success response.",
                             content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
                     ),
                     @ApiResponse(
@@ -207,6 +208,7 @@ public class UserRestController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
+                            description = "Success response.",
                             content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
                     ),
                     @ApiResponse(
@@ -260,52 +262,53 @@ public class UserRestController {
 
     /*Yuli swagger operation.*/
 
-        @Operation(
-                summary = "Retrieves information related to a specific users registered in the system.",
-                description = "Used to retrieve information about users with optional filtering applied.",
-                parameters = {
-                        @Parameter(name = "username",
-                                description = "Username to apply filtering with.",
-                                example = "emily_jackson"),
-                        @Parameter(name = "email",
-                                description = "Email to apply filtering with",
-                                example = "emily_jackson@email.com"),
-                        @Parameter(name = "first_name",
-                                description = "First name of the user to apply filtering with",
-                                example = "Emily"),
-                        @Parameter(name = "sortBy",
-                                description = "Sort users by specific condition",
-                                example = "emily"),
-                        @Parameter(name = "sortOrder",
-                                description = "Sort order of the filtering",
-                                example = "desc")
-                },
-                responses = {
-                        @ApiResponse(
-                                responseCode = "200",
-                                content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
-                        ),
-                        @ApiResponse(
-                                responseCode = "403",
-                                description = "Username and password provided in the 'Authorization' header do not match any user in the database",
-                                content = {
-                                        @Content(examples = {
-                                                @ExampleObject(value = "Invalid authentication.")
-                                        },
-                                                mediaType = "plain text")
-                                }
-                        ),
-                        @ApiResponse(
-                                responseCode = "401",
-                                description = "Username trying to execute the request must be either admin OR the same user to which the profile belongs.",
-                                content = {
-                                        @Content(examples = {
-                                                @ExampleObject(value = "Unauthorized operation.")
-                                        },
-                                                mediaType = "plain text")
-                                }
-                        )
-                })
+    @Operation(
+            summary = "Retrieves information related to a specific users registered in the system.",
+            description = "Used to retrieve information about users with optional filtering applied.",
+            parameters = {
+                    @Parameter(name = "username",
+                            description = "Username to apply filtering with.",
+                            example = "emily_jackson"),
+                    @Parameter(name = "email",
+                            description = "Email to apply filtering with",
+                            example = "emily_jackson@email.com"),
+                    @Parameter(name = "first_name",
+                            description = "First name of the user to apply filtering with",
+                            example = "Emily"),
+                    @Parameter(name = "sortBy",
+                            description = "Sort users by specific condition",
+                            example = "emily"),
+                    @Parameter(name = "sortOrder",
+                            description = "Sort order of the filtering",
+                            example = "desc")
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success response.",
+                            content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Username and password provided in the 'Authorization' header do not match any user in the database",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Invalid authentication.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Username trying to execute the request must be either admin OR the same user to which the profile belongs.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Unauthorized operation.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    )
+            })
     /*Plamen*/
     @SecurityRequirement(name = "Authorization")
     @GetMapping("/search")
@@ -375,6 +378,7 @@ public class UserRestController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
+                            description = "Success response.",
                             content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
                     ),
                     @ApiResponse(
@@ -436,6 +440,7 @@ public class UserRestController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
+                            description = "Success response.",
                             content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
                     ),
                     @ApiResponse(
@@ -499,6 +504,7 @@ public class UserRestController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
+                            description = "Success response.",
                             content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
                     ),
                     @ApiResponse(

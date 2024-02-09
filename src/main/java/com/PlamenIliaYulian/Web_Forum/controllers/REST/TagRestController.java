@@ -204,7 +204,8 @@ public class TagRestController {
             },
             responses = {
                     @ApiResponse(
-                            responseCode = "200",
+                            responseCode = "204",
+                            description = "Success response when the respective tag has been deleted from the system.",
                             content = @Content(schema = @Schema(implementation = Tag.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
                     ),
                     @ApiResponse(

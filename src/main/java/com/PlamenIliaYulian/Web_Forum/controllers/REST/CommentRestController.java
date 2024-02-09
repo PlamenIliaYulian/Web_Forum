@@ -79,6 +79,7 @@ public class CommentRestController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
+                            description = "Success response.",
                             content = @Content(schema = @Schema(implementation = Comment.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
                     ),
                     @ApiResponse(
@@ -141,6 +142,7 @@ public class CommentRestController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
+                            description = "Success response.",
                             content = @Content(schema = @Schema(implementation = Comment.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
                     ),
                     @ApiResponse(
@@ -165,7 +167,7 @@ public class CommentRestController {
                     ),
                     @ApiResponse(
                             responseCode = "401",
-                            description = "User trying to execute the request must be either admin OR the same user to which the profile belongs.",
+                            description = "User trying to execute the request must not be the user that created the comment.",
                             content = {
                                     @Content(examples = {
                                             @ExampleObject(value = "Unauthorized operation.")
@@ -203,6 +205,7 @@ public class CommentRestController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
+                            description = "Success response.",
                             content = @Content(schema = @Schema(implementation = Comment.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
                     ),
                     @ApiResponse(
@@ -227,7 +230,7 @@ public class CommentRestController {
                     ),
                     @ApiResponse(
                             responseCode = "401",
-                            description = "User trying to execute the request must be either admin OR the same user to which the profile belongs.",
+                            description = "User trying to execute the request must not be the user that created the comment..",
                             content = {
                                     @Content(examples = {
                                             @ExampleObject(value = "Unauthorized operation.")
@@ -254,7 +257,7 @@ public class CommentRestController {
                     HttpStatus.NOT_FOUND,
                     e.getMessage()
             );
-        }catch (AuthenticationException e) {
+        } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }

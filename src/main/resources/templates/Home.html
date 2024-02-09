@@ -3,8 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
+    <link href="../static/css/reset.css" th:href="@{/css/reset.css}" rel="stylesheet"/>
+    <link href="../static/css/home.css" th:href="@{/css/home.css}" rel="stylesheet"/>
 </head>
-<body>
 
+
+<body>
+<div class="webPage-container">
+
+
+    <header th:fragment="header-header" id="header">
+        <ul id="header-ul">
+            <li><a href="#" th:href="@{/home}" th:text="#{homepage.home}">Home</a></li>
+            <li th:if="${isAuthenticated}" th:text="#{homepage.createpost}"><a href="#" th:href="@{/posts/new}"></a>Create post</li>
+            <li th:if="${isAuthenticated}" th:text="#{homepage.browseAllPosts}"><a href="#" th:href="@{/posts}"></a>Browse post</li>
+            <li th:if="${isAuthenticated}" th:text="#{homepage.browseAllusers}"><a href="#" th:href="@{/users}"></a>Browse users</li>
+            <li th:unless="${isAuthenticated}"><a href="#" th:href="@{/auth/login}" th:text="#{homepage.login}">Login</a></li>
+            <li th:unless="${isAuthenticated}"><a href="#" th:href="@{/auth/register}" th:text="#{homepage.register}">Register</a></li>
+            <li th:if="${isAdmin}"><a href="#" th:href="@{/admin-panel/main}" th:text="#{homepage.adminPanel}">Admin panel</a></li>
+            <li><a href="#" th:href="@{/home/about}" th:text="#{homepage.about}">About</a></li>
+            <li th:if="${isAuthenticated}" th:text="${session.currentUser}">Profile</li>
+            <li th:if="${isAuthenticated}" th:text="#{homepage.logout}"><a href="#" th:href="@{/auth/logout}"></a>Logout</li>
+        </ul>
+    </header>
+
+</div>
 </body>
 </html>

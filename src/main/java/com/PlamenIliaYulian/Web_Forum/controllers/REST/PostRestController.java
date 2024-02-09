@@ -21,11 +21,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -36,7 +31,6 @@ import org.springframework.web.server.ResponseStatusException;
 import com.PlamenIliaYulian.Web_Forum.models.Tag;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -64,6 +58,13 @@ public class PostRestController {
             summary = "Creates a new post using the details provided in the body of the post request.",
             description = "Used to create a new post in the system.",
             responses = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "Success response when a new Post has been created.",
+                            content = @Content(
+                                    schema = @Schema(implementation = Post.class),
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
                     @ApiResponse(
                             responseCode = "401",
                             description = "The user trying to create the post has been blocked by the administrators of the system.",
@@ -279,6 +280,7 @@ public class PostRestController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
+                            description = "Success response.",
                             content = @Content(schema = @Schema(implementation = Post.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
                     ),
                     @ApiResponse(
@@ -297,16 +299,6 @@ public class PostRestController {
                             content = {
                                     @Content(examples = {
                                             @ExampleObject(value = "Post with title 'Java Basics' not found.")
-                                    },
-                                            mediaType = "plain text")
-                            }
-                    ),
-                    @ApiResponse(
-                            responseCode = "401",
-                            description = "User trying to execute the request must be either admin OR the same user to which the profile belongs.",
-                            content = {
-                                    @Content(examples = {
-                                            @ExampleObject(value = "Unauthorized operation.")
                                     },
                                             mediaType = "plain text")
                             }
@@ -336,6 +328,7 @@ public class PostRestController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
+                            description = "Success response.",
                             content = @Content(schema = @Schema(implementation = Post.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
                     ),
                     @ApiResponse(
@@ -403,6 +396,7 @@ public class PostRestController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
+                            description = "Success response.",
                             content = @Content(schema = @Schema(implementation = Post.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
                     ),
                     @ApiResponse(
@@ -424,7 +418,17 @@ public class PostRestController {
                                     },
                                             mediaType = "plain text")
                             }
-                    )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "User trying to execute the request must not be the user that created the post.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Unauthorized operation.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
             })
     @SecurityRequirement(name = "Authorization")
     /*Plamen*/
@@ -458,6 +462,7 @@ public class PostRestController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
+                            description = "Success response.",
                             content = @Content(schema = @Schema(implementation = Post.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
                     ),
                     @ApiResponse(
@@ -548,6 +553,7 @@ public class PostRestController {
             responses = {
                     @ApiResponse(
                             responseCode = "200",
+                            description = "Success response.",
                             content = @Content(schema = @Schema(implementation = Post.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
                     ),
                     @ApiResponse(
@@ -689,10 +695,12 @@ public class PostRestController {
     public List<Post> getMostCommentedPosts() {
         return postService.getMostCommentedPosts();
     }
+
     @GetMapping("/top10mostliked")
     public List<Post> getMostLikedPosts() {
         return postService.getMostCommentedPosts();
     }
+
     @GetMapping("/top10mostrecentlycreated")
     public List<Post> getMostRecentlyCreatedPosts() {
         return postService.getMostCommentedPosts();

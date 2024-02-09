@@ -1,6 +1,8 @@
 package com.PlamenIliaYulian.Web_Forum.controllers.MVC;
 
+import com.PlamenIliaYulian.Web_Forum.controllers.helpers.AuthenticationHelper;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.PostService;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.RoleService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -16,14 +18,27 @@ public class HomeMvcController {
     private final UserService userService;
     private final PostService postService;
 
-    public HomeMvcController(UserService userService, PostService postService) {
+    private final AuthenticationHelper authenticationHelper;
+    private final RoleService roleService;
+
+    public HomeMvcController(UserService userService, PostService postService, AuthenticationHelper authenticationHelper, RoleService roleService) {
         this.userService = userService;
         this.postService = postService;
+        this.authenticationHelper = authenticationHelper;
+        this.roleService = roleService;
     }
 
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession httpSession) {
         return httpSession.getAttribute("currentUser") != null;
+    }
+    @ModelAttribute("isAdmin")
+    public boolean populateIsLoggedAndAdmin(HttpSession httpSession) {
+        return (httpSession.getAttribute("currentUser") != null &&
+                authenticationHelper
+                        .tryGetUserFromSession(httpSession)
+                        .getRoles()
+                        .contains(roleService.getRoleById(1)));
     }
 
     @GetMapping
