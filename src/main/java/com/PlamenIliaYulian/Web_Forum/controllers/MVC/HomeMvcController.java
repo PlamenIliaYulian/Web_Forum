@@ -47,6 +47,7 @@ public class HomeMvcController {
         model.addAttribute("totalPostsCount", postService.getAllPostsCount());
         model.addAttribute("mostCommentedPosts", postService.getMostCommentedPosts());
         model.addAttribute("mostRecentPosts", postService.getMostRecentlyCreatedPosts());
+        model.addAttribute("mostLikedPosts", postService.getMostLikedPosts());
         return "Home";
     }
 

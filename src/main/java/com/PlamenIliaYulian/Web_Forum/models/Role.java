@@ -54,7 +54,6 @@ public class Role implements Comparable<Role> {
         return Objects.hash(roleId);
     }
 
-    /* TODO - Пламка, Илийка - тази имплементация ни трябва, за да могат да минават тестовете.*/
     @Override
     public int compareTo(Role o) {
         return Integer.compare(this.roleId, o.roleId);

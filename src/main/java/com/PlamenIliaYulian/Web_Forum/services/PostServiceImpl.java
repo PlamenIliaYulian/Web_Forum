@@ -43,7 +43,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post createPost(Post post, User authenticatedUser) {
         PermissionHelper.isBlocked(authenticatedUser, UNAUTHORIZED_OPERATION);
-        /*TODO implement unique name verification*/
+        /*TODO implement unique title verification*/
         post.setCreatedOn(LocalDateTime.now());
         post.setCreatedBy(authenticatedUser);
         return postRepository.createPost(post);
@@ -68,8 +68,6 @@ public class PostServiceImpl implements PostService {
         return postRepository.updatePost(post);
     }
 
-    /*TODO for Yuli - Ask Iliikata and Plamkata why we pass >>> User userExecutingTheRequest.
-    *  We do not use it anywhere.*/
     @Override
     public List<Post> getAllPosts(User userExecutingTheRequest, PostFilterOptions postFilterOptions) {
         return postRepository.getAllPosts(postFilterOptions);

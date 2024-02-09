@@ -20,7 +20,6 @@ import java.util.Set;
 @ExtendWith(MockitoExtension.class)
 public class CommentServiceTests {
 
-    /*ToDO Change names to MockRepository and MockService*/
     @Mock
     CommentRepository commentRepository;
 

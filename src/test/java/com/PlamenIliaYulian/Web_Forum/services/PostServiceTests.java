@@ -22,8 +22,6 @@ import java.util.*;
 @ExtendWith(MockitoExtension.class)
 public class PostServiceTests {
 
-    /*ToDO Change names to MockRepository and MockService*/
-
     @Mock
     PostRepository postRepository;
     @Mock

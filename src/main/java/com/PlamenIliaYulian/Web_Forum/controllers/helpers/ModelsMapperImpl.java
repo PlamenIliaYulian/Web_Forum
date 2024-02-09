@@ -173,7 +173,6 @@ public class ModelsMapperImpl implements ModelsMapper {
         return comment;
     }
 
-    /*TODO add # to tags.*/
     @Override
     public Tag tagFromDto(TagDto tagDto) {
         Tag tag = new Tag();

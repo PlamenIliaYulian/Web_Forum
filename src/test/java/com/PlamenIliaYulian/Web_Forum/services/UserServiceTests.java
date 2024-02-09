@@ -24,7 +24,6 @@ import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTests {
-    /*ToDO Change names to MockRepository and MockService*/
 
     @Mock
     UserRepository userRepository;
@@ -34,7 +33,6 @@ public class UserServiceTests {
     UserServiceImpl userService;
 
 
-    /*TODO July*/
     @Test
     public void updateUser_Should_UpdateUser_When_TheSameUserTriesToUpdateTheirProfile() {
         User userToBeUpdated = TestHelpers.createMockNoAdminUser();

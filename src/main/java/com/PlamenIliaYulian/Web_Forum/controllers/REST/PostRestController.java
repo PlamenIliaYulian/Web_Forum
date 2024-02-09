@@ -16,6 +16,7 @@ import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -693,21 +694,62 @@ public class PostRestController {
         }
     }
 
+    @Operation(
+            summary = "Pulls from the database the count of all created posts in the system.",
+            description = "Used to obtain the total amount of posts published in the system.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success Response"
+                    )
+            })
     @GetMapping("/count")
     public Long getAllPostCount() {
         return postService.getAllPostsCount();
     }
 
+    @Operation(
+            summary = "Pulls from the database the top 10 most commented posts in the system.",
+            description = "Used to obtain the 10 most commented posts published in the system.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success Response",
+                            content = @Content(array = @ArraySchema(
+                                    schema = @Schema(implementation = Post.class)))
+                    )
+            })
     @GetMapping("/top10mostcommented")
     public List<Post> getMostCommentedPosts() {
         return postService.getMostCommentedPosts();
     }
 
+    @Operation(
+            summary = "Pulls from the database the top 10 most liked posts in the system.",
+            description = "Used to obtain the 10 most liked posts published in the system.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success Response",
+                            content = @Content(array = @ArraySchema(
+                                    schema = @Schema(implementation = Post.class)))
+                    )
+            })
     @GetMapping("/top10mostliked")
     public List<Post> getMostLikedPosts() {
         return postService.getMostCommentedPosts();
     }
-
+    @Operation(
+            summary = "Pulls from the database the top 10 most recently created posts in the system.",
+            description = "Used to obtain the 10 most recently created posts published in the system.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success Response",
+                            content = @Content(array = @ArraySchema(
+                                    schema = @Schema(implementation = Post.class)))
+                    )
+            })
     @GetMapping("/top10mostrecentlycreated")
     public List<Post> getMostRecentlyCreatedPosts() {
         return postService.getMostCommentedPosts();

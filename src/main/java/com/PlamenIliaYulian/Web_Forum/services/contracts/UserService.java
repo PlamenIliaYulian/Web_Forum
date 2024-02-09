@@ -26,7 +26,7 @@ public interface UserService {
     /*July - 📌 DONE 📌 - last updated 25.01.2024*/
     User getUserByUsername(String username);
 
-    /*TODO test Plamen*/
+    /*test Plamen*/
     User getUserByEmail(String email, User userIsAuthorized);
 
     /*✔  Ilia ✔ */
@@ -41,7 +41,7 @@ public interface UserService {
     /*July - 📌 DONE 📌- last updated 25.01.2024*/
     User makeAdministrativeChanges(User userToMakeUpdates, User userToBeUpdated);
 
-    /*Ilia TODO tests*/
+    /*Ilia tests*/
     User deleteAvatar(int id, User userToDoChanges);
 
     long getAllUsersCount();

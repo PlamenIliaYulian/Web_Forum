@@ -15,6 +15,7 @@ import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -567,6 +568,15 @@ public class UserRestController {
         }
     }
 
+    @Operation(
+            summary = "Pulls from the database the count of all created users in the system.",
+            description = "Used to obtain the total amount of users registered in the system.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success Response"
+                    )
+            })
     @GetMapping("/count")
     public Long getAllUsersCount() {
         return userService.getAllUsersCount();

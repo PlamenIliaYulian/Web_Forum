@@ -22,7 +22,6 @@ import java.util.Set;
 
 @ExtendWith(MockitoExtension.class)
 public class TagServiceTests {
-    /*ToDO Change names to MockRepository and MockService*/
 
     @Mock
     TagRepository tagRepository;
@@ -30,7 +29,6 @@ public class TagServiceTests {
     @InjectMocks
     TagServiceImpl tagService;
 
-    /*TODO Yuli Update the test with the new logic.*/
     @Test
     public void createTag_Should_Pass_When_TagCreatorIsNotBlocked() {
         Tag tagToCreate = TestHelpers.createMockTag();
