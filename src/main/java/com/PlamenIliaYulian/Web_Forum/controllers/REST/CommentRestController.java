@@ -71,6 +71,8 @@ public class CommentRestController {
     @Operation(
             summary = "Updates a specific comment",
             description = "Used to update the content of a specific comment.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Body is consisted of the content of the comment only."),
             parameters = {
                     @Parameter(name = "id",
                             description = "Specific id to search in the system",

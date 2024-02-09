@@ -57,6 +57,8 @@ public class PostRestController {
     @Operation(
             summary = "Creates a new post using the details provided in the body of the post request.",
             description = "Used to create a new post in the system.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Body consists of title and content."),
             responses = {
                     @ApiResponse(
                             responseCode = "201",
@@ -181,6 +183,8 @@ public class PostRestController {
 
     @Operation(
             summary = "Updates an existing post using the details provided in the body of the post request and a giver ID.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Body consists of title and content."),
             description = "Used to update an existing post in the system.",
             parameters = {
                     @Parameter(name = "id",
@@ -306,7 +310,8 @@ public class PostRestController {
             })
     @SecurityRequirement(name = "Authorization")
     @GetMapping("/title/{title}")
-    public Post getPostByTitle(@PathVariable String title, @RequestHeader HttpHeaders headers) {
+    public Post getPostByTitle(@PathVariable String title,
+                               @RequestHeader HttpHeaders headers) {
         try {
             User authenticatedUser = authenticationHelper.tryGetUser(headers);
             return postService.getPostByTitle(title);
@@ -545,6 +550,8 @@ public class PostRestController {
     @Operation(
             summary = "Add comment to a specific Post",
             description = "Used to find a post by given Id and add comment to id.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Body consists of the content of the comment."),
             parameters = {
                     @Parameter(name = "id",
                             description = "Specific id to search in the system",

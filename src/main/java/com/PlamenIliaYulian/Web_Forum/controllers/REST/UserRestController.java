@@ -50,6 +50,8 @@ public class UserRestController {
     @Operation(
             summary = "Creates new user in the system.",
             description = "Used to created new user with given username, first name, last name, password and email",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Body consists of the username, password, first name, last name and the email of the user."),
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -113,7 +115,8 @@ public class UserRestController {
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    void deleteUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+    void deleteUser(@RequestHeader HttpHeaders headers,
+                    @PathVariable int id) {
         try {
             User userIsAuthenticated = authenticationHelper.tryGetUser(headers);
             User userToBeDeleted = userService.getUserById(id);
@@ -135,12 +138,16 @@ public class UserRestController {
 
     /*Yuli - implemented:*/
     @Operation(
-            summary = "Updates the information of the user found by the provided username.",
+            summary = "Updates the information of the user found by the numeric ID.",
             description = "Used to update User's first name, last name, email or password.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Body consists of the password, first name, last name and the email of the user."),
             parameters = {
-                    @Parameter(name = "username",
-                            description = "Path variable.",
-                            example = "emily_jackson"),
+                    @Parameter(
+                            name = "id",
+                            description = "ID must be numeric. For example '/api/v1/users/3'.",
+                            example = "3"
+                    ),
             },
             responses = {
                     @ApiResponse(
@@ -160,7 +167,7 @@ public class UserRestController {
                     ),
                     @ApiResponse(
                             responseCode = "401",
-                            description = "Username trying to execute the request must be either admin OR the same user to which the profile belongs.",
+                            description = "User trying to execute the request must be either admin OR the same user to which the profile belongs.",
                             content = {
                                     @Content(examples = {
                                             @ExampleObject(value = "Unauthorized operation.")
@@ -170,10 +177,10 @@ public class UserRestController {
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "There is no user with this 'username'.",
+                            description = "There is no user with this 'ID'.",
                             content = {
                                     @Content(examples = {
-                                            @ExampleObject(value = "User with username 'username' not found.")
+                                            @ExampleObject(value = "User with ID '3' not found.")
                                     },
                                             mediaType = "plain text")
                             }
@@ -200,6 +207,8 @@ public class UserRestController {
     @Operation(
             summary = "Updates a more specific information (deleting user, blocking user etc.) of the user found by the provided id.",
             description = "Used by the system's administrators to delete, block / unblock etc. a specific user.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Body consists of the array of Roles, isAdmin and isBlocked."),
             parameters = {
                     @Parameter(name = "id",
                             description = "Path variable (the id of the user whose profile will be updated.",
@@ -223,7 +232,7 @@ public class UserRestController {
                     ),
                     @ApiResponse(
                             responseCode = "401",
-                            description = "Username trying to execute the request must be an admin.",
+                            description = "User trying to execute the request must be an admin.",
                             content = {
                                     @Content(examples = {
                                             @ExampleObject(value = "Unauthorized operation.")
@@ -236,7 +245,7 @@ public class UserRestController {
                             description = "There is no user with this 'id'.",
                             content = {
                                     @Content(examples = {
-                                            @ExampleObject(value = "User with username 'username' not found.")
+                                            @ExampleObject(value = "User with ID '3' not found.")
                                     },
                                             mediaType = "plain text")
                             }
@@ -300,7 +309,7 @@ public class UserRestController {
                     ),
                     @ApiResponse(
                             responseCode = "401",
-                            description = "Username trying to execute the request must be either admin OR the same user to which the profile belongs.",
+                            description = "User trying to execute the request must be either admin OR the same user to which the profile belongs.",
                             content = {
                                     @Content(examples = {
                                             @ExampleObject(value = "Unauthorized operation.")
@@ -393,7 +402,7 @@ public class UserRestController {
                     ),
                     @ApiResponse(
                             responseCode = "401",
-                            description = "Username trying to execute the request must be either admin OR the same user to which the profile belongs.",
+                            description = "User trying to execute the request must be either admin OR the same user to which the profile belongs.",
                             content = {
                                     @Content(examples = {
                                             @ExampleObject(value = "Unauthorized operation.")
@@ -406,7 +415,7 @@ public class UserRestController {
                             description = "There is no user with this 'username'.",
                             content = {
                                     @Content(examples = {
-                                            @ExampleObject(value = "User with username 'username' not found.")
+                                            @ExampleObject(value = "User with ID '3' not found.")
                                     },
                                             mediaType = "plain text")
                             }
@@ -496,6 +505,8 @@ public class UserRestController {
     @Operation(
             summary = "Uploads a phone number to user's profile.",
             description = "Used to update user's profile by updating their phone number.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Body consists of the phone number that has to be attached to the user."),
             parameters = {
                     @Parameter(name = "userToBeUpdated",
                             description = "ID of the user whose profile will be updated.",

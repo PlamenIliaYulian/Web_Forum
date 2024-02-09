@@ -156,6 +156,8 @@ public class TagRestController {
     @Operation(
             summary = "Creates a new tag using the details provided in the body of the post request.",
             description = "Used to create a new tag in the system.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Body consists of the tag as text."),
             responses = {
                     @ApiResponse(
                             responseCode = "401",
@@ -220,7 +222,7 @@ public class TagRestController {
                     ),
                     @ApiResponse(
                             responseCode = "401",
-                            description = "Username trying to execute the request must be either admin OR the same user to which the profile belongs.",
+                            description = "User trying to execute the request must be either admin OR the same user to which the profile belongs.",
                             content = {
                                     @Content(examples = {
                                             @ExampleObject(value = "Unauthorized operation.")
