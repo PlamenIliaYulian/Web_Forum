@@ -59,7 +59,6 @@ public class PostServiceImpl implements PostService {
         postRepository.softDeletePost(post);
     }
 
-    /*Ilia*/
     @Override
     public Post updatePost(Post post, User authorizedUser) {
         PermissionHelper.isBlocked(authorizedUser, UNAUTHORIZED_OPERATION);
@@ -78,7 +77,6 @@ public class PostServiceImpl implements PostService {
         return postRepository.getPostByTitle(title);
     }
 
-    /*Ilia*/
     @Override
     public Post getPostById(int id) {
         return postRepository.getPostById(id);
@@ -99,7 +97,6 @@ public class PostServiceImpl implements PostService {
         return postRepository.updatePost(post);
     }
 
-    /*TODO ILIQ */
     @Override
     public Post dislikePost(Post post, User authorizedUser) {
         PermissionHelper.isNotSameUser(post.getCreatedBy(), authorizedUser, UNAUTHORIZED_OPERATION);
@@ -114,8 +111,7 @@ public class PostServiceImpl implements PostService {
 
         return postRepository.updatePost(post);
     }
-
-    /*Ilia*/
+    
     @Override
     public Post addTagToPost(Post post, Tag tag, User authorizedUser) {
         PermissionHelper.isBlocked(authorizedUser, UNAUTHORIZED_OPERATION);
@@ -140,7 +136,6 @@ public class PostServiceImpl implements PostService {
         return postRepository.updatePost(post);
     }
 
-    /*Plamkata*/
     @Override
     public Post addCommentToPost(Post postToComment, Comment commentToBeAdded, User userWhoComments) {
         PermissionHelper.isBlocked(userWhoComments,UNAUTHORIZED_OPERATION);
@@ -179,7 +174,6 @@ public class PostServiceImpl implements PostService {
         return postRepository.getMostCommentedPosts();
     }
 
-    /*TODO ILIQ */
     @Override
     public List<Post> getMostLikedPosts() {
         return postRepository.getMostLikedPosts();
@@ -197,7 +191,6 @@ public class PostServiceImpl implements PostService {
         return postRepository.getPostsByCreator(user);
     }
 
-    /*Ilia*/
     @Override
     public List<Comment> getAllCommentsRelatedToPost(Post postWithComments) {
         return postWithComments.getRelatedComments()

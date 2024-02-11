@@ -65,7 +65,6 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.softDeleteComment(comment);
     }
 
-    /*TODO ILIQ */
     @Override
     public List<Comment> getAllComments(User userExecutingTheRequest, CommentFilterOptions commentFilterOptions) {
         return commentRepository.getAllComments(commentFilterOptions);
@@ -93,7 +92,6 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.updateComment(comment);
     }
 
-    /*Ilia*/
     @Override
     public Comment dislikeComment(Comment comment, User authorizedUser) {
         PermissionHelper.isNotSameUser(comment.getCreatedBy(), authorizedUser,YOU_ARE_THE_CREATOR_OF_THIS_COMMENT);

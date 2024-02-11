@@ -268,7 +268,6 @@ public class UserServiceTests {
                 () -> userService.addPhoneNumber(userToBeUpdated, phoneNumber, userToDoUpdates));
     }
 
-    /*Ilia*/
     @Test
     public void deleteUser_Throw_When_UserIsNotAdminAndNotSame() {
         User user = TestHelpers.createMockNoAdminUser();
@@ -280,7 +279,6 @@ public class UserServiceTests {
                         () -> userService.deleteUser(user, userWhoDeletes));
     }
 
-    /*Ilia*/
     @Test
     public void deleteUser_Should_DeleteUser_When_UserValidParametersPassed() {
         User user = TestHelpers.createMockNoAdminUser();
@@ -291,7 +289,6 @@ public class UserServiceTests {
                 .updateUser(user);
     }
 
-    /*Ilia*/
     @Test
     public void getUserByFirstName_Throw_When_UserIsNotAdmin() {
         User user = TestHelpers.createMockNoAdminUser();
@@ -300,7 +297,6 @@ public class UserServiceTests {
                         () -> userService.getUserByFirstName("firstName", user));
     }
 
-    /*Ilia*/
     @Test
     public void getUserByFirstName_CallRepository_When_ValidParametersPassed() {
         User user = TestHelpers.createMockAdminUser();
@@ -311,7 +307,6 @@ public class UserServiceTests {
                 .getUserByFirstName("firstName");
     }
 
-    /*Ilia*/
     @Test
     public void getUsersById_Should_ReturnUser_When_MethodCalled() {
         Mockito.when(userRepository.getUserById(2))
@@ -320,6 +315,34 @@ public class UserServiceTests {
         User user = userService.getUserById(2);
 
         Assertions.assertEquals(2, user.getUserId());
+    }
+
+    @Test
+    public void deleteAvatar_Should_Throw_When_UserIsNotAdminOrNotSame() {
+        User user = TestHelpers.createMockNoAdminUser();
+        User userToDoChanges = TestHelpers.createMockNoAdminUser();
+        userToDoChanges.setUserId(222);
+
+        Mockito.when(userRepository.getUserById(Mockito.anyInt()))
+                        .thenReturn(user);
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                ()-> userService.deleteAvatar(Mockito.anyInt(),userToDoChanges));
+    }
+
+    @Test
+    public void deleteAvatar_Should_SetDefaultAvatarToUser_When_PassedValidParameters() {
+        User userWithChanges = TestHelpers.createMockNoAdminUser();
+
+        Mockito.when(userRepository.getUserById(Mockito.anyInt()))
+                .thenReturn(userWithChanges);
+
+        Mockito.when(avatarService.getDefaultAvatar())
+                .thenReturn(TestHelpers.createAvatar());
+
+        User userResult = userService.deleteAvatar(Mockito.anyInt(), userWithChanges);
+
+        Assertions.assertEquals(1, userResult.getAvatar().getAvatarId());
     }
 
     @Test

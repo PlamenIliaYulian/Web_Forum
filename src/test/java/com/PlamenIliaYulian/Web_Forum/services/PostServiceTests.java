@@ -372,7 +372,7 @@ public class PostServiceTests {
         Mockito.verify(postRepository, Mockito.times(1))
                 .updatePost(postToAddComment);
     }
-    /*Ilia*/
+
     @Test
     public void updatePost_Throw_When_UserIsBlocked() {
         Post post = TestHelpers.createMockPost2();
@@ -383,7 +383,6 @@ public class PostServiceTests {
                 ()-> postService.updatePost(post, creator));
     }
 
-    /*Ilia*/
     @Test
     public void updatePost_Throw_When_UserIsNotAdminAndNotCreator() {
         Post post = TestHelpers.createMockPost2();
@@ -394,7 +393,6 @@ public class PostServiceTests {
                 ()-> postService.updatePost(post, userToUpdate));
     }
 
-    /*Ilia*/
     @Test
     public void updatePost_CallRepository_When_ValidParametersPassed() {
         Post post = TestHelpers.createMockPost2();
@@ -408,7 +406,6 @@ public class PostServiceTests {
                 .updatePost(post);
     }
 
-    /*Ilia*/
     @Test
     public void getPostById_Should_ReturnPost_When_MethodCalled() {
         Mockito.when(postRepository.getPostById(1))
@@ -419,7 +416,6 @@ public class PostServiceTests {
         Assertions.assertEquals(1, post.getPostId());
     }
 
-    /*Ilia*/
     @Test
     public void addTagToPost_Throw_When_UserIsBlocked() {
         Post post = TestHelpers.createMockPost2();
@@ -431,7 +427,6 @@ public class PostServiceTests {
                 ()-> postService.addTagToPost(post, tag,userToAddTag));
     }
 
-    /*Ilia*/
     @Test
     public void addTagToPost_Throw_When_UserIsNotAdminAndNotCreator() {
         Post post = TestHelpers.createMockPost2();
@@ -443,7 +438,6 @@ public class PostServiceTests {
                 ()-> postService.addTagToPost(post, tag,userToAddTag));
     }
 
-    /*Ilia*/
     @Test
     public void addTagToPost_AddTag_When_ValidParametersPassed() {
         Post post = TestHelpers.createMockPost2();
@@ -457,7 +451,7 @@ public class PostServiceTests {
         Mockito.verify(postRepository, Mockito.times(1))
                 .updatePost(post);
     }
-    /*Ilia*/
+
     @Test
     public void getAllCommentsRelatedToPost_ReturnsList_WhenCalled() {
         Post post = TestHelpers.createMockPost1();
@@ -465,6 +459,50 @@ public class PostServiceTests {
         List<Comment> listComments = postService.getAllCommentsRelatedToPost(post);
 
         Assertions.assertNotNull(listComments);
+    }
+
+    @Test
+    public void dislikePost_Should_Throw_When_UserTryingToDislikeThePostIsPostCreator() {
+        User user = TestHelpers.createMockNoAdminUser();
+        Post post = TestHelpers.createMockPost1();
+        post.setCreatedBy(user);
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> postService.dislikePost(post, user));
+    }
+
+    @Test
+    public void dislikePost_Should_Throw_When_UserTryingToDislikeThePostHasAlreadyDislikedIt() {
+        User user = TestHelpers.createMockNoAdminUser();
+        user.setUserId(100);
+        Post post = TestHelpers.createMockPost1();
+        Set<User> usersWhoDislikedThePost = new HashSet<>();
+        usersWhoDislikedThePost.add(user);
+
+        post.setUsersWhoDislikedPost(usersWhoDislikedThePost);
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> postService.dislikePost(post, user));
+    }
+
+    @Test
+    public void dislikePost_Should_CallRepository_When_ValidArgumentsPassed() {
+        User user = TestHelpers.createMockNoAdminUser();
+        user.setUserId(100);
+        Post post = TestHelpers.createMockPost1();
+
+        postService.dislikePost(post, user);
+
+        Mockito.verify(postRepository, Mockito.times(1))
+                .updatePost(post);
+    }
+
+    @Test
+    public void getMostLikedPosts() {
+        postService.getMostLikedPosts();
+
+        Mockito.verify(postRepository, Mockito.times(1))
+                .getMostLikedPosts();
     }
 
     @Test

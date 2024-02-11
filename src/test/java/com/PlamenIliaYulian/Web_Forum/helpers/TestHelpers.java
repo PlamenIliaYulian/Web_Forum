@@ -205,5 +205,10 @@ public class TestHelpers {
                 null
         );
     }
+    public static Avatar createAvatar() {
+        Avatar avatar = new Avatar();
+        avatar.setAvatarId(1);
+        return avatar;
+    }
 
 }

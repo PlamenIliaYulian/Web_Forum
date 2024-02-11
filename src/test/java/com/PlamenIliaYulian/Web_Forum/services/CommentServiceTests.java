@@ -3,6 +3,7 @@ package com.PlamenIliaYulian.Web_Forum.services;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
 import com.PlamenIliaYulian.Web_Forum.helpers.TestHelpers;
 import com.PlamenIliaYulian.Web_Forum.models.Comment;
+import com.PlamenIliaYulian.Web_Forum.models.CommentFilterOptions;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.CommentRepository;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
@@ -118,7 +119,7 @@ public class CommentServiceTests {
                 .updateComment(commentToLike);
     }
 
-    /*Ilia*/
+
     @Test
     public void getCommentByContent_Should_ReturnComment_When_MethodCalled() {
         Mockito.when(commentRepository.getCommentByContent(Mockito.anyString()))
@@ -128,7 +129,7 @@ public class CommentServiceTests {
 
         Assertions.assertEquals(1, comment.getCommentId());
     }
-    /*Ilia*/
+
     @Test
     public void deleteComment_Throw_When_UserIsBlocked() {
         Comment comment = TestHelpers.createMockComment1();
@@ -137,7 +138,7 @@ public class CommentServiceTests {
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 ()-> commentService.deleteComment(comment));
     }
-    /*Ilia*/
+
     @Test
     public void deleteComment_Should_DeleteComment_When_UserIsNotBlocked() {
         Comment comment = TestHelpers.createMockComment1();
@@ -147,7 +148,7 @@ public class CommentServiceTests {
         Mockito.verify(commentRepository, Mockito.times(1))
                 .softDeleteComment(comment);
     }
-    /*Ilia*/
+
     @Test
     public void dislikeComment_Throw_When_IsTheSameUser() {
         Comment comment = TestHelpers.createMockComment1();
@@ -155,7 +156,7 @@ public class CommentServiceTests {
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 ()-> commentService.dislikeComment(comment, comment.getCreatedBy()));
     }
-    /*Ilia*/
+
     @Test
     public void dislikeComment_Throw_When_UserAlreadyDislikedComment() {
         Comment comment = TestHelpers.createMockComment1();
@@ -167,7 +168,7 @@ public class CommentServiceTests {
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 ()-> commentService.dislikeComment(comment, userDisliked));
     }
-    /*Ilia*/
+
     @Test
     public void dislikeComment_Should_UpdateComment_When_ValidParametersPassed () {
         Comment comment = TestHelpers.createMockComment1();
@@ -181,6 +182,18 @@ public class CommentServiceTests {
 
         Mockito.verify(commentRepository, Mockito.times(1))
                 .updateComment(comment);
+    }
+
+    @Test
+    public void getAllComments_Should_CallRepository() {
+        User user = TestHelpers.createMockNoAdminUser();
+        CommentFilterOptions commentFilterOptions = TestHelpers.createCommentFilterOptions();
+
+        commentService.getAllComments(user, commentFilterOptions);
+
+        Mockito.verify(commentRepository, Mockito.times(1))
+                .getAllComments(commentFilterOptions);
+
     }
 
     @Test

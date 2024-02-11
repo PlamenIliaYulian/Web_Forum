@@ -25,7 +25,6 @@ public class TagServiceImpl implements TagService {
         this.tagRepository = tagRepository;
     }
 
-    /*TODO ILIQ */
     @Override
     public Tag getTagByName(String name) {
         return tagRepository.getTagByName(name);
@@ -68,7 +67,6 @@ public class TagServiceImpl implements TagService {
         return tagRepository.getAllTags();
     }
 
-    /*TODO ILIQ */
     @Override
     public Tag getTagById(int id) {
         return tagRepository.getTagById(id);

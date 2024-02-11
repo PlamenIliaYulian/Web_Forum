@@ -10,12 +10,10 @@ public class AvatarServiceImpl implements AvatarService {
 
     private final AvatarRepository avatarRepository;
 
-    /*TODO PLAMEN*/
     public AvatarServiceImpl(AvatarRepository avatarRepository) {
         this.avatarRepository = avatarRepository;
     }
 
-    /*TODO ILIQ*/
     @Override
     public Avatar createAvatar(Avatar avatar) {
         return avatarRepository.createAvatar(avatar);

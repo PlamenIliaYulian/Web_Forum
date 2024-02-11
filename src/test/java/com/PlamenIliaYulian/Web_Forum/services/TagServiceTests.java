@@ -96,6 +96,21 @@ public class TagServiceTests {
     }
 
     @Test
+    public void getTagByName_Should_CallRepository() {
+        tagService.getTagByName(Mockito.anyString());
+
+        Mockito.verify(tagRepository, Mockito.times(1))
+                .getTagByName(Mockito.anyString());
+    }
+
+    @Test
+    public void getTagById_Should_CallRepository() {
+        tagService.getTagById(Mockito.anyInt());
+
+        Mockito.verify(tagRepository, Mockito.times(1))
+                .getTagById(Mockito.anyInt());
+    }
+    @Test
     public void updateTag_Should_Throw_When_UserIsBlocked(){
         User userToUpdate = TestHelpers.createMockNoAdminUser();
         Tag tagToBeUpdated = TestHelpers.createMockTag();

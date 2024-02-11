@@ -21,7 +21,6 @@ public class RoleServiceTests {
     @InjectMocks
     RoleServiceImpl roleMockService;
 
-    /*Ilia*/
     @Test
     public void getRoleById_Should_ReturnRole_When_MethodCalled() {
         Mockito.when(roleMockRepository.getRoleById(2))
@@ -31,7 +30,7 @@ public class RoleServiceTests {
 
         Assertions.assertEquals(2, role.getRoleId());
     }
-    /*Ilia*/
+
     @Test
     public void getRoleByName_Should_ReturnRole_When_MethodCalled() {
         Mockito.when(roleMockRepository.getRoleByName(Mockito.anyString()))
