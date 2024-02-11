@@ -187,9 +187,8 @@ public class TestHelpers {
 
     public static CommentFilterOptions createCommentFilterOptions() {
         return new CommentFilterOptions(
-                0,
-                0,
                 "Content",
+                null,
                 "2024-01-31 00:00:00",
                 "Comment_Creator",
                 null,

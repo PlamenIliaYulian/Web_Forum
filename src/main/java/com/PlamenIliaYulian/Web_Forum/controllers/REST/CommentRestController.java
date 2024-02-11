@@ -51,9 +51,8 @@ public class CommentRestController {
 
     @GetMapping("/search")
     public List<Comment> getAllComments(@RequestHeader HttpHeaders headers,
-                                        @RequestParam(required = false) Integer likes,
-                                        @RequestParam(required = false) Integer dislikes,
                                         @RequestParam(required = false) String content,
+                                        @RequestParam(required = false) String createdAfter,
                                         @RequestParam(required = false) String createdBefore,
                                         @RequestParam(required = false) String createdBy,
                                         @RequestParam(required = false) String sortBy,
@@ -61,7 +60,7 @@ public class CommentRestController {
         try {
             User userExecutingTheRequest = authenticationHelper.tryGetUser(headers);
             CommentFilterOptions commentFilterOptions =
-                    new CommentFilterOptions(likes, dislikes, content, createdBefore, createdBy, sortBy, sortOrder);
+                    new CommentFilterOptions(content, createdBefore, createdAfter,createdBy, sortBy, sortOrder);
             return commentService.getAllComments(userExecutingTheRequest, commentFilterOptions);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());

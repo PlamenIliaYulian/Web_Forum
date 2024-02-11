@@ -79,24 +79,23 @@ public class CommentRepositoryImpl implements CommentRepository {
         }
     }
 
-    /*TODO Iliikata adjust the filtering regarding the likes/dislikes + tags + createdAfter + check for SWAGGER ANNOTATIONS*/
     @Override
     public List<Comment> getAllComments(CommentFilterOptions commentFilterOptions) {
         try (Session session = sessionFactory.openSession();) {
             List<String> filters = new ArrayList<>();
             Map<String, Object> parameters = new HashMap<>();
 
-            commentFilterOptions.getLikes().ifPresent(value -> {
-                filters.add(" likes = :likes ");
-                parameters.put("likes", value);
-            });
-            commentFilterOptions.getDislikes().ifPresent(value -> {
-                filters.add(" dislikes = :dislikes ");
-                parameters.put("dislikes", value);
-            });
             commentFilterOptions.getContent().ifPresent(value -> {
                 filters.add(" content like :content ");
                 parameters.put("content", String.format("%%%s%%", value));
+            });
+
+            commentFilterOptions.getCreatedAfter().ifPresent(value -> {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                LocalDateTime date = LocalDateTime.parse(value, formatter);
+
+                filters.add(" createdOn > :createdAfter ");
+                parameters.put("createdAfter", date);
             });
 
             commentFilterOptions.getCreatedBefore().ifPresent(value -> {
