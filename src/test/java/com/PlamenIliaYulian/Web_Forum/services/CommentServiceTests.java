@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -181,4 +182,40 @@ public class CommentServiceTests {
         Mockito.verify(commentRepository, Mockito.times(1))
                 .updateComment(comment);
     }
+
+    @Test
+    public void createComment_Should_Throw_When_UserIsBlocked(){
+        Comment commentToCreate = TestHelpers.createMockComment1();
+        User userWhoIsBlocked = TestHelpers.createMockNoAdminUser();
+        userWhoIsBlocked.setBlocked(true);
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                ()-> commentService.createComment(commentToCreate,userWhoIsBlocked));
+    }
+
+    @Test
+    public void createComment_Should_CallRepository_When_ArgumentsAreValid(){
+        Comment commentToBeCreated = TestHelpers.createMockComment1();
+        User userToCreateComment = TestHelpers.createMockNoAdminUser();
+        commentToBeCreated.setCreatedOn(LocalDateTime.now());
+        commentToBeCreated.setCreatedBy(userToCreateComment);
+
+        commentService.createComment(commentToBeCreated, userToCreateComment);
+
+        Mockito.verify(commentRepository, Mockito.times(1))
+                .createComment(commentToBeCreated);
+    }
+
+    @Test
+    public void getCommentByCreator_Should_CallRepository_When_ArgumentsAreValid(){
+        User userWhoCreatedComment = TestHelpers.createMockAdminUser();
+        Comment commentToBeFound = TestHelpers.createMockComment1();
+        commentToBeFound.setCreatedBy(userWhoCreatedComment);
+
+        commentService.getCommentsByCreator(userWhoCreatedComment);
+
+        Mockito.verify(commentRepository, Mockito.times(1))
+                .getCommentsByCreator(userWhoCreatedComment);
+    }
+
 }

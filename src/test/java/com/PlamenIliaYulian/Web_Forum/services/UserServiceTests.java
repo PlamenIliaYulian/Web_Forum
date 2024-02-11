@@ -332,4 +332,15 @@ public class UserServiceTests {
         Mockito.verify(userRepository, Mockito.times(1))
                 .getAllUsersCount();
     }
+
+    @Test
+    public void getUserByEmail_Should_CallRepository(){
+        User userToCallMethod = TestHelpers.createMockNoAdminUser();
+        String email = "";
+
+        userService.getUserByEmail(email, userToCallMethod);
+
+        Mockito.verify(userRepository, Mockito.times(1))
+                .getUserByEmail(email);
+    }
 }

@@ -95,4 +95,25 @@ public class TagServiceTests {
                 .updateTag(tagToDelete);
     }
 
+    @Test
+    public void updateTag_Should_Throw_When_UserIsBlocked(){
+        User userToUpdate = TestHelpers.createMockNoAdminUser();
+        Tag tagToBeUpdated = TestHelpers.createMockTag();
+        userToUpdate.setBlocked(true);
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                ()-> tagService.updateTag(tagToBeUpdated, userToUpdate));
+    }
+
+    @Test
+    public void updateTag_Should_CallRepository(){
+        User userToUpdate = TestHelpers.createMockNoAdminUser();
+        Tag tagToBeUpdated = TestHelpers.createMockTag();
+
+        tagService.updateTag(tagToBeUpdated, userToUpdate);
+
+        Mockito.verify(tagRepository, Mockito.times(1))
+                .updateTag(tagToBeUpdated);
+    }
+
 }

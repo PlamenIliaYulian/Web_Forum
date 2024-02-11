@@ -73,14 +73,27 @@ public class PostRepositoryImpl implements PostRepository {
             List<String> filters = new ArrayList<>();
             Map<String, Object> parameters = new HashMap<>();
 
-            postFilterOptions.getLikes().ifPresent(value -> {
-                filters.add(" likes = :likes ");
-                parameters.put("likes", value);
+
+            postFilterOptions.getMinLikes().ifPresent(value ->{
+                filters.add(" likes >=: minLikes ");
+                parameters.put("minLikes", value);
             });
-            postFilterOptions.getDislikes().ifPresent(value -> {
-                filters.add(" dislikes = :dislikes ");
-                parameters.put("dislikes", value);
+
+            postFilterOptions.getMaxLikes().ifPresent(value ->{
+                filters.add(" likes <=: maxLikes ");
+                parameters.put("maxLikes", value);
             });
+
+            postFilterOptions.getMinDislikes().ifPresent(value ->{
+                filters.add(" dislikes >=: minDislikes ");
+                parameters.put("minDislikes", value);
+            });
+
+            postFilterOptions.getMaxDislikes().ifPresent(value ->{
+                filters.add(" dislikes <=: maxDislikes ");
+                parameters.put("maxDislikes", value);
+            });
+
             postFilterOptions.getTitle().ifPresent(value -> {
                 filters.add(" title like :title ");
                 parameters.put("title", String.format("%%%s%%", value));
@@ -96,6 +109,15 @@ public class PostRepositoryImpl implements PostRepository {
 
                 filters.add(" createdOn < :createdBefore ");
                 parameters.put("createdBefore", date);
+            });
+
+
+            postFilterOptions.getCreatedAfter().ifPresent(value -> {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                LocalDateTime date = LocalDateTime.parse(value, formatter);
+
+                filters.add(" createdOn > :createdAfter ");
+                parameters.put("createdAfter", date);
             });
 
 

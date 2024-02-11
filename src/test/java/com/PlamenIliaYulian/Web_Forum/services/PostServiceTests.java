@@ -490,4 +490,24 @@ public class PostServiceTests {
         Mockito.verify(postRepository, Mockito.times(1))
                 .getMostRecentlyCreatedPosts();
     }
+
+    @Test
+    public void getPostsByCreator_Should_Call_Repository(){
+        Post postToBeFound = TestHelpers.createMockPost1();
+        User userToCreatePost = TestHelpers.createMockAdminUser();
+        postToBeFound.setCreatedBy(userToCreatePost);
+
+        postService.getPostsByCreator(userToCreatePost);
+
+        Mockito.verify(postRepository, Mockito.times(1))
+                .getPostsByCreator(userToCreatePost);
+    }
+
+    @Test
+    public void getMostCommentedPosts_Should_Call_Repository(){
+        postService.getMostCommentedPosts();
+
+        Mockito.verify(postRepository, Mockito.times(1))
+                .getMostCommentedPosts();
+    }
 }
