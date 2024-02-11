@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.updateUser(userToBeUpdated);
     }
 
-    /*TODO JULY */
+    /*TODO JULY - DONE*/
     @Override
     public List<User> getAllUsers(UserFilterOptions userFilterOptions) {
         return userRepository.getAllUsers(userFilterOptions);
@@ -147,7 +147,7 @@ public class UserServiceImpl implements UserService {
         return userToDoChanges;
     }
 
-    /*TODO JULY */
+    /*TODO JULY  - DONE*/
     @Override
     public long getAllUsersCount() {
         return userRepository.getAllUsersCount();

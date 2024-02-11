@@ -87,6 +87,7 @@ public class CommentServiceTests {
     public void likeComment_Should_Throw_When_UserAlreadyLikedComment(){
         Comment commentToLike = TestHelpers.createMockComment1();
         User userWhoWillLikeComment = TestHelpers.createMockNoAdminUser();
+        userWhoWillLikeComment.setUserId(777);
         Set<User> usersWhoLikeComment = new HashSet<>();
         Set<User> usersWhoDislikeComment = new HashSet<>();
         usersWhoLikeComment.add(userWhoWillLikeComment);

@@ -466,4 +466,28 @@ public class PostServiceTests {
 
         Assertions.assertNotNull(listComments);
     }
+
+    @Test
+    public void getAllPostsCount_Should_Pass(){
+        Long returnValue = 1L;
+        Mockito.when(postRepository.getAllPostsCount())
+                .thenReturn(returnValue);
+
+        postService.getAllPostsCount();
+
+        Mockito.verify(postRepository, Mockito.times(1))
+                .getAllPostsCount();
+    }
+
+    @Test
+    public void getMostRecentlyCreatedPosts_Should_Pass(){
+        List<Post> returnedPosts = new ArrayList<>();
+        Mockito.when(postRepository.getMostRecentlyCreatedPosts())
+                .thenReturn(returnedPosts);
+
+        postService.getMostRecentlyCreatedPosts();
+
+        Mockito.verify(postRepository, Mockito.times(1))
+                .getMostRecentlyCreatedPosts();
+    }
 }

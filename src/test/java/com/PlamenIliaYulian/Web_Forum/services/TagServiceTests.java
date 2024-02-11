@@ -36,11 +36,15 @@ public class TagServiceTests {
 
         Mockito.when(tagRepository.getTagByName(tagToCreate.getTag()))
                 .thenThrow(EntityNotFoundException.class);
+        Mockito.when(tagRepository.createTag(tagToCreate))
+                .thenReturn(tagToCreate);
 
-        tagService.createTag(tagToCreate, nonBlockedTagCreator);
+        Tag createdTag = tagService.createTag(tagToCreate, nonBlockedTagCreator);
 
         Mockito.verify(tagRepository, Mockito.times(1))
                 .createTag(tagToCreate);
+
+        Assertions.assertEquals(createdTag, tagToCreate);
     }
 
     @Test

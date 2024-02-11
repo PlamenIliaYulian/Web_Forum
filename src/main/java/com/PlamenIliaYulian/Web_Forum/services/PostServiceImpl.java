@@ -167,7 +167,7 @@ public class PostServiceImpl implements PostService {
         return postRepository.updatePost(postToRemoveCommentFrom);
     }
 
-    /*TODO JULY */
+    /*TODO JULY - DONE */
     @Override
     public Long getAllPostsCount() {
         return postRepository.getAllPostsCount();
@@ -185,7 +185,7 @@ public class PostServiceImpl implements PostService {
         return postRepository.getMostLikedPosts();
     }
 
-    /*TODO JULY */
+    /*TODO JULY - DONE */
     @Override
     public List<Post> getMostRecentlyCreatedPosts() {
         return postRepository.getMostRecentlyCreatedPosts();

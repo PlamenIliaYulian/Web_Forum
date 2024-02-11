@@ -191,10 +191,27 @@ public class UserServiceTests {
         users.add(TestHelpers.createMockNoAdminUser());
         UserFilterOptions userFilterOptions = TestHelpers.createUserFilterOptions();
 
-        Mockito.when(userRepository.getAllUsers(Mockito.any()))
+        Mockito.when(userRepository.getAllUsers(userFilterOptions))
                 .thenReturn(users);
 
-        userService.getAllUsers(adminUser, userFilterOptions);
+        List<User> allUsers = userService.getAllUsers(adminUser, userFilterOptions);
+
+        Mockito.verify(userRepository, Mockito.times(1))
+                .getAllUsers(userFilterOptions);
+        Assertions.assertFalse(allUsers.isEmpty());
+        Assertions.assertEquals(allUsers.get(0), TestHelpers.createMockNoAdminUser());
+    }
+
+    @Test
+    public void getAllUsers_Should_Pass_When_ValidWithoutValidAdminUserPassed() {
+        List<User> users = new ArrayList<>();
+        users.add(TestHelpers.createMockNoAdminUser());
+        UserFilterOptions userFilterOptions = TestHelpers.createUserFilterOptions();
+
+        Mockito.when(userRepository.getAllUsers(userFilterOptions))
+                .thenReturn(users);
+
+        List<User> allUsers = userService.getAllUsers(userFilterOptions);
 
         Mockito.verify(userRepository, Mockito.times(1))
                 .getAllUsers(userFilterOptions);
@@ -303,5 +320,16 @@ public class UserServiceTests {
         User user = userService.getUserById(2);
 
         Assertions.assertEquals(2, user.getUserId());
+    }
+
+    @Test
+    public void getAllUsersCount_Should_Pass(){
+        Mockito.when(userRepository.getAllUsersCount())
+                .thenReturn(1L);
+
+        userService.getAllUsersCount();
+
+        Mockito.verify(userRepository, Mockito.times(1))
+                .getAllUsersCount();
     }
 }

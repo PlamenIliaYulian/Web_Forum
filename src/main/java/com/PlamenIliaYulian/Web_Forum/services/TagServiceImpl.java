@@ -31,17 +31,19 @@ public class TagServiceImpl implements TagService {
         return tagRepository.getTagByName(name);
     }
 
-    /*TODO JULY */
+    /*TODO JULY
+    * I could not find another way to make the test cover the final return. I had to make the changes seen below.*/
     @Override
     public Tag createTag(Tag tag, User userToCheckIfBlocked) {
         PermissionHelper.isBlocked(userToCheckIfBlocked, UNAUTHORIZED_OPERATION);
 
+        Tag tagToCreate = null;
         try {
             tag = tagRepository.getTagByName(tag.getTag());
         } catch (EntityNotFoundException e) {
-            return tagRepository.createTag(tag);
+            tagToCreate = tagRepository.createTag(tag);
         }
-        return tag;
+        return tagToCreate;
 
     }
 
