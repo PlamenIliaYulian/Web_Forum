@@ -30,7 +30,7 @@ public interface PostService {
 
     List<Comment> getAllCommentsRelatedToPost(Post postWithComments);
 
-    Post removeCommentFromPost(Post postToComment, String comment, User authorizedUser);
+    Post removeCommentFromPost(Post postToComment, Comment comment, User authorizedUser);
     Long getAllPostsCount();
     List<Post> getMostCommentedPosts();
     List<Post> getMostLikedPosts();

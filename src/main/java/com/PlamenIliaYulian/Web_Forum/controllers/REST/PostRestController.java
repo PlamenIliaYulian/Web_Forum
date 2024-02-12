@@ -11,6 +11,7 @@ import com.PlamenIliaYulian.Web_Forum.models.*;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.CommentDto;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.PostDto;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.TagDto;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.PostService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,16 +43,18 @@ public class PostRestController {
     private final AuthenticationHelper authenticationHelper;
     private final ModelsMapper modelsMapper;
     private final TagService tagService;
+    private final CommentService commentService;
 
     @Autowired
     public PostRestController(PostService postService,
                               AuthenticationHelper authenticationHelper,
                               ModelsMapper modelsMapper,
-                              TagService tagService) {
+                              TagService tagService, CommentService commentService) {
         this.postService = postService;
         this.authenticationHelper = authenticationHelper;
         this.modelsMapper = modelsMapper;
         this.tagService = tagService;
+        this.commentService = commentService;
     }
 
 
@@ -618,23 +621,21 @@ public class PostRestController {
     }
 
     /*TODO Swagger Plamkata*/
-    @DeleteMapping("/{id}/comments/{comment}")
+    @DeleteMapping("/{postId}/comments/{commentId}")
     public Post removeCommentFromPost(@RequestHeader HttpHeaders headers,
-                                      @PathVariable int id,
-                                      @PathVariable String comment) {
-
+                                      @PathVariable int postId,
+                                      @PathVariable int commentId) {
         try {
             User authorizedUser = authenticationHelper.tryGetUser(headers);
-            Post postToComment = postService.getPostById(id);
-            return postService.removeCommentFromPost(postToComment, comment, authorizedUser);
+            Post postToComment = postService.getPostById(postId);
+            Comment commentToBeRemoved = commentService.getCommentById(commentId);
+            return postService.removeCommentFromPost(postToComment, commentToBeRemoved, authorizedUser);
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (InvalidUserInputException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 

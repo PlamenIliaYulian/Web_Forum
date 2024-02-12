@@ -29,6 +29,5 @@ public interface ModelsMapper {
     PostFilterOptions postFilterOptionsFromDto(PostFilterOptionsDto dto);
     UserFilterOptions userFilterOptionsFromUsernameOptionsDto(UserFilterByUsernameOptionsDto dto);
     User userFromRegisterDto(RegisterDto registerDto);
-
-
+    CommentDto commentDtoFromComment(Comment commentToBeEdited);
 }

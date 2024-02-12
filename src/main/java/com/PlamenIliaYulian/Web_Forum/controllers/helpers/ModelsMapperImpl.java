@@ -154,6 +154,13 @@ public class ModelsMapperImpl implements ModelsMapper {
     }
 
     @Override
+    public CommentDto commentDtoFromComment(Comment commentToBeEdited) {
+        CommentDto commentDto = new CommentDto();
+        commentDto.setComment(commentToBeEdited.getContent());
+        return commentDto;
+    }
+
+    @Override
     public Post postFromDto(PostDto postDto) {
         Post post = new Post();
         post.setTitle(postDto.getTitle());

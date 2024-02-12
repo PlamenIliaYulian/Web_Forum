@@ -146,18 +146,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post removeCommentFromPost(Post postToRemoveCommentFrom, String comment, User authorizedUser) {
+    public Post removeCommentFromPost(Post postToRemoveCommentFrom, Comment comment, User authorizedUser) {
         PermissionHelper.isBlocked(authorizedUser,UNAUTHORIZED_OPERATION);
-        Comment commentToBeRemoved = commentService.getCommentByContent(comment);
-        User commentCreator = commentToBeRemoved.getCreatedBy();
+        User commentCreator = comment.getCreatedBy();
         PermissionHelper.isAdminOrSameUser(commentCreator, authorizedUser, UNAUTHORIZED_OPERATION);
 
         Set<Comment> comments = postToRemoveCommentFrom.getRelatedComments();
-        if (!comments.contains(commentToBeRemoved)) {
+        if (!comments.contains(comment)) {
             throw new InvalidOperationException("The comment does not belong to this post.");
         }
-        comments.remove(commentToBeRemoved);
-        commentService.deleteComment(commentToBeRemoved);
+        comments.remove(comment);
+        commentService.deleteComment(comment);
         return postRepository.updatePost(postToRemoveCommentFrom);
     }
 

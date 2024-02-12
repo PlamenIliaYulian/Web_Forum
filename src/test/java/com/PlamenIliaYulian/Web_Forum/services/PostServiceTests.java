@@ -180,46 +180,28 @@ public class PostServiceTests {
     @Test
     public void removeCommentFromPost_Should_Throw_When_UserIsBlocked() {
         Post postToRemoveCommentFrom = TestHelpers.createMockPost1();
-        String commentContent = "Comment";
+        Comment commentToBeRemoved = TestHelpers.createMockComment1();
         User blockedUser = TestHelpers.createMockNoAdminUser();
         blockedUser.setBlocked(true);
 
         Assertions.assertThrows(UnauthorizedOperationException.class,
                 () -> postService.removeCommentFromPost(
                         postToRemoveCommentFrom,
-                        commentContent,
+                        commentToBeRemoved,
                         blockedUser
                 ));
     }
 
 
     @Test
-    public void removeCommentFromPost_Should_Throw_When_WeCannotFindTheCommentByItsContent() {
-        Post postToRemoveCommentFrom = TestHelpers.createMockPost1();
-        String commentContent = "Comment";
-        User nonBlockedUser = TestHelpers.createMockNoAdminUser();
-
-        Mockito.when(commentService.getCommentByContent(commentContent))
-                .thenThrow(EntityNotFoundException.class);
-
-        Assertions.assertThrows(EntityNotFoundException.class,
-                () -> postService.removeCommentFromPost(postToRemoveCommentFrom, commentContent, nonBlockedUser));
-    }
-
-
-    @Test
     public void removeCommentFromPost_Should_Throw_When_UserTryingToRemoveCommentIsNotItsCreatorNorAdmin() {
         Post postToRemoveCommentFrom = TestHelpers.createMockPost1();
-        String commentContent = "Comment";
         User nonBlockedUser = TestHelpers.createMockNoAdminUser();
         nonBlockedUser.setUserId(777);
         Comment commentToRemove = TestHelpers.createMockComment1();
 
-        Mockito.when(commentService.getCommentByContent(commentContent))
-                .thenReturn(commentToRemove);
-
         Assertions.assertThrows(UnauthorizedOperationException.class,
-                () -> postService.removeCommentFromPost(postToRemoveCommentFrom, commentContent, nonBlockedUser));
+                () -> postService.removeCommentFromPost(postToRemoveCommentFrom, commentToRemove, nonBlockedUser));
     }
 
     @Test
@@ -227,15 +209,11 @@ public class PostServiceTests {
         Post postToRemoveCommentFrom = TestHelpers.createMockPost1();
         Set<Comment> comments = new TreeSet<>();
         postToRemoveCommentFrom.setRelatedComments(comments);
-        String commentContent = "Comment";
         User nonBlockedUser = TestHelpers.createMockNoAdminUser();
         Comment commentToRemove = TestHelpers.createMockComment1();
 
-        Mockito.when(commentService.getCommentByContent(commentContent))
-                .thenReturn(commentToRemove);
-
         Assertions.assertThrows(InvalidOperationException.class,
-                () -> postService.removeCommentFromPost(postToRemoveCommentFrom, commentContent, nonBlockedUser));
+                () -> postService.removeCommentFromPost(postToRemoveCommentFrom, commentToRemove, nonBlockedUser));
     }
 
     @Test
@@ -245,18 +223,14 @@ public class PostServiceTests {
         Set<Comment> relatedComments = new TreeSet<>();
         relatedComments.add(commentToRemove);
         postToRemoveCommentFrom.setRelatedComments(relatedComments);
-        String commentContent = "Comment";
         User nonBlockedUser = TestHelpers.createMockNoAdminUser();
-
-        Mockito.when(commentService.getCommentByContent(commentContent))
-                .thenReturn(commentToRemove);
 
         Mockito.doNothing().when(commentService).deleteComment(commentToRemove);
 
         Mockito.when(postRepository.updatePost(postToRemoveCommentFrom))
                 .thenReturn(postToRemoveCommentFrom);
 
-        postService.removeCommentFromPost(postToRemoveCommentFrom, commentContent, nonBlockedUser);
+        postService.removeCommentFromPost(postToRemoveCommentFrom, commentToRemove, nonBlockedUser);
 
         Mockito.verify(postRepository, Mockito.times(1))
                 .updatePost(postToRemoveCommentFrom);
