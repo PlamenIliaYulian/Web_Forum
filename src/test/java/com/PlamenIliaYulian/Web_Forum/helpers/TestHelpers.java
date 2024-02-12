@@ -173,8 +173,11 @@ public class TestHelpers {
         return new PostFilterOptions(
                 0,
                 0,
+                0,
+                0,
                 "Test title",
                 "Test content",
+                "2024-01-31 00:00:00",
                 "2024-01-31 00:00:00",
                 "Test User",
                 null,

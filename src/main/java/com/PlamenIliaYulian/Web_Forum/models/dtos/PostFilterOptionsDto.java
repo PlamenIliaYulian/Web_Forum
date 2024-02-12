@@ -3,21 +3,27 @@ package com.PlamenIliaYulian.Web_Forum.models.dtos;
 import java.util.Optional;
 
 public class PostFilterOptionsDto {
-    private int likes;
-    private int dislikes;
+    private int minLikes;
+    private int maxLikes;
+    private int minDislikes;
+    private int maxDislikes;
     private String title;
     private String content;
     private String createdBefore;
+    private String createdAfter;
     private String createdBy;
     private String sortBy;
     private String sortOrder;
 
-    public PostFilterOptionsDto(int likes, int dislikes, String title, String content, String createdBefore, String createdBy, String sortBy, String sortOrder) {
-        this.likes = likes;
-        this.dislikes = dislikes;
+    public PostFilterOptionsDto(int minLikes, int maxLikes, int minDislikes, int maxDislikes, String title, String content, String createdBefore, String createdAfter, String createdBy, String sortBy, String sortOrder) {
+        this.minLikes = minLikes;
+        this.maxLikes = maxLikes;
+        this.minDislikes = minDislikes;
+        this.maxDislikes = maxDislikes;
         this.title = title;
         this.content = content;
         this.createdBefore = createdBefore;
+        this.createdAfter = createdAfter;
         this.createdBy = createdBy;
         this.sortBy = sortBy;
         this.sortOrder = sortOrder;
@@ -26,20 +32,44 @@ public class PostFilterOptionsDto {
     public PostFilterOptionsDto() {
     }
 
-    public int getLikes() {
-        return likes;
+    public int getMinLikes() {
+        return minLikes;
     }
 
-    public void setLikes(int likes) {
-        this.likes = likes;
+    public void setMinLikes(int minLikes) {
+        this.minLikes = minLikes;
     }
 
-    public int getDislikes() {
-        return dislikes;
+    public int getMaxLikes() {
+        return maxLikes;
     }
 
-    public void setDislikes(int dislikes) {
-        this.dislikes = dislikes;
+    public void setMaxLikes(int maxLikes) {
+        this.maxLikes = maxLikes;
+    }
+
+    public int getMinDislikes() {
+        return minDislikes;
+    }
+
+    public void setMinDislikes(int minDislikes) {
+        this.minDislikes = minDislikes;
+    }
+
+    public int getMaxDislikes() {
+        return maxDislikes;
+    }
+
+    public void setMaxDislikes(int maxDislikes) {
+        this.maxDislikes = maxDislikes;
+    }
+
+    public String getCreatedAfter() {
+        return createdAfter;
+    }
+
+    public void setCreatedAfter(String createdAfter) {
+        this.createdAfter = createdAfter;
     }
 
     public String getTitle() {

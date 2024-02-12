@@ -107,11 +107,14 @@ public class ModelsMapperImpl implements ModelsMapper {
     @Override
     public PostFilterOptions postFilterOptionsFromDto(PostFilterOptionsDto dto) {
         return new PostFilterOptions(
-                dto.getLikes(),
-                dto.getDislikes(),
+                dto.getMinLikes(),
+                dto.getMaxLikes(),
+                dto.getMinDislikes(),
+                dto.getMaxDislikes(),
                 dto.getTitle(),
                 dto.getContent(),
                 dto.getCreatedBefore(),
+                dto.getCreatedAfter(),
                 dto.getCreatedBy(),
                 dto.getSortBy(),
                 dto.getSortOrder()

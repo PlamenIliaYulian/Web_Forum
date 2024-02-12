@@ -255,18 +255,21 @@ public class PostRestController {
 
     @GetMapping("/search")
     public List<Post> getAllPosts(@RequestHeader HttpHeaders headers,
-                                  @RequestParam(required = false) Integer likes,
-                                  @RequestParam(required = false) Integer dislikes,
+                                  @RequestParam(required = false) Integer minLikes,
+                                  @RequestParam(required = false) Integer maxLikes,
+                                  @RequestParam(required = false) Integer minDislikes,
+                                  @RequestParam(required = false) Integer maxDislikes,
                                   @RequestParam(required = false) String title,
                                   @RequestParam(required = false) String content,
                                   @RequestParam(required = false) String createdBefore,
+                                  @RequestParam(required = false) String createdAfter,
                                   @RequestParam(required = false) String createdBy,
                                   @RequestParam(required = false) String sortBy,
                                   @RequestParam(required = false) String sortOrder) {
         try {
             User userExecutingTheRequest = authenticationHelper.tryGetUser(headers);
             PostFilterOptions postFilterOptions =
-                    new PostFilterOptions(likes, dislikes, title, content, createdBefore, createdBy, sortBy, sortOrder);
+                    new PostFilterOptions(minLikes, maxLikes, minDislikes,maxDislikes, title, content, createdBefore, createdAfter, createdBy, sortBy, sortOrder);
             return postService.getAllPosts(userExecutingTheRequest, postFilterOptions);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
