@@ -47,23 +47,27 @@
             <div class="topTen-container">
                 <p class="topTen" th:text="#{homepage.top10mostCommentedPosts}">Top ten most commented posts</p>
             </div>
-
+            <!--Dynamically created top 10 most commented posts below:-->
             <div class="topTen-posts-container" >
                 <div class="posts-preview" th:each="post : ${mostCommentedPosts}">
                     <div class="verticalColoredLine"></div>
                     <div class="topicContent">
                         <div class="post-title-container">
-                            <a href="" th:text="${post.title}">Title Content</a>
+                            <a href="#" th:href="@{/posts/{id}(id=${post.getPostId()})}" th:text="${post.title}">Title Content</a>
                         </div>
                         <div class="userNameCreationDateLikesTags-container">
                             <div class="userPlusCreationDate-container">
                                 <div class="userIconPlusUsername-container">
                                     <span class="material-symbols-outlined">account_circle</span>
-                                    <p class="userName" th:text="${post.createdBy.getUserName()}">Username</p>
+                                    <a class="userName" th:text="${post.createdBy.getUserName()}" th:href="@{/users/{id}(id=${post.getCreatedBy().getUserId()})}">Username</a>
                                 </div>
                                 <div class="calendarIconPlusDate-container">
                                     <span class="material-symbols-outlined" >calendar_month</span>
                                     <p class="creationDate" th:text="${post.getCreatedOn()}">24.01.31 07:00:00</p>
+                                </div>
+                                <div class="commentIconPlusCommentsCount-container">
+                                    <span class="material-symbols-outlined" >comment</span>
+                                    <p th:text="${post.getRelatedComments().size()}">10</p>
                                 </div>
                             </div>
 
@@ -79,7 +83,7 @@
                                 </div>
                                 <div class="TagIconPlusTag-container">
                                     <span class="material-symbols-outlined">loyalty</span>
-                                    <div id="tag-name-container">
+                                    <div class="tag-name-container">
                                         <p class="tagName" th:unless="${post.getTags().isEmpty()}" th:text="${'#'+post.getTags().toArray()[0]}">#SomeVeryLongWord</p>
                                     </div>
 
@@ -90,12 +94,59 @@
                 </div>
             </div>
 
+
             <div class="line-separator"></div>
+
 
             <div class="topTen-container">
                 <p class="topTen" th:text="#{homepage.top10mostRecentlyCreatedPosts}">Top ten most recently created posts</p>
             </div>
+            <!--Dynamically created top 10 most recently created posts below:-->
+            <div class="topTen-posts-container" >
+                <div class="posts-preview" th:each="post : ${mostRecentPosts}">
+                    <div class="verticalColoredLine"></div>
+                    <div class="topicContent">
+                        <div class="post-title-container">
+                            <a href="" th:text="${post.title}">Title Content</a>
+                        </div>
+                        <div class="userNameCreationDateLikesTags-container">
+                            <div class="userPlusCreationDate-container">
+                                <div class="userIconPlusUsername-container">
+                                    <span class="material-symbols-outlined">account_circle</span>
+                                    <a class="userName" th:text="${post.createdBy.getUserName()}" th:href="@{/users/{id}(id=${post.getCreatedBy().getUserId()})}">Username</a>
+                                </div>
+                                <div class="calendarIconPlusDate-container">
+                                    <span class="material-symbols-outlined" >calendar_month</span>
+                                    <p class="creationDate" th:text="${post.getCreatedOn()}">24.01.31 07:00:00</p>
+                                </div>
+                                <div class="commentIconPlusCommentsCount-container">
+                                    <span class="material-symbols-outlined" >comment</span>
+                                    <p th:text="${post.getRelatedComments().size()}">10</p>
+                                </div>
+                            </div>
 
+
+                            <div class="likesPlusTag-container">
+                                <div class="likesIconPlusLikes-container">
+                                    <span class="material-symbols-outlined">thumb_up</span>
+                                    <p class="likesCount" th:text="${post.getLikes()}">123</p>
+                                </div>
+                                <div class="likesIconPlusLikes-container">
+                                    <span class="material-symbols-outlined">thumb_down</span>
+                                    <p class="likesCount" th:text="${post.getDislikes()}">123</p>
+                                </div>
+                                <div class="TagIconPlusTag-container">
+                                    <span class="material-symbols-outlined">loyalty</span>
+                                    <div class="tag-name-container">
+                                        <p class="tagName" th:unless="${post.getTags().isEmpty()}" th:text="${'#'+post.getTags().toArray()[0]}">#SomeVeryLongWord</p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
         </div>

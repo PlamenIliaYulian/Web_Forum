@@ -317,7 +317,6 @@ translateY()
 }
 
 .post-title-container a{
-    text-decoration: none;
     color: black;
     font-size: 20px;
     font-weight: bold;
@@ -388,6 +387,7 @@ translateY()
 .userName, .creationDate, .likesCount, .tagName {
     font-size: 15px;
     font-weight: 500;
+    color: black;
 }
 
 .userNameCreationDateLikesTags-container {
@@ -404,11 +404,12 @@ translateY()
 .userIconPlusUsername-container,
 .calendarIconPlusDate-container,
 .likesIconPlusLikes-container,
-.TagIconPlusTag-container {
+.TagIconPlusTag-container,
+.commentIconPlusCommentsCount-container
+{
     display: flex;
     padding-right: 20px;
 }
-
 
 
 
