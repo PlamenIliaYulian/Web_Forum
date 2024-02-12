@@ -30,8 +30,6 @@ public class TagServiceImpl implements TagService {
         return tagRepository.getTagByName(name);
     }
 
-    /*TODO JULY
-    * I could not find another way to make the test cover the final return. I had to make the changes seen below.*/
     @Override
     public Tag createTag(Tag tag, User userToCheckIfBlocked) {
         PermissionHelper.isBlocked(userToCheckIfBlocked, UNAUTHORIZED_OPERATION);
@@ -55,7 +53,6 @@ public class TagServiceImpl implements TagService {
         tagRepository.updateTag(tag);
     }
 
-    /*TODO PLAMEN */
     @Override
     public Tag updateTag(Tag tag, User userToCheckIfBlocked) {
         PermissionHelper.isBlocked(userToCheckIfBlocked, UNAUTHORIZED_OPERATION);

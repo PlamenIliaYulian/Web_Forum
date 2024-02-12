@@ -19,7 +19,6 @@ public class AvatarServiceImpl implements AvatarService {
         return avatarRepository.createAvatar(avatar);
     }
 
-    /*TODO July - done*/
     @Override
     public Avatar getDefaultAvatar() {
         return avatarRepository.getDefaultAvatar();

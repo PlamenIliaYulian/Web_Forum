@@ -55,7 +55,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.updateUser(userToBeUpdated);
     }
 
-    /*TODO JULY - DONE*/
     @Override
     public List<User> getAllUsers(UserFilterOptions userFilterOptions) {
         return userRepository.getAllUsers(userFilterOptions);
@@ -80,7 +79,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.getUserByUsername(username);
     }
 
-    /*TODO PLAMEN */
     @Override
     public User getUserByEmail(String email,
                                User userIsAuthorized) {
@@ -147,7 +145,6 @@ public class UserServiceImpl implements UserService {
         return userToDoChanges;
     }
 
-    /*TODO JULY  - DONE*/
     @Override
     public long getAllUsersCount() {
         return userRepository.getAllUsersCount();

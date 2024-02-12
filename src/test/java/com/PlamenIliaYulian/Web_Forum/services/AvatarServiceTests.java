@@ -35,6 +35,7 @@ public class AvatarServiceTests {
 
     }
 
+    @Test
     public void getDefaultAvatar_Should_CallAvatarRepositoryAndPass(){
         Mockito.when(avatarRepository.getDefaultAvatar())
                 .thenReturn(new Avatar());

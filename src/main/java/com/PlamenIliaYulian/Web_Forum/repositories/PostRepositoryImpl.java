@@ -64,8 +64,7 @@ public class PostRepositoryImpl implements PostRepository {
         return post;
     }
 
-
-    /*TODO Plamen adjust the filtering regarding the likes/dislikes + tags + createdAfter*/
+    /*TODO tags*/
     @Override
     public List<Post> getAllPosts(PostFilterOptions postFilterOptions) {
 

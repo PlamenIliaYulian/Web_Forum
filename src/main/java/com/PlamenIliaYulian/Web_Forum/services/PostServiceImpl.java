@@ -43,7 +43,6 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post createPost(Post post, User authenticatedUser) {
         PermissionHelper.isBlocked(authenticatedUser, UNAUTHORIZED_OPERATION);
-        /*TODO implement unique title verification*/
         post.setCreatedOn(LocalDateTime.now());
         post.setCreatedBy(authenticatedUser);
         return postRepository.createPost(post);
@@ -162,13 +161,11 @@ public class PostServiceImpl implements PostService {
         return postRepository.updatePost(postToRemoveCommentFrom);
     }
 
-    /*TODO JULY - DONE */
     @Override
     public Long getAllPostsCount() {
         return postRepository.getAllPostsCount();
     }
 
-    /*TODO PLAMEN */
     @Override
     public List<Post> getMostCommentedPosts() {
         return postRepository.getMostCommentedPosts();
@@ -179,13 +176,11 @@ public class PostServiceImpl implements PostService {
         return postRepository.getMostLikedPosts();
     }
 
-    /*TODO JULY - DONE */
     @Override
     public List<Post> getMostRecentlyCreatedPosts() {
         return postRepository.getMostRecentlyCreatedPosts();
     }
 
-    /*TODO PLAMEN */
     @Override
     public List<Post> getPostsByCreator(User user) {
         return postRepository.getPostsByCreator(user);
