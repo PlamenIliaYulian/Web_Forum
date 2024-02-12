@@ -45,6 +45,13 @@ public class ModelsMapperImpl implements ModelsMapper {
         postWeGotFromTitle.setTitle(postDto.getTitle());
         return postWeGotFromTitle;
     }
+    @Override
+    public Post postFromDto(PostDto postDto, int id) {
+        Post post = postService.getPostById(id);
+        post.setContent(postDto.getContent());
+        post.setTitle(postDto.getTitle());
+        return post;
+    }
 
     @Override
     public User userFromAdministrativeDto(UserAdministrativeDto userAdministrativeDto, String username) {
@@ -206,6 +213,14 @@ public class ModelsMapperImpl implements ModelsMapper {
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword());
         return user;
+    }
+
+    @Override
+    public PostDto postDtoFromPost(Post post) {
+        PostDto postDto = new PostDto();
+        postDto.setTitle(post.getTitle());
+        postDto.setContent(post.getContent());
+        return postDto;
     }
 
     @Override

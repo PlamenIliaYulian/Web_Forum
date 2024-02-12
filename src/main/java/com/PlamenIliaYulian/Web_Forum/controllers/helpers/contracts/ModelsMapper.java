@@ -5,7 +5,7 @@ import com.PlamenIliaYulian.Web_Forum.models.dtos.*;
 
 public interface ModelsMapper {
     Post postFromDto(PostDto postDto);
-
+    Post postFromDto(PostDto postDto, int id);
     Comment commentFromDto(CommentDto commentDto);
     Comment commentFromDto(CommentDto commentDto, String content);
     Comment commentFromDto(CommentDto commentDto, int id);
@@ -15,6 +15,7 @@ public interface ModelsMapper {
     Tag tagFromDto(TagDto tagDto, int id);
     User userFromDto(UserDto userDto);
     User userFromDtoUpdate(UserDto userDto, int id);
+    PostDto postDtoFromPost(Post post);
 
     Post postFromDto(PostDto postDto, Post postWeGotFromTitle);
 

@@ -3,6 +3,7 @@ package com.PlamenIliaYulian.Web_Forum.controllers.MVC;
 import com.PlamenIliaYulian.Web_Forum.controllers.helpers.AuthenticationHelper;
 import com.PlamenIliaYulian.Web_Forum.controllers.helpers.contracts.ModelsMapper;
 import com.PlamenIliaYulian.Web_Forum.exceptions.AuthenticationException;
+import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.models.Role;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
@@ -110,6 +111,10 @@ public class UserMvcController {
             return "SingleUser";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "Error";
         }
     }
 
@@ -126,6 +131,10 @@ public class UserMvcController {
             return "SingleUserPosts";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "Error";
         }
     }
 
@@ -141,6 +150,10 @@ public class UserMvcController {
             return "SingleUserComments";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "Error";
         }
     }
 
@@ -162,6 +175,10 @@ public class UserMvcController {
             return "UserEdit";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "Error";
         }
     }
 
@@ -189,6 +206,10 @@ public class UserMvcController {
         } catch (AuthenticationException e) {
             model.addAttribute("error", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             return "Error";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "Error";
         }
     }
 
@@ -212,6 +233,10 @@ public class UserMvcController {
         } catch (AuthenticationException e) {
             model.addAttribute("error", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             return "Error";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "Error";
         }
     }
 
@@ -231,6 +256,10 @@ public class UserMvcController {
             return "redirect:/{id}";
         } catch (AuthenticationException e) {
             model.addAttribute("error", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            return "Error";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
             return "Error";
         }
     }
@@ -262,6 +291,10 @@ public class UserMvcController {
         } catch (AuthenticationException e) {
             model.addAttribute("error", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             return "Error";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "Error";
         }
     }
 
@@ -280,6 +313,10 @@ public class UserMvcController {
             return "DeleteConfirmation";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "Error";
         }
     }
 
@@ -300,6 +337,10 @@ public class UserMvcController {
             return "Home";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "Error";
         }
     }
 
