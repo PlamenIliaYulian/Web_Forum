@@ -242,7 +242,6 @@ public class TagRestController {
                     )
             })
     @SecurityRequirement(name = "Authorization")
-    /*Plamen*/
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void deleteTag(@RequestHeader HttpHeaders headers,

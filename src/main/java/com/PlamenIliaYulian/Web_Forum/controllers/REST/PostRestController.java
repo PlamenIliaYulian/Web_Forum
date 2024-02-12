@@ -117,7 +117,6 @@ public class PostRestController {
         }
     }
 
-    /*Plamen*/
     @Operation(
             summary = "Deletes specific post from the system.",
             description = "Used to soft delete specific post from the system by given ID.",
@@ -162,7 +161,6 @@ public class PostRestController {
                             }
                     )
             })
-    /*Plamen*/
     @SecurityRequirement(name = "Authorization")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
@@ -253,6 +251,7 @@ public class PostRestController {
         }
     }
 
+    /*TODO Swagger Plamkata*/
     @GetMapping("/search")
     public List<Post> getAllPosts(@RequestHeader HttpHeaders headers,
                                   @RequestParam(required = false) Integer minLikes,
@@ -276,7 +275,6 @@ public class PostRestController {
         }
     }
 
-    /*Plamen*/
     @Operation(
             summary = "Retrieves specific post in the system.",
             description = "Used to find a post by given title in the system.",
@@ -377,6 +375,7 @@ public class PostRestController {
         }
     }
 
+    /*TODO Swagger Yuli*/
     @PutMapping("/{id}/likes")
     public Post likePost(@RequestHeader HttpHeaders headers,
                          @PathVariable int id) {
@@ -440,7 +439,6 @@ public class PostRestController {
                     ),
             })
     @SecurityRequirement(name = "Authorization")
-    /*Plamen*/
     @PutMapping("/{id}/dislikes")
     public Post dislikePost(@RequestHeader HttpHeaders headers,
                             @PathVariable int id) {
@@ -530,6 +528,7 @@ public class PostRestController {
         }
     }
 
+    /*TODO Swagger Ilia*/
     @DeleteMapping("/{id}/tags/{tagName}")
     public Post removeTagFromPost(@RequestHeader HttpHeaders headers,
                                   @PathVariable int id,
@@ -599,7 +598,6 @@ public class PostRestController {
                     )
             })
     @SecurityRequirement(name = "Authorization")
-    /*Plamen*/
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{id}/comments")
     public Post addCommentToPost(@RequestHeader HttpHeaders headers,
@@ -619,6 +617,7 @@ public class PostRestController {
         }
     }
 
+    /*TODO Swagger Plamkata*/
     @DeleteMapping("/{id}/comments/{comment}")
     public Post removeCommentFromPost(@RequestHeader HttpHeaders headers,
                                       @PathVariable int id,

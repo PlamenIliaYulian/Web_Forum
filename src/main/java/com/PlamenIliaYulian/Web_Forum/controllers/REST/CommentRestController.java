@@ -49,6 +49,7 @@ public class CommentRestController {
         this.modelsMapper = modelsMapper;
     }
 
+    /*TODO Swagger Ilia*/
     @GetMapping("/search")
     public List<Comment> getAllComments(@RequestHeader HttpHeaders headers,
                                         @RequestParam(required = false) String content,

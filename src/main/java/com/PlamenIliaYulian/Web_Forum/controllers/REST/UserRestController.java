@@ -46,8 +46,6 @@ public class UserRestController {
         this.modelsMapper = modelsMapper;
     }
 
-    /*Plamen*/
-
     @Operation(
             summary = "Creates new user in the system.",
             description = "Used to created new user with given username, first name, last name, password and email",
@@ -137,7 +135,6 @@ public class UserRestController {
         }
     }
 
-    /*Yuli - implemented:*/
     @Operation(
             summary = "Updates the information of the user found by the numeric ID.",
             description = "Used to update User's first name, last name, email or password.",
@@ -270,8 +267,6 @@ public class UserRestController {
         }
     }
 
-    /*Yuli swagger operation.*/
-
     @Operation(
             summary = "Retrieves information related to a specific users registered in the system.",
             description = "Used to retrieve information about users with optional filtering applied.",
@@ -319,7 +314,6 @@ public class UserRestController {
                             }
                     )
             })
-    /*Plamen*/
     @SecurityRequirement(name = "Authorization")
     @GetMapping("/search")
     public List<User> getAllUsers(@RequestHeader HttpHeaders headers,
@@ -501,8 +495,6 @@ public class UserRestController {
         }
     }
 
-    /*Plamen*/
-    /*We have to find a better way to set the phone number.*/
     @Operation(
             summary = "Uploads a phone number to user's profile.",
             description = "Used to update user's profile by updating their phone number.",
