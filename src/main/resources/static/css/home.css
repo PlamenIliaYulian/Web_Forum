@@ -74,13 +74,101 @@ translateY()
 /*CSS FOR DIFFERENT FRAGMENTS - START*/
 
 
-#main-content-container {
+#main-content-container,
+#singleUser-main-content-container{
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
+#singleUser-main-content-container{
+    flex-direction: row;
+    padding: 50px;
+    justify-content: center;
+    align-items: start;
+    min-height: 100vh;
+}
+
+#user-profile-information-container{
+    /*background-color: #AF00C2;*/
+    padding: 100px;
+    border-radius: 20px;
+    max-width: 20%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.75);
+    overflow: hidden;
+}
+#username{
+    padding-left: 20px;
+    font-weight: bold;
+    font-size: 40px;
+}
+#user-picture-container{
+    width: 200px;
+    height: 200px;
+    border-radius: 1000px;
+    background-position: center;
+    padding: 30px 30px 60px;
+}
+
+#icon-plus-username-container,
+#icon-plus-firstname-container,
+#icon-plus-lastname-container,
+#icon-plus-email-container,
+#icon-plus-role-container,
+#icon-plus-phoneNumber-container,
+#icon-plus-isBlocked-container,
+#icon-plus-isDeleted-container{
+    display: flex;
+    font-size: 25px;
+    font-weight: bold;
+    padding-bottom: 20px;
+}
+
+#icon-plus-username-container .material-symbols-outlined,
+#icon-plus-firstname-container .material-symbols-outlined,
+#icon-plus-lastname-container .material-symbols-outlined,
+#icon-plus-email-container .material-symbols-outlined,
+#icon-plus-role-container .material-symbols-outlined,
+#icon-plus-phoneNumber-container .material-symbols-outlined,
+#icon-plus-isBlocked-container .material-symbols-outlined,
+#icon-plus-isDeleted-container .material-symbols-outlined,
+form .material-symbols-outlined
+{
+    padding-right: 15px;
+    color: rgba(0, 0, 0, .5);
+}
+
+.single-user-forms-container{
+    display: flex;
+}
+
+.single-user-page-button{
+    margin-right: 20px;
+    height: 50px;
+    padding: 15px;
+}
+
+.delete-button{
+    background: darkred;
+    border: none;
+    color: white;
+    border-radius: 100px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.edit-button{
+    background: rgba(168, 152, 78, 0.8);
+    border: none;
+    color: white;
+    border-radius: 100px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
 
 #main-register-and-loginpage-content-container {
     display: flex;
@@ -272,6 +360,7 @@ translateY()
 .topTen{
     font-size: 50px;
     font-weight: bold;
+    text-align: center;
 }
 
 .topTen-posts-container{

@@ -200,7 +200,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public List<Post> getPostsByCreator(User user) {
         try (Session session = sessionFactory.openSession();) {
-            Query<Post> query = session.createQuery("from Post where createdBy = :creatorId AND isDeleted = false",
+            Query<Post> query = session.createQuery("from Post where createdBy.id = :creatorId AND isDeleted = false",
                     Post.class);
             query.setParameter("creatorId", user.getUserId());
             return query.list();

@@ -3,6 +3,7 @@ package com.PlamenIliaYulian.Web_Forum.controllers.MVC;
 import com.PlamenIliaYulian.Web_Forum.controllers.helpers.AuthenticationHelper;
 import com.PlamenIliaYulian.Web_Forum.controllers.helpers.contracts.ModelsMapper;
 import com.PlamenIliaYulian.Web_Forum.exceptions.AuthenticationException;
+import com.PlamenIliaYulian.Web_Forum.models.Role;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.PhoneNumberDto;
@@ -13,6 +14,7 @@ import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.PostService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.RoleService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -46,9 +48,36 @@ public class UserMvcController {
         this.roleService = roleService;
     }
 
+    @ModelAttribute("requestURI")
+    public String requestURI(final HttpServletRequest request) {
+        return request.getRequestURI();
+    }
+
+    @ModelAttribute("isAdmin")
+    public boolean populateIsLoggedAndAdmin(HttpSession httpSession) {
+        return (httpSession.getAttribute("currentUser") != null &&
+                authenticationHelper
+                        .tryGetUserFromSession(httpSession)
+                        .getRoles()
+                        .contains(roleService.getRoleById(1)));
+    }
+
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession httpSession) {
         return httpSession.getAttribute("currentUser") != null;
+    }
+
+    @ModelAttribute("loggedUser")
+    public User populateLoggedUser(HttpSession httpSession) {
+        if(httpSession.getAttribute("currentUser") != null){
+            return authenticationHelper.tryGetUserFromSession(httpSession);
+        }
+        return new User();
+    }
+
+    @ModelAttribute("adminRole")
+    public Role populateAdminRole() {
+        return roleService.getRoleById(1);
     }
 
     @GetMapping
@@ -72,8 +101,12 @@ public class UserMvcController {
                                      HttpSession session) {
 
         try {
-            authenticationHelper.tryGetUserFromSession(session);
-            model.addAttribute("userById", userService.getUserById(id));
+            User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
+            User user = userService.getUserById(id);
+            model.addAttribute("userById", user);
+            model.addAttribute("userPosts",postService.getPostsByCreator(user));
+            model.addAttribute("userComments",commentService.getCommentsByCreator(user));
+            model.addAttribute("loggedInUser",loggedInUser);
             return "SingleUser";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
@@ -104,7 +137,7 @@ public class UserMvcController {
             authenticationHelper.tryGetUserFromSession(session);
             User user = userService.getUserById(id);
             model.addAttribute("userById", user);
-            model.addAttribute("userPosts",commentService.getCommentsByCreator(user));
+            model.addAttribute("userComments",commentService.getCommentsByCreator(user));
             return "SingleUserComments";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";

@@ -127,7 +127,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public List<Comment> getCommentsByCreator(User user) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Comment> query = session.createQuery("from Comment where createdBy = :id and isDeleted = false ", Comment.class);
+            Query<Comment> query = session.createQuery("from Comment where createdBy.id = :id and isDeleted = false ", Comment.class);
             query.setParameter("id", user.getUserId());
             return query.list();
         }

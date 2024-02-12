@@ -1,35 +1,35 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:fragment="head(title)">
     <meta charset="UTF-8">
-    <title>Fragments</title>
+    <title th:text="${title}">Title</title>
 
     <!--Google Icons start-->
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
     <!--Google Icons end-->
-    <link href="../static/css/css/reset.css" th:href="@{/css/css/reset.css}" rel="stylesheet"/>
-    <link href="../static/css/css/home.css" th:href="@{/css/css/home.css}" rel="stylesheet"/>
+    <link href="../static/css/reset.css" th:href="@{/css/reset.css}" rel="stylesheet"/>
+    <link href="../static/css/home.css" th:href="@{/css/home.css}" rel="stylesheet"/>
 </head>
 <body>
 
 <header th:fragment="header" id="header">
     <div id="header-links-container">
         <a href="#" th:href="@{/home}" th:text="#{homepage.home}">Home</a>
-        <a th:if="${isAuthenticated}" th:text="#{homepage.createPost}" href="#" th:href="@{/posts/new}">Create post</a>
+        <a th:if="${isAuthenticated}" th:text="#{homepage.createPost}" href="#" th:href="@{/posts/new}">Create new post</a>
         <a th:if="${isAuthenticated}" th:text="#{homepage.browseAllPosts}" href="#" th:href="@{/posts}">Browse post</a>
         <a th:if="${isAuthenticated}" th:text="#{homepage.browseAllUsers}" href="#" th:href="@{/users}">Browse users</a>
         <a th:unless="${isAuthenticated}" href="#" th:href="@{/auth/login}" th:text="#{homepage.login}">Login</a>
         <a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/register}" th:text="#{homepage.register}">Register</a>
         <a href="#" th:if="${isAdmin}" th:href="@{/admin-panel/main}" th:text="#{homepage.adminPanel}">Admin panel</a>
         <a href="#" th:href="@{/home/about}" th:text="#{homepage.about}">About</a>
-        <a href="#" th:if="${isAuthenticated}" th:text="${session.currentUser}">Profile</a>
+        <a href="#" th:if="${isAuthenticated}" th:text="${session.currentUser}" th:href="@{/users/{id}(id=${loggedUser.getUserId()})}">Profile</a>
         <a href="#" th:if="${isAuthenticated}" th:href="@{/auth/logout}" th:text="#{homepage.logout}">Logout</a>
     </div>
 </header>
 
 
-<footer th:fragment="footer" id="webPage-footer">
+<footer th:fragment="gradient-footer" id="webPage-footer">
     <p>@Copyright PlamkataIliikataYulkata inc. 2024</p>
 </footer>
 

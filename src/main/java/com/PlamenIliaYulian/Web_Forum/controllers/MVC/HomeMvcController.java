@@ -1,6 +1,7 @@
 package com.PlamenIliaYulian.Web_Forum.controllers.MVC;
 
 import com.PlamenIliaYulian.Web_Forum.controllers.helpers.AuthenticationHelper;
+import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.PostService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.RoleService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
@@ -47,6 +48,14 @@ public class HomeMvcController {
                         .tryGetUserFromSession(httpSession)
                         .getRoles()
                         .contains(roleService.getRoleById(1)));
+    }
+
+    @ModelAttribute("loggedUser")
+    public User populateLoggedUser(HttpSession httpSession) {
+        if(httpSession.getAttribute("currentUser") != null){
+            return authenticationHelper.tryGetUserFromSession(httpSession);
+        }
+        return new User();
     }
 
     @GetMapping

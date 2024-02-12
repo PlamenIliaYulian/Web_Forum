@@ -105,6 +105,14 @@ public class AuthenticationMvcController {
         return httpSession.getAttribute("currentUser") != null;
     }
 
+    @ModelAttribute("loggedUser")
+    public User populateLoggedUser(HttpSession httpSession) {
+        if(httpSession.getAttribute("currentUser") != null){
+            return authenticationHelper.tryGetUserFromSession(httpSession);
+        }
+        return new User();
+    }
+
     @ModelAttribute("isAdmin")
     public boolean populateIsLoggedAndAdmin(HttpSession httpSession) {
         return (httpSession.getAttribute("currentUser") != null &&
