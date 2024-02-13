@@ -16,14 +16,14 @@
     <div class="webPage-container">
         <header th:fragment="header" id="header">
             <div id="header-links-container">
-                <a href="#" th:href="@{/home}" th:text="#{homepage.home}">Home</a>
+                <a href="#" th:href="@{/}" th:text="#{homepage.home}">Home</a>
                 <a th:if="${isAuthenticated}" th:text="#{homepage.createPost}" href="#" th:href="@{/posts/new}">Create new post</a>
                 <a th:if="${isAuthenticated}" th:text="#{homepage.browseAllPosts}" href="#" th:href="@{/posts}">Browse post</a>
                 <a th:if="${isAuthenticated}" th:text="#{homepage.browseAllUsers}" href="#" th:href="@{/users}">Browse users</a>
                 <a th:unless="${isAuthenticated}" href="#" th:href="@{/auth/login}" th:text="#{homepage.login}">Login</a>
                 <a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/register}" th:text="#{homepage.register}">Register</a>
                 <a href="#" th:if="${isAdmin}" th:href="@{/admin-panel/main}" th:text="#{homepage.adminPanel}">Admin panel</a>
-                <a href="#" th:href="@{/home/about}" th:text="#{homepage.about}">About</a>
+                <a href="#" th:href="@{/about}" th:text="#{homepage.about}">About</a>
                 <a href="#" th:if="${isAuthenticated}" th:text="${session.currentUser}" th:href="@{/users/{id}(id=${loggedUser.getUserId()})}">Profile</a>
                 <a href="#" th:if="${isAuthenticated}" th:href="@{/auth/logout}" th:text="#{homepage.logout}">Logout</a>
             </div>
@@ -68,11 +68,9 @@
                 <div class= "single-user-forms-container"
                      th:if="${loggedInUser.getUserId()} == ${userById.getUserId()} OR ${isAdmin}">
                     <form action="#" th:action="@{__${requestURI}__/edit}" method="get">
-                        <span class="material-symbols-outlined">edit</span>
                         <input class="single-user-page-button edit-button" type="submit" value="Edit profile" >
                     </form>
                     <form action="#" th:action="@{__${requestURI}__/edit/delete}" method="get">
-                        <span class="material-symbols-outlined">delete</span>
                         <input class="single-user-page-button delete-button" type="submit" value="Delete profile">
                     </form>
                 </div>
