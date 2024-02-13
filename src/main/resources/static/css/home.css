@@ -292,7 +292,71 @@ input#hide-comment:checked ~ div#content-comments{
     color: white;
 }
 
+.delete-page-container{
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(
+            farthest-side at bottom left,
+            #AF00C2,
+            transparent
+    ),
+    radial-gradient(
+            farthest-corner at top right,
+            #900056,
+            transparent
+    ),
+    radial-gradient(
+            #C24700,
+            transparent
+    );
 
+}
+#delete-user-form-container{
+    padding: 50px;
+    border-radius: 20px;
+    background: white;
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.8);
+}
+#delete-user-form-container p{
+    padding-bottom: 20px;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+#delete-user-form-container a{
+    font-weight: bold;
+    color: black;
+    padding-left: 30px;
+}
+
+#delete-cancel-buttons-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+#delete-button{
+    color: white;
+    background: darkred;
+    padding: 20px;
+    border-radius: 100px;
+    border: none;
+    font-weight: bold;
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.8);
+}
+
+#cancel-button{
+    color: white;
+    background: darkgreen;
+    padding: 20px;
+    border-radius: 100px;
+    border: none;
+    font-weight: bold;
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.8);
+}
 
 .error {
     color: red;
@@ -548,6 +612,7 @@ input#hide-comment:checked ~ div#content-comments{
 }
 
 .userNameCreationDateLikesTags-container {
+    width: 100%;
     display: flex;
 }
 

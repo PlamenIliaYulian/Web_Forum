@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<!--<div th:replace="~{Fragments.html :: head(${userById.getUserName()+'`s profile'})}"></div>-->
 <head th:fragment="head(title)">
     <meta charset="UTF-8">
     <title th:text="${title}">Title</title>
@@ -129,9 +128,13 @@
                                         <div class="tag-name-container">
                                             <p class="tagName" th:unless="${post.getTags().isEmpty()}" th:text="${'#'+post.getTags().toArray()[0]}">#SomeVeryLongWord</p>
                                         </div>
-
                                     </div>
+
+                                    <form th:if="${loggedInUser.getUserId() == post.getCreatedBy().getUserId()}" action="#" th:action="@{/posts/{postId}/edit(postId=${post.getPostId()})}" method="get">
+                                        <input class="single-user-page-button edit-button" type="submit" value="Edit">
+                                    </form>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -170,10 +173,7 @@
                                         <span class="material-symbols-outlined" >calendar_month</span>
                                         <p class="creationDate" th:text="${comment.getCreatedOn()}">24.01.31 07:00:00</p>
                                     </div>
-                                    <!--<div class="commentIconPlusCommentsCount-container">
-                                        <span class="material-symbols-outlined" >comment</span>
-                                        <p th:text="${post.getRelatedComments().size()}">10</p>
-                                    </div>-->
+
                                 </div>
 
 
@@ -186,12 +186,9 @@
                                         <span class="material-symbols-outlined">thumb_down</span>
                                         <p class="likesCount" th:text="${comment.getDislikes()}">123</p>
                                     </div>
-                                    <!--<div class="TagIconPlusTag-container">
-                                        <span class="material-symbols-outlined">loyalty</span>
-                                        <div class="tag-name-container">
-                                            <p class="tagName" th:unless="${post.getTags().isEmpty()}" th:text="${'#'+post.getTags().toArray()[0]}">#SomeVeryLongWord</p>
-                                        </div>
-                                    </div>-->
+                                    <form th:if="${loggedInUser.getUserId() == comment.getCreatedBy().getUserId()}" action="#" th:action="@{/posts/__${comment.getOriginalPost().getPostId()}__/comments/__${comment.getCommentId()}__/edit}" method="get">
+                                        <input class="single-user-page-button edit-button" type="submit" value="Edit">
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -204,7 +201,6 @@
 
         </div>
 
-        <!--<div th:replace="~{Fragments.html :: gradient-footer}"></div>-->
         <footer th:fragment="gradient-footer" id="webPage-footer">
             <p>@Copyright PlamkataIliikataYulkata inc. 2024</p>
         </footer>

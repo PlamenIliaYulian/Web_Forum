@@ -59,7 +59,7 @@ public class AuthenticationMvcController {
         try {
             authenticationHelper.verifyAuthentication(loginDto.getUsername(), loginDto.getPassword());
             session.setAttribute("currentUser", loginDto.getUsername());
-            return "redirect:/home";
+            return "redirect:/";
         } catch (AuthenticationException e) {
             errors.rejectValue("username", "auth_error", e.getMessage());
             return "Login";
@@ -69,7 +69,7 @@ public class AuthenticationMvcController {
     @GetMapping("/logout")
     public String handleLogout(HttpSession session) {
         session.removeAttribute("currentUser");
-        return "redirect:/home";
+        return "redirect:/";
     }
 
     @GetMapping("/register")

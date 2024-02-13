@@ -1,10 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{Fragments.html:: head(#{delete.confirmation-head-message})}"></div>
 <body>
+<div th:replace="~{Fragments.html::header}"></div>
 
+<div class="delete-page-container">
+
+
+    <div id="delete-user-form-container">
+        <p th:text="#{delete-confirmation-message}"></p>
+        <div id="delete-cancel-buttons-container">
+            <form th:action="@{__${requestURI}__}"
+                  th:object="${loggedUser}"
+                  action="#" method="post">
+                <input id="delete-button" type="submit" th:value="Delete">
+            </form>
+            <a  href="#" th:href="@{/users/{id}(id=${loggedUser.getUserId()})}">
+                <input id="cancel-button" type="submit" th:value="Cancel">
+            </a>
+        </div>
+    </div>
+
+</div>
+
+
+<div th:replace="~{Fragments.html::white-footer}"></div>
 </body>
 </html>

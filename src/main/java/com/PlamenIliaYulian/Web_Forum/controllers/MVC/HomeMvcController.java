@@ -14,12 +14,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/home")
+@RequestMapping("/")
 public class HomeMvcController {
 
     private final UserService userService;
     private final PostService postService;
-
     private final AuthenticationHelper authenticationHelper;
     private final RoleService roleService;
 

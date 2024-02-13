@@ -334,7 +334,7 @@ public class UserMvcController {
             }
             session.removeAttribute("currentUser");
             userService.deleteUser(userById, userLoggedIn);
-            return "Home";
+            return "redirect:/";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
         } catch (EntityNotFoundException e) {
