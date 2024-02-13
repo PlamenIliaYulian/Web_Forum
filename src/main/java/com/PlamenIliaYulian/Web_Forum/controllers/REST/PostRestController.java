@@ -531,7 +531,72 @@ public class PostRestController {
         }
     }
 
-    /*TODO Swagger Ilia*/
+    @Operation(
+            summary = "Remove a tag from a post.",
+            description = "Remove a tag from a certain post by providing postId and tagName in the parameters.",
+            parameters = {
+                    @Parameter(
+                            name = "postId",
+                            description = "Post ID must be numeric.",
+                            example = "3"
+                    ),
+                    @Parameter(
+                            name = "tagName",
+                            description = "Tag name must be the same as the tag, desired to be removed.",
+                            example = "6"
+                    )
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success Response"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not Found status.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(
+                                                    name = "Missing post", value = "Post with ID '200' not found.",
+                                                    description = "There is no such post with the provided ID."),
+                                            @ExampleObject(name = "Missing tag", value = "Tag with tag 'something' not found.",
+                                                    description = "There is no such tag with the provided tagName.")
+                                    },
+                                    mediaType = "Plain text")
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Missing Authentication.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(
+                                                    name = "Not authenticated", value = "The requested resource requires authentication.",
+                                                    description = "You need to be authenticated to remove a tag from a post.")
+                                    },
+                                    mediaType = "Plain text")
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Not authorized.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(name = "Not authorized", value = "Unauthorized operation.",
+                                                    description = "Only admin or post creator can remove tag from a post.")
+                                    },
+                                    mediaType = "Plain text")
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad request.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(name = "Bad request", value = "Invalid user input operation.",
+                                                    description = "The post does not contain such a tag.")
+                                    },
+                                    mediaType = "Plain text")
+                    )
+            })
+    @SecurityRequirement(name = "Authorization")
     @DeleteMapping("/{id}/tags/{tagName}")
     public Post removeTagFromPost(@RequestHeader HttpHeaders headers,
                                   @PathVariable int id,
