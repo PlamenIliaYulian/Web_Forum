@@ -49,7 +49,58 @@ public class CommentRestController {
         this.modelsMapper = modelsMapper;
     }
 
-    /*TODO Swagger Ilia*/
+
+    @Operation(
+            summary = "Get all comments with option to filter and sort.",
+            description = "Get a list of all comments. Also through parameters you can filter out comments and sort them.",
+            parameters = {
+                    @Parameter(
+                            name = "content",
+                            description = "If the beer name consist provided text in the 'contebt' parameter.",
+                            example = "data algorithm"),
+                    @Parameter(
+                            name = "createdAfter",
+                            description = "Select the most distant creation date.",
+                            example = "2024-01-27 13:33:04"),
+                    @Parameter(
+                            name = "createdBefore",
+                            description = "Select the nearest creation date.",
+                            example = "2024-01-27 13:33:04"),
+                    @Parameter(
+                            name = "createdBy",
+                            description = "If the beer creator's name consist the text provided in the 'createdBy' parameter.",
+                            example = "john"),
+                    @Parameter(
+                            name = "sortBy",
+                            description = "You can choose to sort the comments list by 'likes', 'dislikes', 'content', 'createdOn' or 'createdBy'.",
+                            example = "likes"),
+                    @Parameter(
+                            name = "sortOrder",
+                            description = "You can choose to sort the comments list in descending order by typing 'desc'. The default is an ascending order.",
+                            example = "desc")
+
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success Response",
+                            content = @Content(
+                                    schema = @Schema(implementation = Comment.class),
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Missing Authentication.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(
+                                                    name = "Not authenticated", value = "The requested resource requires authentication.",
+                                                    description = "You need to be authenticated to view all comments.")
+                                    },
+                                    mediaType = "Plain text")
+                    )
+            })
+    @SecurityRequirement(name = "Authorization")
     @GetMapping("/search")
     public List<Comment> getAllComments(@RequestHeader HttpHeaders headers,
                                         @RequestParam(required = false) String content,

@@ -225,7 +225,7 @@ public class PostRepositoryImpl implements PostRepository {
             case "content":
                 orderBy = "content";
                 break;
-            case "createdBefore":
+            case "createdOn":
                 orderBy = "createdOn";
                 break;
             case "createdBy":

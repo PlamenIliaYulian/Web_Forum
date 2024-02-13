@@ -1,3 +1,10 @@
+create table avatars
+(
+    avatar_id int auto_increment
+        primary key,
+    avatar    mediumblob not null
+);
+
 create table roles
 (
     role_id int auto_increment
@@ -28,13 +35,13 @@ create table users
         unique (user_email)
 );
 
-create table avatars
+create table avatars_users
 (
-    avatar_id int auto_increment
-        primary key,
-    user_id   int      not null,
-    avatar    longblob not null,
-    constraint avatars_users_user_id_fk
+    avatar_id int not null,
+    user_id   int not null,
+    constraint avatars_users_avatars_avatar_id_fk
+        foreign key (avatar_id) references avatars (avatar_id),
+    constraint avatars_users_users_user_id_fk
         foreign key (user_id) references users (user_id)
 );
 
@@ -212,4 +219,3 @@ create table users_roles
     constraint users_roles_users_user_id_fk
         foreign key (user_id) references users (user_id)
 );
-

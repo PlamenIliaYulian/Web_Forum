@@ -148,7 +148,7 @@ public class CommentRepositoryImpl implements CommentRepository {
             case "content":
                 orderBy = "content";
                 break;
-            case "createdBefore":
+            case "createdOn":
                 orderBy = "createdOn";
                 break;
             case "createdBy":
