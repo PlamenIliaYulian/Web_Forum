@@ -1,10 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{Fragments.html::head(#{profile.edit})}"></div>
 <body>
+
+<div class="webPage-container">
+
+    <div th:replace="~{Fragments.html::header}"></div>
+
+
+
+    <div id="user-profile-information-container">
+        <!--<div id="icon-plus-username-container">
+            <p id="username" th:text="${userById.getUserName()}">Very long username</p>
+        </div>-->
+        <img id="user-picture-container" src="../static/images/user_photo.png" th:src="@{/images/user_photo.png}">
+
+        <form id="uploadForm" method="post" th:action="@{__${requestURI}__/UploadAvatar}" enctype="multipart/form-data">
+            <input id="input-file" type="file" name="file" />
+            <button type="submit">Upload</button>
+        </form>
+
+
+        <form action="#" th:object="${userMvcDtoUpdate}" th:action="@{__${requestURI}__}" method="post">
+            <div id="icon-plus-firstname-container">
+                <span class="material-symbols-outlined">person</span>
+                <input type="text" th:field="*{firstName}" th:placeholder="#{register.firstname}">
+                <label class="error" th:errors="*{firstName}"> First name error placeholder. </label>
+            </div>
+
+            <div id="icon-plus-lastname-container">
+                <span class="material-symbols-outlined">person</span>
+                <input type="text" th:field="*{lastName}" th:placeholder="#{register.lastname}">
+                <label class="error" th:errors="*{lastName}"> Last name error placeholder. </label>
+            </div>
+
+            <div id="icon-plus-email-container">
+                <span class="material-symbols-outlined">email</span>
+                <input type="text" th:field="*{email}" th:placeholder="#{register.email}">
+                <label class="error" th:errors="*{email}"> Email error placeholder. </label>
+            </div>
+
+            <div id="icon-plus-password-container">
+                <span class="material-symbols-outlined">password</span>
+                <input type="password" th:field="*{password}" th:placeholder="#{register.password}">
+                <label class="error" th:errors="*{password}"> Password error placeholder. </label>
+            </div>
+
+            <div id="icon-plus-confirmPassword-container">
+                <span class="material-symbols-outlined">password</span>
+                <input type="password" th:field="*{confirmPassword}" th:placeholder="#{register.confirmPassword}">
+                <label class="error" th:errors="*{confirmPassword}"> Password error placeholder. </label>
+            </div>
+
+            <div th:if="${isAdmin}" id="icon-plus-phoneNumber-container">
+                <span class="material-symbols-outlined">settings_phone</span>
+                <input type="text" th:field="*{phoneNumber}" th:placeholder="#{profile.edit.phoneNumber}">
+            </div>
+
+            <input class="register-and-login-general-button" type="submit" th:value="Save" id="login-button" value="Save">
+        </form>
+
+
+
+    </div>
+
+
+</div>
+<div th:replace="~{Fragments.html::gradient-footer}"></div>
 
 </body>
 </html>

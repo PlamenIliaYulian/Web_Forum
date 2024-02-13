@@ -30,4 +30,6 @@ public interface ModelsMapper {
     UserFilterOptions userFilterOptionsFromUsernameOptionsDto(UserFilterByUsernameOptionsDto dto);
     User userFromRegisterDto(RegisterDto registerDto);
     CommentDto commentDtoFromComment(Comment commentToBeEdited);
+
+    UserMvcDtoUpdate userMvcDtoFromUser(User userById);
 }

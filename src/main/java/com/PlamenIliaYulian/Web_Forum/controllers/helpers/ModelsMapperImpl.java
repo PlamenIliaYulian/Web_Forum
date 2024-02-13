@@ -98,6 +98,7 @@ public class ModelsMapperImpl implements ModelsMapper {
         user.setLastName(userMvcDtoUpdate.getLastName());
         user.setEmail(userMvcDtoUpdate.getEmail());
         user.setPassword(userMvcDtoUpdate.getPassword());
+        user.setPhoneNumber(userMvcDtoUpdate.getPhoneNumber());
         return user;
     }
 
@@ -158,6 +159,16 @@ public class ModelsMapperImpl implements ModelsMapper {
         CommentDto commentDto = new CommentDto();
         commentDto.setComment(commentToBeEdited.getContent());
         return commentDto;
+    }
+
+    @Override
+    public UserMvcDtoUpdate userMvcDtoFromUser(User userById) {
+        UserMvcDtoUpdate userMvcDtoUpdate = new UserMvcDtoUpdate();
+        userMvcDtoUpdate.setFirstName(userById.getFirstName());
+        userMvcDtoUpdate.setLastName(userById.getLastName());
+        userMvcDtoUpdate.setEmail(userById.getEmail());
+        userMvcDtoUpdate.setPhoneNumber(userById.getPhoneNumber());
+        return userMvcDtoUpdate;
     }
 
     @Override

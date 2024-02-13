@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserMvcController {
 
+    public static final String PASSWORD_CONFIRMATION_SHOULD_MATCH_PASSWORD = "Password confirmation should match password.";
     private final AuthenticationHelper authenticationHelper;
     private final ModelsMapper modelsMapper;
     private final UserService userService;
@@ -160,9 +161,7 @@ public class UserMvcController {
     @GetMapping("/{id}/edit")
     public String showEditPage(@PathVariable int id,
                                Model model,
-                               HttpSession session,
-                               @Valid @ModelAttribute("userDtoUpdate") UserMvcDtoUpdate userMvcDtoUpdate) {
-
+                               HttpSession session) {
         try {
             User userLoggedIn = authenticationHelper.tryGetUserFromSession(session);
             User userById = userService.getUserById(id);
@@ -170,6 +169,8 @@ public class UserMvcController {
                 model.addAttribute("error",HttpStatus.FORBIDDEN.getReasonPhrase());
                 return "Error";
             }
+            UserMvcDtoUpdate userMvcDtoUpdate = modelsMapper.userMvcDtoFromUser(userById);
+            model.addAttribute("userMvcDtoUpdate", userMvcDtoUpdate);
             model.addAttribute("userById", userById);
             model.addAttribute("userLoggedIn", userLoggedIn);
             return "UserEdit";
@@ -184,7 +185,7 @@ public class UserMvcController {
 
     @PostMapping("/{id}/edit")
     public String handleEditUser(@PathVariable int id,
-                                 @Valid @ModelAttribute("userDtoUpdate") UserMvcDtoUpdate userMvcDtoUpdate,
+                                 @Valid @ModelAttribute("userMvcDtoUpdate") UserMvcDtoUpdate userMvcDtoUpdate,
                                  BindingResult errors,
                                  HttpSession session,
                                  Model model) {
@@ -193,6 +194,10 @@ public class UserMvcController {
             return "UserEdit";
         }
 
+        if (!userMvcDtoUpdate.getPassword().equals(userMvcDtoUpdate.getConfirmPassword())) {
+            errors.rejectValue("passwordConfirm", "password_error", PASSWORD_CONFIRMATION_SHOULD_MATCH_PASSWORD);
+            return "UserEdit";
+        }
         try {
             User userLoggedIn = authenticationHelper.tryGetUserFromSession(session);
             User userById = userService.getUserById(id);
@@ -200,6 +205,7 @@ public class UserMvcController {
                 model.addAttribute("error", HttpStatus.FORBIDDEN.getReasonPhrase());
                 return "Error";
             }
+            model.addAttribute("userById", userById);
             User userUpdated = modelsMapper.userFromMvcDtoUpdate(userMvcDtoUpdate, id);
             userService.updateUser(userUpdated,userLoggedIn);
             return "redirect:/{id}";
