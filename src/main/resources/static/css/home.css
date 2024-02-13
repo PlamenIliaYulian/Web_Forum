@@ -1,5 +1,6 @@
 * {
     font-family: 'Roboto', sans-serif;
+    box-sizing: border-box;
 }
 
 .webPage-container {
@@ -85,7 +86,7 @@ translateY()
 #singleUser-main-content-container{
     flex-direction: row;
     padding: 50px;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: start;
     min-height: 100vh;
 }
@@ -94,11 +95,14 @@ translateY()
     /*background-color: #AF00C2;*/
     padding: 100px;
     border-radius: 20px;
-    max-width: 20%;
+    max-width: 30%;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    overflow-wrap: break-word;
+    word-break: break-all;
     box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.75);
-    overflow: hidden;
 }
 #username{
     padding-left: 20px;
@@ -125,6 +129,7 @@ translateY()
     font-size: 25px;
     font-weight: bold;
     padding-bottom: 20px;
+    max-width: 100%;
 }
 
 #icon-plus-username-container .material-symbols-outlined,
@@ -141,7 +146,48 @@ form .material-symbols-outlined
     color: rgba(0, 0, 0, .5);
 }
 
+#user-posts-and-comments-container{
+    padding-left: 30px;
+    min-width: 70%;
+}
+
+#show-hide-buttons-container{
+    display: flex;
+}
+
+input#show-post, input#hide-post,
+input#show-comment, input#hide-comment{
+    display:none;
+    transition: ease-out 3s;
+}
+
+div#content-posts,
+div#content-comments{
+    display:none;
+    transition: ease-out 3s;
+}
+input#show-post:checked ~ div#content-posts,
+input#show-comment:checked ~ div#content-comments{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    transition: ease-out 3s;
+}
+
+input#hide-post:checked ~ div#content-posts,
+input#hide-comment:checked ~ div#content-comments{
+    display:none;
+    transition: ease-out 3s;
+}
+
+.comment-content-container{
+    padding-bottom: 30px;
+}
 .single-user-forms-container{
+    display: flex;
+}
+
+.single-user-forms-container form{
     display: flex;
 }
 
@@ -256,8 +302,8 @@ form .material-symbols-outlined
 #search-bar-and-welcome-message-container {
     min-height: 30vh;
     width: 100%;
-    background-image: url("https://images.unsplash.com/photo-1580927752452-89d86da3fa0a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
-    /*background-image: url("https://images.unsplash.com/photo-1581472723648-909f4851d4ae?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");*/
+    /*background-image: url("https://images.unsplash.com/photo-1580927752452-89d86da3fa0a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");*/
+    background-image: url("https://images.unsplash.com/photo-1581472723648-909f4851d4ae?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
     /*background-image: url("https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1926&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");*/
     /*background-image: url("https://images.unsplash.com/photo-1629757509637-7c99379d6d26?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");*/
     background-repeat: no-repeat;
@@ -361,6 +407,14 @@ form .material-symbols-outlined
     font-size: 50px;
     font-weight: bold;
     text-align: center;
+    padding-bottom: 50px;
+}
+
+.expand-less-buttons{
+    font-size: 60px;
+    background: black;
+    color: white;
+    border-radius: 1000px;
 }
 
 .topTen-posts-container{
@@ -401,6 +455,14 @@ form .material-symbols-outlined
     border-bottom-right-radius: 5px;
 }
 
+.verticalColoredLine-red-orange{
+    min-width: 15px;
+    margin-right: 20px;
+    background: linear-gradient(360deg, rgb(186, 27, 60) 0%, rgb(221, 73, 43) 100%);
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
 .post-title-container{
     padding-bottom: 20px;
 }
@@ -416,6 +478,12 @@ form .material-symbols-outlined
     min-width: 50%;
     max-width: 50%;
     margin-bottom: 50px;
+}
+
+#user-posts-and-comments-container > .line-separator{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
 }
 
 

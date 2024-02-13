@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "comments")
-public class Comment implements Comparable<Comment>{
+public class Comment implements Comparable<Comment> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +52,13 @@ public class Comment implements Comparable<Comment>{
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> usersWhoDislikedComment;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinTable(name = "posts_comments",
+            joinColumns = @JoinColumn(name = "comment_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id"))
+    private Post originalPost;
+
     public Set<User> getUsersWhoLikedComment() {
         return usersWhoLikedComment;
     }
@@ -69,6 +76,14 @@ public class Comment implements Comparable<Comment>{
     }
 
     public Comment() {
+    }
+
+    public Post getOriginalPost() {
+        return originalPost;
+    }
+
+    public void setOriginalPost(Post originalPost) {
+        this.originalPost = originalPost;
     }
 
     public int getCommentId() {
