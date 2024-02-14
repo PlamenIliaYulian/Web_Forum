@@ -24,7 +24,7 @@ public interface UserService {
 
     User getUserById(int id);
 
-    User addAvatar(int userToBeUpdated, byte[] avatar, User userIsAuthorized);
+    User addAvatar(int userToBeUpdated, String avatar, User userIsAuthorized);
 
     User addPhoneNumber(User userToBeUpdated, String phoneNumber, User userIsAuthorized);
 

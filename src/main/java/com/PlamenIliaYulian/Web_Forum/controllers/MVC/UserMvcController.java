@@ -3,6 +3,7 @@ package com.PlamenIliaYulian.Web_Forum.controllers.MVC;
 import com.PlamenIliaYulian.Web_Forum.controllers.helpers.AuthenticationHelper;
 import com.PlamenIliaYulian.Web_Forum.controllers.helpers.contracts.ModelsMapper;
 import com.PlamenIliaYulian.Web_Forum.exceptions.AuthenticationException;
+import com.PlamenIliaYulian.Web_Forum.exceptions.DuplicateEntityException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.models.Role;
 import com.PlamenIliaYulian.Web_Forum.models.User;
@@ -11,10 +12,7 @@ import com.PlamenIliaYulian.Web_Forum.models.dtos.PhoneNumberDto;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.RegisterDto;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.UserFilterByUsernameOptionsDto;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.UserMvcDtoUpdate;
-import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
-import com.PlamenIliaYulian.Web_Forum.services.contracts.PostService;
-import com.PlamenIliaYulian.Web_Forum.services.contracts.RoleService;
-import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -23,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/users")
@@ -36,18 +35,21 @@ public class UserMvcController {
     private final CommentService commentService;
     private final RoleService roleService;
 
+    private final FileStorageService fileStorageService;
+
     public UserMvcController(AuthenticationHelper authenticationHelper,
                              ModelsMapper modelsMapper,
                              UserService userService,
                              PostService postService,
                              CommentService commentService,
-                             RoleService roleService) {
+                             RoleService roleService, FileStorageService fileStorageService) {
         this.authenticationHelper = authenticationHelper;
         this.modelsMapper = modelsMapper;
         this.userService = userService;
         this.postService = postService;
         this.commentService = commentService;
         this.roleService = roleService;
+        this.fileStorageService = fileStorageService;
     }
 
     @ModelAttribute("requestURI")
@@ -71,7 +73,7 @@ public class UserMvcController {
 
     @ModelAttribute("loggedUser")
     public User populateLoggedUser(HttpSession httpSession) {
-        if(httpSession.getAttribute("currentUser") != null){
+        if (httpSession.getAttribute("currentUser") != null) {
             return authenticationHelper.tryGetUserFromSession(httpSession);
         }
         return new User();
@@ -106,9 +108,9 @@ public class UserMvcController {
             User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
             User user = userService.getUserById(id);
             model.addAttribute("userById", user);
-            model.addAttribute("userPosts",postService.getPostsByCreator(user));
-            model.addAttribute("userComments",commentService.getCommentsByCreator(user));
-            model.addAttribute("loggedInUser",loggedInUser);
+            model.addAttribute("userPosts", postService.getPostsByCreator(user));
+            model.addAttribute("userComments", commentService.getCommentsByCreator(user));
+            model.addAttribute("loggedInUser", loggedInUser);
             return "SingleUser";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
@@ -128,7 +130,7 @@ public class UserMvcController {
             authenticationHelper.tryGetUserFromSession(session);
             User user = userService.getUserById(id);
             model.addAttribute("userById", user);
-            model.addAttribute("userPosts",postService.getPostsByCreator(user));
+            model.addAttribute("userPosts", postService.getPostsByCreator(user));
             return "SingleUserPosts";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
@@ -147,7 +149,7 @@ public class UserMvcController {
             authenticationHelper.tryGetUserFromSession(session);
             User user = userService.getUserById(id);
             model.addAttribute("userById", user);
-            model.addAttribute("userComments",commentService.getCommentsByCreator(user));
+            model.addAttribute("userComments", commentService.getCommentsByCreator(user));
             return "SingleUserComments";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
@@ -166,7 +168,7 @@ public class UserMvcController {
             User userLoggedIn = authenticationHelper.tryGetUserFromSession(session);
             User userById = userService.getUserById(id);
             if (!userLoggedIn.equals(userById)) {
-                model.addAttribute("error",HttpStatus.FORBIDDEN.getReasonPhrase());
+                model.addAttribute("error", HttpStatus.FORBIDDEN.getReasonPhrase());
                 return "Error";
             }
             UserMvcDtoUpdate userMvcDtoUpdate = modelsMapper.userMvcDtoFromUser(userById);
@@ -190,32 +192,40 @@ public class UserMvcController {
                                  HttpSession session,
                                  Model model) {
 
+        User userById = null;
+        try {
+            userById = userService.getUserById(id);
+            model.addAttribute("userById", userById);
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "Error";
+        }
+
         if (errors.hasErrors()) {
             return "UserEdit";
         }
 
         if (!userMvcDtoUpdate.getPassword().equals(userMvcDtoUpdate.getConfirmPassword())) {
-            errors.rejectValue("passwordConfirm", "password_error", PASSWORD_CONFIRMATION_SHOULD_MATCH_PASSWORD);
+            errors.rejectValue("confirmPassword", "password_error", PASSWORD_CONFIRMATION_SHOULD_MATCH_PASSWORD);
             return "UserEdit";
         }
         try {
             User userLoggedIn = authenticationHelper.tryGetUserFromSession(session);
-            User userById = userService.getUserById(id);
             if (!userLoggedIn.equals(userById)) {
                 model.addAttribute("error", HttpStatus.FORBIDDEN.getReasonPhrase());
                 return "Error";
             }
-            model.addAttribute("userById", userById);
+
             User userUpdated = modelsMapper.userFromMvcDtoUpdate(userMvcDtoUpdate, id);
-            userService.updateUser(userUpdated,userLoggedIn);
-            return "redirect:/{id}";
+            userService.updateUser(userUpdated, userLoggedIn);
+            return "redirect:/users/{id}";
         } catch (AuthenticationException e) {
             model.addAttribute("error", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             return "Error";
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "Error";
+        } catch (DuplicateEntityException e) {
+            errors.rejectValue("email", "email_exists", e.getMessage());
+            return "UserEdit";
         }
     }
 
@@ -258,7 +268,7 @@ public class UserMvcController {
                 model.addAttribute("error", HttpStatus.FORBIDDEN.getReasonPhrase());
                 return "Error";
             }
-            userService.deleteAvatar(id,userLoggedIn);
+            userService.deleteAvatar(id, userLoggedIn);
             return "redirect:/{id}";
         } catch (AuthenticationException e) {
             model.addAttribute("error", HttpStatus.UNAUTHORIZED.getReasonPhrase());
@@ -292,7 +302,7 @@ public class UserMvcController {
                 model.addAttribute("error", HttpStatus.FORBIDDEN.getReasonPhrase());
                 return "Error";
             }
-            userService.addPhoneNumber(userById,phoneNumber.getPhone(),userLoggedIn);
+            userService.addPhoneNumber(userById, phoneNumber.getPhone(), userLoggedIn);
             return "redirect:/{id}";
         } catch (AuthenticationException e) {
             model.addAttribute("error", HttpStatus.UNAUTHORIZED.getReasonPhrase());
@@ -348,6 +358,35 @@ public class UserMvcController {
             model.addAttribute("error", e.getMessage());
             return "Error";
         }
+    }
+
+    @PostMapping("/{id}/edit/photos/upload")
+    public String uploadFile(@PathVariable int id,
+                             Model model,
+                             @RequestParam("file") MultipartFile file,
+                             HttpSession session) {
+        String message = "";
+        try {
+            User userById = userService.getUserById(id);
+            model.addAttribute("userById", userById);
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "Error";
+        }
+
+        try {
+            String newAvatarPath = fileStorageService.save(file);
+            userService.addAvatar(id, newAvatarPath, authenticationHelper.tryGetUserFromSession(session));
+            message = "Uploaded the file successfully: " + file.getOriginalFilename();
+            model.addAttribute("message", message);
+        } catch (AuthenticationException e) {
+            return "redirect:/auth/login";
+        } catch (Exception e) {
+            message = "Could not upload the file: " + file.getOriginalFilename() + ". Error: " + e.getMessage();
+            model.addAttribute("message", message);
+        }
+        return "redirect:/users/{id}";
     }
 
 }

@@ -35,7 +35,7 @@
                 <div id="icon-plus-username-container">
                     <p id="username" th:text="${userById.getUserName()}">Very long username</p>
                 </div>
-                <img id="user-picture-container" src="../static/images/user_photo.png" th:src="@{/images/user_photo.png}">
+                <img id="user-picture-container" src="../static/images/users_profile_pictures/default_user_profile_picture.png" th:src="${userById.getAvatar().avatar}">
                 <div id="icon-plus-firstname-container">
                     <span class="material-symbols-outlined">person</span>
                     <p th:text="${userById.getFirstName()}">First name</p>

@@ -12,7 +12,7 @@ public class Avatar {
     private int avatarId;
 
     @Column(name = "avatar")
-    private byte[] avatar;
+    private String avatar;
 
     public Avatar() {
     }
@@ -25,11 +25,11 @@ public class Avatar {
         this.avatarId = avatarId;
     }
 
-    public byte[] getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(byte[] avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 

@@ -50,8 +50,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(User userToBeUpdated, User userIsAuthorized) {
-        checkForUniqueEmail(userToBeUpdated);
         PermissionHelper.isAdminOrSameUser(userToBeUpdated, userIsAuthorized, UNAUTHORIZED_OPERATION);
+        checkForUniqueEmail(userToBeUpdated);
         return userRepository.updateUser(userToBeUpdated);
     }
 
@@ -93,12 +93,12 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User addAvatar(int userToBeUpdated, byte[] avatarByteArray, User userIsAuthorized) {
+    public User addAvatar(int userToBeUpdated, String avatar, User userIsAuthorized) {
         User userToUpdateAvatarTo = userRepository.getUserById(userToBeUpdated);
         PermissionHelper.isSameUser(userToUpdateAvatarTo, userIsAuthorized, UNAUTHORIZED_OPERATION);
 
         Avatar avatarToAdd = new Avatar();
-        avatarToAdd.setAvatar(avatarByteArray);
+        avatarToAdd.setAvatar(avatar);
         avatarToAdd = avatarService.createAvatar(avatarToAdd);
 
         userToUpdateAvatarTo.setAvatar(avatarToAdd);
@@ -140,7 +140,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User deleteAvatar(int id, User userToDoChanges) {
-        PermissionHelper.isAdminOrSameUser(userRepository.getUserById(id),userToDoChanges,UNAUTHORIZED_OPERATION);
+        PermissionHelper.isAdminOrSameUser(userRepository.getUserById(id), userToDoChanges, UNAUTHORIZED_OPERATION);
         userToDoChanges.setAvatar(avatarService.getDefaultAvatar());
         return userToDoChanges;
     }
@@ -168,7 +168,11 @@ public class UserServiceImpl implements UserService {
         boolean duplicateExists = true;
 
         try {
-            userRepository.getUserByEmail(user.getEmail());
+            User existingUser = userRepository.getUserByEmail(user.getEmail());
+            if (existingUser.getUserId() == user.getUserId()) {
+                duplicateExists = false;
+            }
+
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }

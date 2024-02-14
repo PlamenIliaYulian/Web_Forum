@@ -416,9 +416,10 @@ public class UserRestController {
                             }
                     )
             })
+    /*TODO - fix method to upload file, save to directory and use filepath.*/
     @SecurityRequirement(name = "Authorization")
     @PutMapping("/{id}/avatar")
-    public User updateAvatar(@PathVariable int id, @RequestBody byte[] avatar, @RequestHeader HttpHeaders headers) {
+    public User updateAvatar(@PathVariable int id, @RequestBody String avatar, @RequestHeader HttpHeaders headers) {
         try {
             User userToDoChanges = authenticationHelper.tryGetUser(headers);
             return userService.addAvatar(id, avatar, userToDoChanges);
