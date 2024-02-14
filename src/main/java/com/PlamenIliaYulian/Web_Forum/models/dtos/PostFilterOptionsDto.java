@@ -4,9 +4,7 @@ import java.util.Optional;
 
 public class PostFilterOptionsDto {
     private int minLikes;
-    private int maxLikes;
     private int minDislikes;
-    private int maxDislikes;
     private String title;
     private String content;
     private String createdBefore;
@@ -15,11 +13,9 @@ public class PostFilterOptionsDto {
     private String sortBy;
     private String sortOrder;
 
-    public PostFilterOptionsDto(int minLikes, int maxLikes, int minDislikes, int maxDislikes, String title, String content, String createdBefore, String createdAfter, String createdBy, String sortBy, String sortOrder) {
+    public PostFilterOptionsDto(int minLikes, int minDislikes, String title, String content, String createdBefore, String createdAfter, String createdBy, String sortBy, String sortOrder) {
         this.minLikes = minLikes;
-        this.maxLikes = maxLikes;
         this.minDislikes = minDislikes;
-        this.maxDislikes = maxDislikes;
         this.title = title;
         this.content = content;
         this.createdBefore = createdBefore;
@@ -40,13 +36,6 @@ public class PostFilterOptionsDto {
         this.minLikes = minLikes;
     }
 
-    public int getMaxLikes() {
-        return maxLikes;
-    }
-
-    public void setMaxLikes(int maxLikes) {
-        this.maxLikes = maxLikes;
-    }
 
     public int getMinDislikes() {
         return minDislikes;
@@ -56,13 +45,6 @@ public class PostFilterOptionsDto {
         this.minDislikes = minDislikes;
     }
 
-    public int getMaxDislikes() {
-        return maxDislikes;
-    }
-
-    public void setMaxDislikes(int maxDislikes) {
-        this.maxDislikes = maxDislikes;
-    }
 
     public String getCreatedAfter() {
         return createdAfter;

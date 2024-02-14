@@ -4,9 +4,7 @@ import java.util.Optional;
 
 public class PostFilterOptions {
     private Optional<Integer> minLikes;
-    private Optional<Integer> maxLikes;
     private Optional<Integer> minDislikes;
-    private Optional<Integer> maxDislikes;
     private Optional<String> title;
     private Optional<String> content;
     private Optional<String> createdBefore;
@@ -15,13 +13,13 @@ public class PostFilterOptions {
     private Optional<String> sortBy;
     private Optional<String> sortOrder;
 
-    public PostFilterOptions(Integer minLikes, Integer maxLikes, Integer minDislikes,Integer maxDislikes, String title,
+    public PostFilterOptions(Integer minLikes, Integer minDislikes, String title,
                              String content, String createdBefore, String createdAfter, String createdBy,
                              String sortBy, String sortOrder) {
         this.minLikes = Optional.ofNullable(minLikes);
-        this.maxLikes = Optional.ofNullable(maxLikes);
+
         this.minDislikes = Optional.ofNullable(minDislikes);
-        this.maxDislikes = Optional.ofNullable(maxDislikes);
+
         this.title = Optional.ofNullable(title);
         this.content = Optional.ofNullable(content);
         this.createdBefore = Optional.ofNullable(createdBefore);
@@ -39,17 +37,10 @@ public class PostFilterOptions {
         return minLikes;
     }
 
-    public Optional<Integer> getMaxLikes() {
-        return maxLikes;
-    }
-
     public Optional<Integer> getMinDislikes() {
         return minDislikes;
     }
 
-    public Optional<Integer> getMaxDislikes() {
-        return maxDislikes;
-    }
 
     public Optional<String> getTitle() {
         return title;

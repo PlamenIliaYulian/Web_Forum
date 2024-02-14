@@ -78,20 +78,12 @@ public class PostRepositoryImpl implements PostRepository {
                 parameters.put("minLikes", value);
             });
 
-            postFilterOptions.getMaxLikes().ifPresent(value ->{
-                filters.add(" likes <=: maxLikes ");
-                parameters.put("maxLikes", value);
-            });
 
             postFilterOptions.getMinDislikes().ifPresent(value ->{
                 filters.add(" dislikes >=: minDislikes ");
                 parameters.put("minDislikes", value);
             });
 
-            postFilterOptions.getMaxDislikes().ifPresent(value ->{
-                filters.add(" dislikes <=: maxDislikes ");
-                parameters.put("maxDislikes", value);
-            });
 
             postFilterOptions.getTitle().ifPresent(value -> {
                 filters.add(" title like :title ");
@@ -231,6 +223,8 @@ public class PostRepositoryImpl implements PostRepository {
             case "createdBy":
                 orderBy = "createdBy.userName";
                 break;
+            default:
+                return "";
         }
 
         orderBy = String.format(" order by %s", orderBy);

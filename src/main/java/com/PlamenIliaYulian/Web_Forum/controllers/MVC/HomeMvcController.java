@@ -2,6 +2,7 @@ package com.PlamenIliaYulian.Web_Forum.controllers.MVC;
 
 import com.PlamenIliaYulian.Web_Forum.controllers.helpers.AuthenticationHelper;
 import com.PlamenIliaYulian.Web_Forum.models.User;
+import com.PlamenIliaYulian.Web_Forum.models.dtos.PostFilterOptionsDto;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.PostService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.RoleService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;

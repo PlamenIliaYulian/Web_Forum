@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
-    private final Path root = Paths.get("/src/main/resources/static/images/users_profile_pictures");
+    private final Path root = Paths.get("/src/main/resources/static/images.images/user_profile_pictures");
 
     @Override
     public void init() {

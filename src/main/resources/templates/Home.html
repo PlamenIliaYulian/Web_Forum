@@ -33,7 +33,7 @@
                 </div>
             </div>
 
-            <div id="forumTotalUsersTotalPosts-container">
+            <div  id="forumTotalUsersTotalPosts-container">
                 <div id="postIconPlusPostCount-container">
                     <p><span class="material-symbols-outlined">edit_square</span></p>
                     <p th:text="${totalPostsCount}">Total Posts Counts</p>
@@ -44,11 +44,11 @@
                 </div>
             </div>
 
-            <div class="topTen-container">
+            <div  class="topTen-container">
                 <p class="topTen" th:text="#{homepage.top10mostCommentedPosts}">Top ten most commented posts</p>
             </div>
             <!--Dynamically created top 10 most commented posts below:-->
-            <div class="topTen-posts-container" >
+            <div  class="topTen-posts-container" >
                 <div class="posts-preview" th:each="post : ${mostCommentedPosts}">
                     <div class="verticalColoredLine"></div>
                     <div class="topicContent">
@@ -95,14 +95,14 @@
             </div>
 
 
-            <div class="line-separator"></div>
+            <div  class="line-separator"></div>
 
 
-            <div class="topTen-container">
+            <div  class="topTen-container">
                 <p class="topTen" th:text="#{homepage.top10mostRecentlyCreatedPosts}">Top ten most recently created posts</p>
             </div>
             <!--Dynamically created top 10 most recently created posts below:-->
-            <div class="topTen-posts-container" >
+            <div  class="topTen-posts-container" >
                 <div class="posts-preview" th:each="post : ${mostRecentPosts}">
                     <div class="verticalColoredLine"></div>
                     <div class="topicContent">

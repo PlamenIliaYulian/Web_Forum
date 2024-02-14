@@ -29,7 +29,7 @@ public class CommentRepositoryImpl implements CommentRepository {
         try (Session session = sessionFactory.openSession()) {
             Query<Comment> query = session.createQuery("from Comment where commentId = :id and isDeleted = false ", Comment.class);
             query.setParameter("id", id);
-            if(query.list().isEmpty()){
+            if (query.list().isEmpty()) {
                 throw new EntityNotFoundException("Comment", id);
             }
             return query.list().get(0);
@@ -69,6 +69,7 @@ public class CommentRepositoryImpl implements CommentRepository {
             return getCommentById(comment.getCommentId());
         }
     }
+
     @Override
     public Comment softDeleteComment(Comment comment) {
         try (Session session = sessionFactory.openSession()) {
@@ -113,8 +114,8 @@ public class CommentRepositoryImpl implements CommentRepository {
             filters.add(" isDeleted = false ");
             parameters.put("isDeleted", false);
             StringBuilder queryString = new StringBuilder("FROM Comment ");
-                queryString.append(" WHERE ")
-                        .append(String.join(" AND ", filters));
+            queryString.append(" WHERE ")
+                    .append(String.join(" AND ", filters));
 
             queryString.append(generateOrderBy(commentFilterOptions));
             Query<Comment> query = session.createQuery(queryString.toString(), Comment.class);
@@ -154,6 +155,8 @@ public class CommentRepositoryImpl implements CommentRepository {
             case "createdBy":
                 orderBy = "createdBy.userName";
                 break;
+            default:
+                return "";
         }
         orderBy = String.format(" order by %s", orderBy);
 

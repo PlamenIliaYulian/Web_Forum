@@ -1,10 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Home</title>
+    <link href="../static/css/reset.css" th:href="@{/css/reset.css}" rel="stylesheet"/>
+    <link href="../static/css/home.css" th:href="@{/css/home.css}" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
 <body>
+
+<div class="webPage-container">
+
+    <div th:replace="~{Fragments.html :: header}"></div>
+
+    <div id="main-content-container">
+
+        <div id="search-bar-and-welcome-message-container">
+
+            <div th:if="${isAuthenticated}" id="search-container">
+                <form action="" th:object="${filterDto}">
+                    <!--<input id="search-field" type="text" placeholder="Search our forum for your favourite topics">-->
+                    <br/><br/>
+                    <input placeholder="Post name" th:field="*{title}">
+                    <input placeholder="Post content" th:field="*{content}">
+                    <input type="number" step="1"  th:value="0"  th:field="*{minLikes}" />
+                    <input type="number" step="1"  th:value="0" th:field="*{minDislikes}" />
+                    <select th:field="*{sortBy}">
+                        <option value="">Sort By</option>
+                        <option value="likes">Likes</option>
+                        <option value="dislikes">Dislikes</option>
+                        <option value="title">Title</option>
+                        <option value="content">Content</option>
+                        <option value="createdOn">CreatedOn</option>
+                        <option value="createdBy">CreatedBy</option>
+                    </select>
+                    <select th:field="*{sortOrder}">
+                        <option value="">Sort Order</option>
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
+                    </select>
+
+                    <input id="search-button" type="submit" value="Search">
+                </form>
+            </div>
+        </div>
+
+        <div  class="topTen-container">
+            <p class="topTen" th:text="#{browsePosts.allPosts}">All posts</p>
+        </div>
+
+        <div  class="topTen-posts-container" >
+            <div class="posts-preview" th:each="post : ${posts}">
+                <div class="verticalColoredLine"></div>
+                <div class="topicContent">
+                    <div class="post-title-container">
+                        <a href="" th:text="${post.title}">Title Content</a>
+                    </div>
+                    <div class="userNameCreationDateLikesTags-container">
+                        <div class="userPlusCreationDate-container">
+                            <div class="userIconPlusUsername-container">
+                                <span class="material-symbols-outlined">account_circle</span>
+                                <a class="userName" th:text="${post.createdBy.getUserName()}" th:href="@{/users/{id}(id=${post.getCreatedBy().getUserId()})}">Username</a>
+                            </div>
+                            <div class="calendarIconPlusDate-container">
+                                <span class="material-symbols-outlined" >calendar_month</span>
+                                <p class="creationDate" th:text="${post.getCreatedOn()}">24.01.31 07:00:00</p>
+                            </div>
+                            <div class="commentIconPlusCommentsCount-container">
+                                <span class="material-symbols-outlined" >comment</span>
+                                <p th:text="${post.getRelatedComments().size()}">10</p>
+                            </div>
+                        </div>
+
+
+                        <div class="likesPlusTag-container">
+                            <div class="likesIconPlusLikes-container">
+                                <span class="material-symbols-outlined">thumb_up</span>
+                                <p class="likesCount" th:text="${post.getLikes()}">123</p>
+                            </div>
+                            <div class="likesIconPlusLikes-container">
+                                <span class="material-symbols-outlined">thumb_down</span>
+                                <p class="likesCount" th:text="${post.getDislikes()}">123</p>
+                            </div>
+                            <div class="TagIconPlusTag-container">
+                                <span class="material-symbols-outlined">loyalty</span>
+                                <div class="tag-name-container">
+                                    <p class="tagName" th:unless="${post.getTags().isEmpty()}" th:text="${'#'+post.getTags().toArray()[0]}">#SomeVeryLongWord</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div th:replace="~{Fragments.html :: gradient-footer}"></div>
+
+
+
+
+
+
+</div>
 
 </body>
 </html>

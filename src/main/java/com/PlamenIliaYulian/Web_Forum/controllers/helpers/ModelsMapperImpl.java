@@ -116,9 +116,7 @@ public class ModelsMapperImpl implements ModelsMapper {
     public PostFilterOptions postFilterOptionsFromDto(PostFilterOptionsDto dto) {
         return new PostFilterOptions(
                 dto.getMinLikes(),
-                dto.getMaxLikes(),
                 dto.getMinDislikes(),
-                dto.getMaxDislikes(),
                 dto.getTitle(),
                 dto.getContent(),
                 dto.getCreatedBefore(),

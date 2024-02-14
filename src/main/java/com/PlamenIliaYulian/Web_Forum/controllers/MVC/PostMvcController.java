@@ -59,6 +59,11 @@ public class PostMvcController {
         return httpSession.getAttribute("currentUser") != null;
     }
 
+    @ModelAttribute("tags")
+    public List<Tag> populateTags(){
+        return tagService.getAllTags();
+    }
+
     @ModelAttribute("requestURI")
     public String requestURI(final HttpServletRequest request) {
         return request.getRequestURI();
