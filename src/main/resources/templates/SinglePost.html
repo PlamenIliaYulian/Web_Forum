@@ -14,35 +14,32 @@
     <div th:replace="~{Fragments.html :: header}"></div>
 
     <div id="main-content-container">
-
-        <div class="topTen-posts-container">
+        <div  class="topTen-posts-container" >
             <div class="posts-preview">
                 <div class="verticalColoredLine"></div>
                 <div class="topicContent">
                     <div class="post-title-container">
-                        <p th:text="${post.title}">Post Title</p>
+                        <p th:text="${post.title}">Title Content</p>
                     </div>
-
-                    <div id="post-content-container">
-                        <p th:text="${post.content}">Post Content</p>
+                    <div class="single-post-content-container">
+                        <p th:text="${post.content}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis dolore eligendi eum impedit incidunt iusto nam nobis ratione repellat voluptates? Architecto blanditiis deserunt eum harum minima, pariatur perspiciatis quo! Ab, ad amet animi cum cupiditate dolor dolorum ea eligendi fuga fugiat harum hic labore laborum nam numquam obcaecati quis reiciendis repellat rerum sequi similique sit sunt tempora ut vitae voluptatem voluptates. Aliquid error esse expedita fuga hic illo laudantium nam, neque nihil nulla obcaecati omnis placeat quo reiciendis rerum, sed soluta tempora tempore, tenetur velit? Cumque esse, ex expedita ipsam magni nemo nesciunt nisi nulla omnis quaerat ratione tempore unde?</p>
                     </div>
-
                     <div class="userNameCreationDateLikesTags-container">
                         <div class="userPlusCreationDate-container">
                             <div class="userIconPlusUsername-container">
                                 <span class="material-symbols-outlined">account_circle</span>
-                                <a class="userName" th:text="${post.createdBy.getUserName()}"
-                                   th:href="@{/users/{id}(id=${post.getCreatedBy().getUserId()})}">Username</a>
+                                <a class="userName" th:text="${post.createdBy.getUserName()}" th:href="@{/users/{id}(id=${post.getCreatedBy().getUserId()})}">Username</a>
                             </div>
                             <div class="calendarIconPlusDate-container">
-                                <span class="material-symbols-outlined">calendar_month</span>
+                                <span class="material-symbols-outlined" >calendar_month</span>
                                 <p class="creationDate" th:text="${post.getCreatedOn()}">24.01.31 07:00:00</p>
                             </div>
                             <div class="commentIconPlusCommentsCount-container">
-                                <span class="material-symbols-outlined">comment</span>
+                                <span class="material-symbols-outlined" >comment</span>
                                 <p th:text="${post.getRelatedComments().size()}">10</p>
                             </div>
                         </div>
+
 
                         <div class="likesPlusTag-container">
                             <div class="likesIconPlusLikes-container">
@@ -53,42 +50,43 @@
                                 <span class="material-symbols-outlined">thumb_down</span>
                                 <p class="likesCount" th:text="${post.getDislikes()}">123</p>
                             </div>
-                        </div>
-                    </div>
+                            <div class="TagIconPlusTag-container">
+                                <span class="material-symbols-outlined">loyalty</span>
+                                <div class="tag-name-container">
+                                    <p class="tagName" th:unless="${post.getTags().isEmpty()}" th:text="${'#'+post.getTags().toArray()[0]}">#SomeVeryLongWord</p>
+                                </div>
 
-                    <div class="TagsInSinglePost-container" th:unless="${post.getTags().isEmpty()}">
-                        <div class="TagIconPlusTag-container" th:each="tag : ${post.getTags()}">
-                            <span class="material-symbols-outlined">loyalty</span>
-                            <div class="tag-name-container">
-                                <p class="tagName" th:text="${tag.getTag()}">#SomeVeryLongWord</p>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 
-        <div class="line-separator"></div>
+        <div  class="topTen-container">
+            <p class="topTen">Answers:</p>
+        </div>
 
-        <div id="content-comments-in-singe-post" class="topTen-posts-container" >
-            <div class="posts-preview" th:each="comment: ${relatedComments}">
+        <div  class="topTen-posts-container" >
+            <div th:each="comment: ${relatedComments}" class="posts-preview">
                 <div class="verticalColoredLine-red-orange"></div>
                 <div class="topicContent">
-                    <div class="comment-content-container">
-                        <p th:text="${comment.getContent()}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusantium aliquid amet, asperiores assumenda atque autem blanditiis consectetur consequatur consequuntur cum delectus distinctio ea eligendi ex fugit hic iste maxime minus modi molestiae nesciunt nisi nostrum nulla perferendis perspiciatis placeat praesentium quibusdam quidem quis repellendus reprehenderit ullam voluptatem. Commodi, provident?</p>
+                    <div class="single-post-content-container">
+                        <p th:text="${comment.content}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis dolore eligendi eum impedit incidunt iusto nam nobis ratione repellat voluptates? Architecto blanditiis deserunt eum harum minima, pariatur perspiciatis quo! Ab, ad amet animi cum cupiditate dolor dolorum ea eligendi fuga fugiat harum hic labore laborum nam numquam obcaecati quis reiciendis repellat rerum sequi similique sit sunt tempora ut vitae voluptatem voluptates. Aliquid error esse expedita fuga hic illo laudantium nam, neque nihil nulla obcaecati omnis placeat quo reiciendis rerum, sed soluta tempora tempore, tenetur velit? Cumque esse, ex expedita ipsam magni nemo nesciunt nisi nulla omnis quaerat ratione tempore unde?</p>
                     </div>
                     <div class="userNameCreationDateLikesTags-container">
                         <div class="userPlusCreationDate-container">
                             <div class="userIconPlusUsername-container">
                                 <span class="material-symbols-outlined">account_circle</span>
-                                <a class="userName" th:text="${comment.createdBy.getUserName()}" th:href="@{/users/{id}(id=${comment.getCreatedBy().getUserId()})}">Username</a>
+                                <a class="userName" th:text="${comment.createdBy.getUserName()}" th:href="@{/users/{id}(id=${post.getCreatedBy().getUserId()})}">Username</a>
                             </div>
                             <div class="calendarIconPlusDate-container">
                                 <span class="material-symbols-outlined" >calendar_month</span>
                                 <p class="creationDate" th:text="${comment.getCreatedOn()}">24.01.31 07:00:00</p>
                             </div>
+
                         </div>
+
 
                         <div class="likesPlusTag-container">
                             <div class="likesIconPlusLikes-container">
@@ -99,15 +97,11 @@
                                 <span class="material-symbols-outlined">thumb_down</span>
                                 <p class="likesCount" th:text="${comment.getDislikes()}">123</p>
                             </div>
-                            <form th:if="${loggedInUser.getUserId() == comment.getCreatedBy().getUserId()}" action="#" th:action="@{/posts/__${comment.getOriginalPost().getPostId()}__/comments/__${comment.getCommentId()}__/edit}" method="get">
-                                <input class="single-user-page-button edit-button" type="submit" value="Edit">
-                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 
     <div th:replace="~{Fragments.html :: gradient-footer}"></div>
