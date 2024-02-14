@@ -25,8 +25,8 @@ public class HibernateConfig {
     @Autowired
     public HibernateConfig(Environment env) {
         this.dbUrl = env.getProperty("database.url");
-        this.dbUsername = env.getProperty("database.username");
-        this.dbPassword = env.getProperty("database.password");
+        this.dbUsername = env.getProperty("database.user");
+        this.dbPassword = env.getProperty("database.pass");
     }
 
     @Bean(name = "entityManagerFactory")

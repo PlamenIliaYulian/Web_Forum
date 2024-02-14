@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "posts")
@@ -137,7 +138,10 @@ public class Post implements Comparable<Post> {
     }
 
     public Set<Comment> getRelatedComments() {
-        return relatedComments;
+        return relatedComments
+                .stream()
+                .filter(a->!a.isDeleted())
+                .collect(Collectors.toSet());
     }
 
     public void setRelatedComments(Set<Comment> relatedComments) {

@@ -17,6 +17,7 @@
 #header {
     width: 100%;
     background: white;
+    border-bottom: 1px black solid;
 }
 
 #header-links-container {
@@ -559,10 +560,29 @@ input#hide-comment:checked ~ div#content-comments{
     padding-bottom: 20px;
 }
 
-.post-title-container a{
+.post-title-container a,
+.post-title-container p
+{
     color: black;
     font-size: 20px;
     font-weight: bold;
+}
+
+
+#post-content-container {
+    padding: 30px;
+}
+
+.TagsInSinglePost-container {
+    padding-top: 25px;
+    display: flex;
+    padding-right: 20px;
+}
+
+#content-comments-in-singe-post {
+    display:flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .line-separator{

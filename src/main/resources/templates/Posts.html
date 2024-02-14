@@ -54,7 +54,7 @@
                 <div class="verticalColoredLine"></div>
                 <div class="topicContent">
                     <div class="post-title-container">
-                        <a href="" th:text="${post.title}">Title Content</a>
+                        <a href="" th:text="${post.title}" th:href="@{/posts/{id}(id=${post.getPostId()})}" >Title Content</a>
                     </div>
                     <div class="userNameCreationDateLikesTags-container">
                         <div class="userPlusCreationDate-container">

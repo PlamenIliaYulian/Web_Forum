@@ -151,7 +151,7 @@ public class PostMvcController {
             Post post = postService.getPostById(id);
             model.addAttribute("loggedInUser", loggedInUser);
             model.addAttribute("post", post);
-            model.addAttribute("relatedComments", post.getRelatedComments());
+            model.addAttribute("relatedComments", postService.getAllCommentsRelatedToPost(post));
             model.addAttribute("commentDto", new CommentDto());
             return "SinglePost";
         } catch (EntityNotFoundException e) {
