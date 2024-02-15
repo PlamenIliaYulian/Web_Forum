@@ -737,6 +737,7 @@ input#hide-comment:checked ~ div#content-comments {
     align-content: center;
     justify-content: center;
     padding-left: 20px;
+    margin-bottom: 15px;
 }
 
 #edit-post-title {
@@ -765,6 +766,43 @@ input#hide-comment:checked ~ div#content-comments {
     resize: none;
     margin-top: 5px;
     font-size: 20px;
+}
+
+#remove-tag-from-post{
+    text-align: center;
+    color: white;
+    background: rgba(182, 68, 67, 0.8);
+    font-weight: bold;
+    margin-left: 5px;
+    border-radius: 20px;
+
+}
+
+#remove-tag-text{
+    text-align: center;
+    padding: 2px;
+}
+
+#add-tag-to-post{
+    margin-top: 30px;
+}
+
+
+#add-tag-to-post-input{
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 10px;
+}
+
+.add-tag-button{
+    border: none;
+    border-radius: 60px;
+    padding: 0 17px;
+    font-size: 30px;
+    color: white;
+    font-weight: bold;
+    background: rgba(190, 199, 67, 0.8);
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
 }
 
 /*-----------------*/

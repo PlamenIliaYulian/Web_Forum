@@ -34,13 +34,13 @@ public class TagServiceImpl implements TagService {
     public Tag createTag(Tag tag, User userToCheckIfBlocked) {
         PermissionHelper.isBlocked(userToCheckIfBlocked, UNAUTHORIZED_OPERATION);
 
-        Tag tagToCreate = null;
+
         try {
             tag = tagRepository.getTagByName(tag.getTag());
         } catch (EntityNotFoundException e) {
-            tagToCreate = tagRepository.createTag(tag);
+            tag = tagRepository.createTag(tag);
         }
-        return tagToCreate;
+        return tag;
 
     }
 

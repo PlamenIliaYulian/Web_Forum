@@ -172,9 +172,6 @@ public class PostMvcController {
         try {
             authenticationHelper.tryGetUserFromSession(session);
             Post post = postService.getPostById(id);
-            if (!post.getRelatedComments().isEmpty()) {
-                return "redirect:/posts/{id}";
-            }
             PostDto postDto = modelsMapper.postDtoFromPost(post);
             model.addAttribute("postDto", postDto);
             model.addAttribute("tagDto", new TagDto());
@@ -192,7 +189,6 @@ public class PostMvcController {
     @PostMapping("/{id}/edit")
     public String handleEditPost(@PathVariable int id,
                                  @Valid @ModelAttribute("postDto") PostDto postDto,
-                                 @Valid @ModelAttribute("tagDto") TagDto tagDto,
                                  BindingResult errors,
                                  Model model,
                                  HttpSession session) {
@@ -204,10 +200,6 @@ public class PostMvcController {
             User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
             Post post = modelsMapper.postFromDto(postDto, id);
             postService.updatePost(post, loggedInUser);
-            if (tagDto.getTag() != null && !tagDto.getTag().isEmpty()) {
-                Tag tag = modelsMapper.tagFromDto(tagDto);
-                postService.addTagToPost(post, tag, loggedInUser);
-            }
             return "redirect:/posts/{id}";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
@@ -408,22 +400,45 @@ public class PostMvcController {
         }
     }
 
-    /*@PostMapping("/{id}/edit/addTag")
-    public String addTagToPost() {
-        return null;
-    }*/
+    @PostMapping("/{postId}/edit/add-tag")
+    public String handleAddTagToPost(@PathVariable int postId,
+                                      @Valid @ModelAttribute("tagDto") TagDto tagDto,
+                                      BindingResult errors,
+                                      Model model,
+                                      HttpSession session) {
+        if (errors.hasErrors()) {
+            return "PostEdit";
+        }
 
-    @PostMapping("/{postId}/edit/removeTag/{tagId}")
-    public String removeTagToPost(@PathVariable int postId,
-                                  @PathVariable int tagId,
-                                  Model model,
-                                  HttpSession httpSession) {
+        try {
+            User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
+            Post post = postService.getPostById(postId);
+            Tag tag = modelsMapper.tagFromDto(tagDto);
+            postService.addTagToPost(post, tag, loggedInUser);
+            return "redirect:/posts/{postId}/edit";
+        } catch (AuthenticationException e) {
+            return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "Error";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "Error";
+        }
+    }
+
+    @GetMapping("/{postId}/edit/remove-tag/{tagId}")
+    public String handleRemoveTagFromPost(@PathVariable int postId,
+                                          @PathVariable int tagId,
+                                          Model model,
+                                          HttpSession httpSession) {
         try {
             User loggedUser = authenticationHelper.tryGetUserFromSession(httpSession);
             Post postToBeEdited = postService.getPostById(postId);
             Tag tagToBeRemoved = tagService.getTagById(tagId);
             postService.removeTagFromPost(postToBeEdited, tagToBeRemoved, loggedUser);
-            return "redirect:/posts/{postId}";
+            return "redirect:/posts/{postId}/edit";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
         } catch (EntityNotFoundException e) {

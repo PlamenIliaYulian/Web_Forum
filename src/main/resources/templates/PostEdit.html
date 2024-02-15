@@ -21,8 +21,8 @@
 
                     <form class="edit-post-form" th:object="${postDto}" method="post" th:action="@{__${requestURI}__}">
 
-                            <textarea id="edit-post-title" th:field="*{title}"></textarea>
-                            <textarea id="edit-post-content" th:field="*{content}"></textarea>
+                        <textarea id="edit-post-title" th:field="*{title}"></textarea>
+                        <textarea id="edit-post-content" th:field="*{content}"></textarea>
 
                         <input class="single-user-page-button add-comment-button" type="submit" value="Submit">
                     </form>
@@ -35,9 +35,18 @@
                                 <p class="tagName"
                                    th:text="${'#'+ tag}">#SomeVeryLongWord</p>
                             </div>
-
+                            <a id="remove-tag-from-post" href="#" th:href="@{__${requestURI}__/remove-tag/__${tag.getTagId()}__}">
+                                <span id="remove-tag-text" class="material-symbols-outlined">remove</span>
+                            </a>
                         </div>
                     </div>
+
+                    <form id="add-tag-to-post" action="#" th:action="@{__${requestURI}__/add-tag}" th:object="${tagDto}"
+                          method="post">
+                        <input id="add-tag-to-post-input" type="text" th:field="*{tag}"
+                               placeholder="place your tag here">
+                        <input class="single-user-page-button add-tag-button" type="submit" value="+">
+                    </form>
 
 
                 </div>

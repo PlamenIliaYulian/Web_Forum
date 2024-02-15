@@ -88,12 +88,12 @@
                     </div>
 
                     <div class="edit-delete-reply-buttons-container">
-                        <form th:if="${loggedInUser.getUserId() == post.getCreatedBy().getUserId()} AND ${post.getRelatedComments().isEmpty()}" action="#"
+                        <form th:if="${loggedInUser.getUserId() == post.getCreatedBy().getUserId()}" action="#"
                               th:action="@{__${requestURI}__/edit}" method="get">
                             <input class="single-user-page-button edit-button" type="submit" value="Edit">
                         </form>
 
-                        <form th:if="${loggedInUser.getUserId() == post.getCreatedBy().getUserId()}" action="#"
+                        <form th:if="${loggedInUser.getUserId() == post.getCreatedBy().getUserId()} OR ${isAdmin}" action="#"
                               th:action="@{__${requestURI}__/delete}" method="get">
                             <input class="single-user-page-button delete-button" type="submit" value="Delete">
                         </form>
@@ -176,7 +176,7 @@
                             <input class="single-user-page-button edit-button" type="submit" value="Edit">
                         </form>
 
-                        <form th:if="${loggedInUser.getUserId() == comment.getCreatedBy().getUserId()}"
+                        <form th:if="${loggedInUser.getUserId() == comment.getCreatedBy().getUserId()} OR ${isAdmin}"
                               action="#"
                               th:action="@{/posts/__${comment.getOriginalPost().getPostId()}__/comments/__${comment.getCommentId()}__/delete}"
                               method="get">
