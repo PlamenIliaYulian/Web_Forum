@@ -1,10 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>LearnJava | Edit post</title>
+    <link href="../static/css/reset.css" th:href="@{/css/reset.css}" rel="stylesheet"/>
+    <link href="../static/css/home.css" th:href="@{/css/home.css}" rel="stylesheet"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
 </head>
 <body>
+
+<div class="webPage-container">
+    <div th:replace="~{Fragments.html :: header}"></div>
+
+    <div id="main-content-container">
+        <div class="topTen-posts-container">
+            <div class="posts-preview" id="posts-preview-edit">
+                <div class="verticalColoredLine"></div>
+                <div class="topicContent">
+
+                    <form class="edit-post-form" th:object="${postDto}" method="post" th:action="@{__${requestURI}__}">
+
+                            <textarea id="edit-post-title" th:field="*{title}"></textarea>
+                            <textarea id="edit-post-content" th:field="*{content}"></textarea>
+
+                        <input class="single-user-page-button add-comment-button" type="submit" value="Submit">
+                    </form>
+
+                    <div class="TagsInSinglePost-container">
+                        <div class="TagIconPlusTag-container" th:each="tag : ${tagsInPost}"
+                             th:unless="${tagsInPost.isEmpty()}">
+                            <span class="material-symbols-outlined">loyalty</span>
+                            <div class="tag-name-container">
+                                <p class="tagName"
+                                   th:text="${'#'+ tag}">#SomeVeryLongWord</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{Fragments.html :: gradient-footer}"></div>
+</div>
 
 </body>
 </html>

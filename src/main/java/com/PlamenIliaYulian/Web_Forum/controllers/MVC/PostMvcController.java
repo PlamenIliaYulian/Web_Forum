@@ -21,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/posts")
@@ -167,12 +168,17 @@ public class PostMvcController {
     public String showEditPostForm(@PathVariable int id,
                                    Model model,
                                    HttpSession session) {
+
         try {
             authenticationHelper.tryGetUserFromSession(session);
             Post post = postService.getPostById(id);
+            if (!post.getRelatedComments().isEmpty()) {
+                return "redirect:/posts/{id}";
+            }
             PostDto postDto = modelsMapper.postDtoFromPost(post);
             model.addAttribute("postDto", postDto);
             model.addAttribute("tagDto", new TagDto());
+            model.addAttribute("tagsInPost", postService.getPostById(id).getTags());
             return "PostEdit";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
