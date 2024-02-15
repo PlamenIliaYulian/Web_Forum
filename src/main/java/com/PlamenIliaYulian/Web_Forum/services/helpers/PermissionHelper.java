@@ -1,11 +1,7 @@
 package com.PlamenIliaYulian.Web_Forum.services.helpers;
-
-import com.PlamenIliaYulian.Web_Forum.exceptions.DuplicateEntityException;
-import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
 import com.PlamenIliaYulian.Web_Forum.models.Role;
 import com.PlamenIliaYulian.Web_Forum.models.User;
-import com.PlamenIliaYulian.Web_Forum.repositories.contracts.UserRepository;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,7 +11,7 @@ import java.util.List;
 @Component
 public class PermissionHelper {
     private final UserService userService;
-    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+    public static final String ROLE_ADMIN = "ADMIN";
 
     @Autowired
     public PermissionHelper(UserService userService) {

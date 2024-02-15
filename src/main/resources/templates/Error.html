@@ -1,10 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>LearnJava | Home</title>
+    <link href="../static/css/reset.css" th:href="@{/css/reset.css}" rel="stylesheet"/>
+    <link href="../static/css/home.css" th:href="@{/css/home.css}" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
 <body>
+
+<div class="webPage-container">
+
+    <div th:replace="~{Fragments.html :: header}"></div>
+
+    <div id="main-content-container">
+
+        <div class="error-content">
+            <h3 class="display-1 fw-bold" th:text="${statusCode}">HTTP Status Code</h3>
+            <p class="fs-3 text-danger">Opps!</p>
+            <p th:unless="${error == null}" class="error" th:text="${error}">Error placeholder</p>
+        </div>
+    </div>
+
+    <div th:replace="~{Fragments.html :: gradient-footer}"></div>
+</div>
 
 </body>
 </html>
