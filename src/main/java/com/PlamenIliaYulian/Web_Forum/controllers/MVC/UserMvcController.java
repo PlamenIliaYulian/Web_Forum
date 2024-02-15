@@ -8,10 +8,7 @@ import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.models.Role;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
-import com.PlamenIliaYulian.Web_Forum.models.dtos.PhoneNumberDto;
-import com.PlamenIliaYulian.Web_Forum.models.dtos.RegisterDto;
-import com.PlamenIliaYulian.Web_Forum.models.dtos.UserFilterByUsernameOptionsDto;
-import com.PlamenIliaYulian.Web_Forum.models.dtos.UserMvcDtoUpdate;
+import com.PlamenIliaYulian.Web_Forum.models.dtos.*;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -84,20 +81,93 @@ public class UserMvcController {
         return roleService.getRoleById(1);
     }
 
-    @GetMapping
-    public String showAllUsersPage(@ModelAttribute("userFilterOptionsDto") UserFilterByUsernameOptionsDto userFilterByUsernameOptionsDto,
-                                   Model model,
-                                   HttpSession session) {
+    @GetMapping("/search")
+    public String showUsersAdminPage(@ModelAttribute("userFilterOptionsDto") UserFilterOptionsDto userFilterOptionsDto,
+                                     Model model,
+                                     HttpSession session) {
+
         User loggedUser;
         try {
             loggedUser = authenticationHelper.tryGetUserFromSession(session);
-            UserFilterOptions userFilterOptions = modelsMapper.userFilterOptionsFromUsernameOptionsDto(userFilterByUsernameOptionsDto);
-            model.addAttribute("users", userService.getAllUsers(userFilterOptions));
-            return "AllUsers";
+            Role adminRole = roleService.getRoleById(1);
+            if (loggedUser.getRoles().contains(adminRole)) {
+                UserFilterOptions userFilterOptions = modelsMapper.userFilterOptionsFromDto(userFilterOptionsDto);
+                model.addAttribute("users", userService.getAllUsers(userFilterOptions));
+                return "AllUsers";
+            }
+            model.addAttribute("error", HttpStatus.FORBIDDEN.getReasonPhrase());
+            return "Error";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
         }
     }
+
+    @GetMapping("/{id}/administrative-changes")
+    public String showUserAdministrativePage(@PathVariable int id,
+                               Model model,
+                               HttpSession session) {
+        try {
+            User userLoggedIn = authenticationHelper.tryGetUserFromSession(session);
+            User userById = userService.getUserById(id);
+
+            if (!userLoggedIn.getRoles().contains(roleService.getRoleById(1))) {
+                model.addAttribute("error", HttpStatus.FORBIDDEN.getReasonPhrase());
+                return "Error";
+            }
+            UserAdministrativeDto userAdministrativeDto = modelsMapper.userAdministrativeDtoFromUser(userById);
+            model.addAttribute("userById", userById);
+            model.addAttribute("userLoggedIn", userLoggedIn);
+            model.addAttribute("userAdministrativeDto", userAdministrativeDto);
+
+            return "UserAdministrativeChanges";
+        } catch (AuthenticationException e) {
+            return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "Error";
+        }
+    }
+
+    @PostMapping("/{id}/administrative-changes")
+    public String handleUserAdministrativeChanges(@PathVariable int id,
+                                 @Valid @ModelAttribute("userAdministrativeDto") UserAdministrativeDto userAdministrativeDto,
+                                 BindingResult errors,
+                                 HttpSession session,
+                                 Model model) {
+
+        User userById;
+        try {
+            userById = userService.getUserById(id);
+            model.addAttribute("userById", userById);
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "Error";
+        }
+
+        if (errors.hasErrors()) {
+            return "UserEdit";
+        }
+
+        try {
+            User userLoggedIn = authenticationHelper.tryGetUserFromSession(session);
+            if (!userLoggedIn.getRoles().contains(roleService.getRoleById(1))) {
+                model.addAttribute("error", HttpStatus.FORBIDDEN.getReasonPhrase());
+                return "Error";
+            }
+            User userUpdated = modelsMapper.userFromUserAdministrativeDto(userAdministrativeDto, id);
+            userService.updateUser(userUpdated, userLoggedIn);
+            return "redirect:/users/search";
+        } catch (AuthenticationException e) {
+            model.addAttribute("error", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            return "Error";
+        } catch (DuplicateEntityException e) {
+            errors.rejectValue("email", "email_exists", e.getMessage());
+            return "UserEdit";
+        }
+    }
+
 
     @GetMapping("/{id}")
     public String showSingleUserPage(@PathVariable int id,

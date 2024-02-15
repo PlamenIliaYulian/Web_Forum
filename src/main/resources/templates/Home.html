@@ -16,20 +16,13 @@
         <div id="main-content-container">
 
             <div id="search-bar-and-welcome-message-container">
-                <div th:unless="${isAuthenticated}" id="welcome-message-container">
+                <div id="welcome-message-container">
                     <p>
                         🚀 Welcome to our forum - Your Java Junction! 🚀
                         <br>
                         <br>
-                        Hello Java enthusiasts! learn-springboot.com is your go-to spot for all things Java—connect, learn, and share with like-minded coders. Explore Java fundamentals, get help, share projects, and stay updated on the latest in the Java world. Ready to code and connect? Join us at www.learn-springboot.com for a happy coding experience!
+                        Hello Java enthusiasts! "Learn Springboot" is your go-to spot for all things Java—connect, learn, and share with like-minded coders. Explore Java fundamentals, get help, share projects, and stay updated on the latest in the Java world. Ready to code and connect? Join us at www.learn-springboot.com for a happy coding experience!
                     </p>
-                </div>
-
-                <div th:if="${isAuthenticated}" id="search-container">
-                    <form action="">
-                        <input id="search-field" type="text" placeholder="Search our forum for your favourite topics">
-                        <input id="search-button" type="submit" value="Search">
-                    </form>
                 </div>
             </div>
 

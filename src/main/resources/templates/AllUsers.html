@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>LearnJava | Home</title>
+    <link href="../static/css/reset.css" th:href="@{/css/reset.css}" rel="stylesheet"/>
+    <link href="../static/css/home.css" th:href="@{/css/home.css}" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body>
+
+<div class="webPage-container">
+
+    <div th:replace="~{Fragments.html :: header}"></div>
+
+    <div id="main-content-container">
+
+        <div id="search-bar-and-welcome-message-container">
+
+            <div th:if="${isAuthenticated}" id="search-container">
+                <form action="" th:object="${userFilterOptionsDto}">
+                    <br/><br/>
+                    <input id="browse-users-input-username" placeholder="Username" th:field="*{username}">
+                    <input id="browse-posts-input-email" placeholder="Email" th:field="*{email}">
+                    <input id="browse-posts-input-first-name" placeholder="First name"  th:field="*{firstName}"/>
+                    <select id="browse-posts-input-sortBy" th:field="*{sortBy}">
+                        <option value="">Sort By</option>
+                        <option value="username">Username</option>
+                        <option value="user_email">Email</option>
+                        <option value="first_name">First Name</option>
+                    </select>
+                    <select id="browse-posts-input-sortORder" th:field="*{sortOrder}">
+                        <option value="">Sort Order</option>
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
+                    </select>
+                    <input id="search-button" type="submit" value="Search">
+                </form>
+            </div>
+        </div>
+
+
+        <div  class="topTen-container">
+            <p class="topTen" th:text="#{users}">Users:</p>
+        </div>
+        <!--Dynamically created top 10 most commented posts below:-->
+        <div  class="topTen-posts-container" >
+            <div id="all-users-details-preview" class="posts-preview" th:each="user : ${users}">
+                <div class="verticalColoredLine-dark-blue-light-blue"></div>
+                <div class="topicContent">
+                    <div class="post-title-container">
+                        <a href="#" th:href="@{/users/{id}(id=${user.getUserId()})}" th:text="${user.getUserName()}">Username</a>
+                    </div>
+                    <div class="userNameCreationDateLikesTags-container">
+                        <div class="userPlusCreationDate-container">
+                            <div class="userIconPlusUsername-container">
+                                <span class="material-symbols-outlined">person</span>
+                                <a class="userName" th:text="${user.getFirstName()}">Laura</a>
+                            </div>
+                            <div class="calendarIconPlusDate-container">
+                                <span class="material-symbols-outlined">person</span>
+                                <p class="creationDate" th:text="${user.getLastName()}" >Wilson</p>
+                            </div>
+                            <div class="commentIconPlusCommentsCount-container">
+                                <span class="material-symbols-outlined" >email</span>
+                                <p th:text="${user.getEmail()}">laura@gmail.com</p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="edit-delete-reply-buttons-container">
+                        <form th:if="${isAdmin}" action="#"
+                              th:action="@{/users/__${user.getUserId()}__/administrative-changes}" method="get">
+                            <input class="single-user-page-button administrative-changes-button" type="submit" value="AdministrativeChanges">
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+    </div>
+
+    <div th:replace="~{Fragments.html :: gradient-footer}"></div>
+</div>
+
+</body>
+</html>

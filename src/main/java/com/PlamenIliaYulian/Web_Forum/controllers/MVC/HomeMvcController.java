@@ -35,6 +35,7 @@ public class HomeMvcController {
         return httpSession.getAttribute("currentUser") != null;
     }
 
+
     @ModelAttribute("requestURI")
     public String requestURI(final HttpServletRequest request) {
         return request.getRequestURI();

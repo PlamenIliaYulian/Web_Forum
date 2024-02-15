@@ -651,6 +651,13 @@ input#hide-comment:checked ~ div#content-comments {
     border-bottom-right-radius: 5px;
 }
 
+.verticalColoredLine-dark-blue-light-blue {
+    min-width: 15px;
+    margin-right: 20px;
+    background: linear-gradient(0deg, rgba(10,0,148,1) 0%, rgba(0,255,252,1) 100%);    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
 .verticalColoredLine-red-orange {
     min-width: 15px;
     margin-right: 20px;
@@ -705,6 +712,21 @@ input#hide-comment:checked ~ div#content-comments {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+#all-users-details-preview{
+    min-width: 50vw;
+}
+
+.administrative-changes-button{
+    max-width: 100%;
+    background: #dc3c02;
+    border: none;
+    color: white;
+    border-radius: 100px;
+    font-size: 15px;
+    font-weight: bold;
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
 }
 
 .line-separator {

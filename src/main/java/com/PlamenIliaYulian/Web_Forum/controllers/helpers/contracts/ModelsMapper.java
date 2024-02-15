@@ -32,4 +32,7 @@ public interface ModelsMapper {
     CommentDto commentDtoFromComment(Comment commentToBeEdited);
 
     UserMvcDtoUpdate userMvcDtoFromUser(User userById);
+    UserAdministrativeDto userAdministrativeDtoFromUser(User userById);
+
+    User userFromUserAdministrativeDto(UserAdministrativeDto userAdministrativeDto, int id);
 }

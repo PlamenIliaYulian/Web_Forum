@@ -170,6 +170,24 @@ public class ModelsMapperImpl implements ModelsMapper {
     }
 
     @Override
+    public UserAdministrativeDto userAdministrativeDtoFromUser(User userById) {
+        UserAdministrativeDto userAdministrativeDto = new UserAdministrativeDto();
+        userAdministrativeDto.setBlocked(userById.isBlocked());
+        userAdministrativeDto.setDeleted(userById.isDeleted());
+        userAdministrativeDto.setRoles(userById.getRoles());
+        return userAdministrativeDto;
+    }
+
+    @Override
+    public User userFromUserAdministrativeDto(UserAdministrativeDto userAdministrativeDto, int id) {
+        User user = userService.getUserById(id);
+        user.setBlocked(userAdministrativeDto.isBlocked());
+        user.setDeleted(userAdministrativeDto.isDeleted());
+        user.setRoles(userAdministrativeDto.getRoles());
+        return user;
+    }
+
+    @Override
     public Post postFromDto(PostDto postDto) {
         Post post = new Post();
         post.setTitle(postDto.getTitle());
