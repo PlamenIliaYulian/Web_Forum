@@ -119,7 +119,7 @@ public class PostMvcController {
     }
 
     @PostMapping("/new")
-    public String createPost(@Valid @ModelAttribute("postDto") PostDto postDto,
+    public String handleCreatePost(@Valid @ModelAttribute("postDto") PostDto postDto,
                              BindingResult errors,
                              Model model,
                              HttpSession session) {
@@ -132,8 +132,9 @@ public class PostMvcController {
             Post postToBeCreated = modelsMapper.postFromDto(postDto);
             Post newPost = postService.createPost(postToBeCreated, user);
             int postId = newPost.getPostId();
-            model.addAttribute("postId", postId);
-            return "redirect:/posts/{postId}";
+            StringBuilder sb = new StringBuilder();
+            sb.append("redirect:/posts/").append(postId);
+            return sb.toString();
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
         } catch (UnauthorizedOperationException e) {

@@ -40,7 +40,7 @@ public class PostRepositoryImpl implements PostRepository {
             session.persist(post);
             session.getTransaction().commit();
         }
-        return post;
+        return getPostByTitle(post.getTitle());
     }
 
     /*Ilia - I did not implement this method*/
