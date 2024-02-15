@@ -489,6 +489,27 @@ input#hide-comment:checked ~ div#content-comments{
     align-items: center;
 }
 
+#browse-posts-input-title,
+#browse-posts-input-content,
+#browse-posts-input-likes,
+#browse-posts-input-dislikes,
+#browse-posts-input-sortBy,
+#browse-posts-input-sortORder{
+    margin-right: 10px;
+    padding-bottom: 15px;
+    padding-left: 10px;
+    padding-top: 15px;
+    border-radius: 1000px;
+    border: none;
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
+}
+#browse-posts-dislikes-icon,
+#browse-posts-likes-icon{
+    color: white;
+    font-size: 35px;
+    font-weight: bold;
+}
+
 #search-button {
     height: 5vh;
     width: 6vw;

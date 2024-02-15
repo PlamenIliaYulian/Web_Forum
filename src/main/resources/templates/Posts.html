@@ -21,11 +21,13 @@
                 <form action="" th:object="${filterDto}">
                     <!--<input id="search-field" type="text" placeholder="Search our forum for your favourite topics">-->
                     <br/><br/>
-                    <input placeholder="Post name" th:field="*{title}">
-                    <input placeholder="Post content" th:field="*{content}">
-                    <input type="number" step="1"  th:value="0"  th:field="*{minLikes}" />
-                    <input type="number" step="1"  th:value="0" th:field="*{minDislikes}" />
-                    <select th:field="*{sortBy}">
+                    <input id="browse-posts-input-title" placeholder="Post name" th:field="*{title}">
+                    <input id="browse-posts-input-content" placeholder="Post content" th:field="*{content}">
+                    <span id="browse-posts-dislikes-icon" class="material-symbols-outlined">thumb_up</span>
+                    <input id="browse-posts-input-likes" type="number" step="1"  th:field="*{minLikes}" />
+                    <span id="browse-posts-likes-icon" class="material-symbols-outlined">thumb_down</span>
+                    <input id="browse-posts-input-dislikes" type="number" step="1"  th:field="*{minDislikes}" />
+                    <select id="browse-posts-input-sortBy" th:field="*{sortBy}">
                         <option value="">Sort By</option>
                         <option value="likes">Likes</option>
                         <option value="dislikes">Dislikes</option>
@@ -34,12 +36,11 @@
                         <option value="createdOn">CreatedOn</option>
                         <option value="createdBy">CreatedBy</option>
                     </select>
-                    <select th:field="*{sortOrder}">
+                    <select id="browse-posts-input-sortORder" th:field="*{sortOrder}">
                         <option value="">Sort Order</option>
                         <option value="asc">Ascending</option>
                         <option value="desc">Descending</option>
                     </select>
-
                     <input id="search-button" type="submit" value="Search">
                 </form>
             </div>
