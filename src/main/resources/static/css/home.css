@@ -9,7 +9,7 @@
 
 #login-and-register-webPage-container,
 #delete-confirmation-webPage-container,
-#edit-user-webPage-container{
+#edit-user-webPage-container {
     background: #3A0090;
 }
 
@@ -79,14 +79,15 @@ translateY()
 
 
 #main-content-container,
-#singleUser-main-content-container{
+#singleUser-main-content-container {
     min-height: 100vh;
     display: flex;
     justify-content: start;
     align-items: center;
     flex-direction: column;
 }
-#singleUser-main-content-container{
+
+#singleUser-main-content-container {
     flex-direction: row;
     padding: 50px;
     justify-content: space-evenly;
@@ -94,7 +95,15 @@ translateY()
     min-height: 100vh;
 }
 
-#user-profile-information-container{
+#edit-post-main-content-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#user-profile-information-container {
     background: white;
     padding: 100px;
     border-radius: 20px;
@@ -108,28 +117,29 @@ translateY()
     box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.75);
 }
 
-#edit-page-container > #user-profile-information-container{
+#edit-page-container > #user-profile-information-container {
     align-items: center;
 }
 
-#user-profile-information-container > form{
+#user-profile-information-container > form {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
 
-#user-profile-information-container > #uploadForm{
+#user-profile-information-container > #uploadForm {
     display: flex;
     flex-direction: row;
 }
 
-#username{
+#username {
     padding-left: 20px;
     font-weight: bold;
     font-size: 40px;
 }
-#user-picture-container{
+
+#user-picture-container {
     width: 200px;
     height: 200px;
     border-radius: 1000px;
@@ -144,7 +154,7 @@ translateY()
 #icon-plus-role-container,
 #icon-plus-phoneNumber-container,
 #icon-plus-isBlocked-container,
-#icon-plus-isDeleted-container{
+#icon-plus-isDeleted-container {
     display: flex;
     font-size: 25px;
     font-weight: bold;
@@ -160,33 +170,33 @@ translateY()
 #icon-plus-phoneNumber-container .material-symbols-outlined,
 #icon-plus-isBlocked-container .material-symbols-outlined,
 #icon-plus-isDeleted-container .material-symbols-outlined,
-form .material-symbols-outlined
-{
+form .material-symbols-outlined {
     padding-right: 15px;
     color: rgba(0, 0, 0, .5);
 }
 
-#user-posts-and-comments-container{
+#user-posts-and-comments-container {
     padding-left: 30px;
     min-width: 70%;
 }
 
-#show-hide-buttons-container{
+#show-hide-buttons-container {
     display: flex;
 }
 
 input#show-post, input#hide-post,
-input#show-comment, input#hide-comment{
-    display:none;
+input#show-comment, input#hide-comment {
+    display: none;
 }
 
 div#content-posts,
-div#content-comments{
-    display:none;
+div#content-comments {
+    display: none;
 }
+
 input#show-post:checked ~ div#content-posts,
-input#show-comment:checked ~ div#content-comments{
-    display:flex;
+input#show-comment:checked ~ div#content-comments {
+    display: flex;
     justify-content: center;
     align-items: center;
     opacity: 0;
@@ -217,31 +227,32 @@ input#show-comment:checked ~ div#content-comments{
 }
 
 input#hide-post:checked ~ div#content-posts,
-input#hide-comment:checked ~ div#content-comments{
+input#hide-comment:checked ~ div#content-comments {
     animation: none;
     opacity: 1;
     visibility: visible;
-    display:none;
+    display: none;
 }
 
-.comment-content-container{
+.comment-content-container {
     padding-bottom: 30px;
 }
-.single-user-forms-container{
+
+.single-user-forms-container {
     display: flex;
 }
 
-.single-user-forms-container form{
+.single-user-forms-container form {
     display: flex;
 }
 
-.single-user-page-button{
+.single-user-page-button {
     margin-right: 20px;
     height: 50px;
     padding: 15px;
 }
 
-.delete-button{
+.delete-button {
     background: rgba(182, 68, 67, 0.8);
     border: none;
     color: white;
@@ -251,7 +262,7 @@ input#hide-comment:checked ~ div#content-comments{
     box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
 }
 
-.edit-button{
+.edit-button {
     background: rgba(168, 152, 78, 0.8);
     border: none;
     color: white;
@@ -270,6 +281,7 @@ input#hide-comment:checked ~ div#content-comments{
     font-size: 15px;
     font-weight: bold;
     box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
+    width: fit-content;
 }
 
 
@@ -328,12 +340,13 @@ input#hide-comment:checked ~ div#content-comments{
 }
 
 .register-and-login-general-input,
-.edit-user-inputFields{
+.edit-user-inputFields {
     border-radius: 100px;
     padding-left: 20px;
     border: 1px solid black;
 }
-.edit-user-inputFields{
+
+.edit-user-inputFields {
     padding-top: 10px;
     padding-bottom: 10px;
     font-size: 15px;
@@ -354,7 +367,7 @@ input#hide-comment:checked ~ div#content-comments{
     color: white;
 }
 
-.delete-page-container{
+.delete-page-container {
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -376,7 +389,7 @@ input#hide-comment:checked ~ div#content-comments{
 
 }
 
-#edit-page-container{
+#edit-page-container {
     padding-bottom: 50px;
     padding-top: 50px;
     min-height: 100vh;
@@ -400,32 +413,33 @@ input#hide-comment:checked ~ div#content-comments{
 }
 
 
-#delete-user-form-container{
+#delete-user-form-container {
     padding: 50px;
     border-radius: 20px;
     background: white;
     box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.8);
 }
-#delete-user-form-container p{
+
+#delete-user-form-container p {
     padding-bottom: 20px;
     font-weight: bold;
     font-size: 25px;
 }
 
-#delete-user-form-container a{
+#delete-user-form-container a {
     font-weight: bold;
     color: black;
     padding-left: 30px;
 }
 
-#delete-cancel-buttons-container{
+#delete-cancel-buttons-container {
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
 }
 
-#delete-button{
+#delete-button {
     color: white;
     background: rgba(182, 68, 67, 0.8);
     padding: 20px;
@@ -435,7 +449,7 @@ input#hide-comment:checked ~ div#content-comments{
     box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.8);
 }
 
-#cancel-button{
+#cancel-button {
     color: white;
     background: rgba(110, 180, 110, 0.8);
     padding: 20px;
@@ -504,7 +518,7 @@ input#hide-comment:checked ~ div#content-comments{
 #browse-posts-input-likes,
 #browse-posts-input-dislikes,
 #browse-posts-input-sortBy,
-#browse-posts-input-sortORder{
+#browse-posts-input-sortORder {
     margin-right: 10px;
     padding-bottom: 15px;
     padding-left: 10px;
@@ -513,8 +527,9 @@ input#hide-comment:checked ~ div#content-comments{
     border: none;
     box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
 }
+
 #browse-posts-dislikes-icon,
-#browse-posts-likes-icon{
+#browse-posts-likes-icon {
     color: white;
     font-size: 35px;
     font-weight: bold;
@@ -554,7 +569,6 @@ input#hide-comment:checked ~ div#content-comments{
 }
 
 
-
 #postIconPlusPostCount-container,
 #usersIconPlusTotalRegisteredUsers-container {
     display: flex;
@@ -566,7 +580,8 @@ input#hide-comment:checked ~ div#content-comments{
     color: white;
     padding: 20px 30px;
 }
-.topTen-container{
+
+.topTen-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -575,29 +590,29 @@ input#hide-comment:checked ~ div#content-comments{
     padding-bottom: 30px;
 }
 
-.topTen{
+.topTen {
     font-size: 50px;
     font-weight: bold;
     text-align: center;
     padding-bottom: 50px;
 }
 
-#single-post-view-topTen{
+#single-post-view-topTen {
     font-size: 50px;
     font-weight: bold;
     text-align: center;
-    padding-top:10px;
+    padding-top: 10px;
     padding-bottom: 20px;
 }
 
-.expand-less-buttons{
+.expand-less-buttons {
     font-size: 60px;
     background: black;
     color: white;
     border-radius: 1000px;
 }
 
-.topTen-posts-container{
+.topTen-posts-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -607,7 +622,7 @@ input#hide-comment:checked ~ div#content-comments{
 }
 
 
-.posts-preview{
+.posts-preview {
     min-width: 80%;
     max-width: 80%;
     padding-top: 30px;
@@ -620,11 +635,11 @@ input#hide-comment:checked ~ div#content-comments{
     overflow: hidden;
 }
 
-.posts-preview:hover{
+.posts-preview:hover {
     box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.6);
 }
 
-.posts-preview .material-symbols-outlined{
+.posts-preview .material-symbols-outlined {
     padding-right: 6px;
 }
 
@@ -636,7 +651,7 @@ input#hide-comment:checked ~ div#content-comments{
     border-bottom-right-radius: 5px;
 }
 
-.verticalColoredLine-red-orange{
+.verticalColoredLine-red-orange {
     min-width: 15px;
     margin-right: 20px;
     background: linear-gradient(360deg, rgb(186, 27, 60) 0%, rgb(221, 73, 43) 100%);
@@ -644,13 +659,12 @@ input#hide-comment:checked ~ div#content-comments{
     border-bottom-right-radius: 5px;
 }
 
-.post-title-container{
+.post-title-container {
     padding-bottom: 20px;
 }
 
 .post-title-container a,
-.post-title-container p
-{
+.post-title-container p {
     color: black;
     font-size: 20px;
     font-weight: bold;
@@ -676,6 +690,7 @@ input#hide-comment:checked ~ div#content-comments{
     flex-wrap: wrap;
     padding-top: 15px;
 }
+
 .edit-delete-reply-buttons-container form {
     padding-right: 10px;
 }
@@ -687,25 +702,25 @@ input#hide-comment:checked ~ div#content-comments{
 #content-comments-in-singe-post {
     min-width: 80%;
     max-width: 80%;
-    display:flex;
+    display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.line-separator{
+.line-separator {
     border: 1px solid rgba(0, 0, 0, 0.3);
     min-width: 50%;
     max-width: 50%;
     margin-bottom: 50px;
 }
 
-#user-posts-and-comments-container > .line-separator{
+#user-posts-and-comments-container > .line-separator {
     margin-left: auto;
     margin-right: auto;
     margin-top: 30px;
 }
 
-.single-post-content-container{
+.single-post-content-container {
     padding: 30px;
 }
 
@@ -717,6 +732,8 @@ input#hide-comment:checked ~ div#content-comments{
 }
 
 .edit-post-form {
+    display: flex;
+    flex-direction: column;
     align-content: center;
     justify-content: center;
     padding-left: 20px;
@@ -724,7 +741,7 @@ input#hide-comment:checked ~ div#content-comments{
 
 #edit-post-title {
     min-height: 5vh;
-    min-width: 80%;
+    min-width: 100%;
     padding: 20px;
     border-radius: 20px;
     box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
@@ -734,9 +751,13 @@ input#hide-comment:checked ~ div#content-comments{
     font-size: 25px;
 }
 
+#edit-post-topicContent {
+    width: 100%;
+}
+
 #edit-post-content {
     min-height: 25vh;
-    min-width: 80%;
+    min-width: 100%;
     padding: 20px;
     border-radius: 20px;
     box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
@@ -774,7 +795,7 @@ input#hide-comment:checked ~ div#content-comments{
 }
 
 .line-separator ~ .add-comment-input-box-container {
-    margin-bottom: 20px ;
+    margin-bottom: 20px;
 }
 
 /*++++++++++++++++++++++++++++++++++*/
@@ -824,7 +845,6 @@ input#hide-comment:checked ~ div#content-comments{
 }
 
 
-
 .topic {
     font-size: 20px;
     font-weight: 500;
@@ -853,8 +873,7 @@ input#hide-comment:checked ~ div#content-comments{
 .calendarIconPlusDate-container,
 .likesIconPlusLikes-container,
 .TagIconPlusTag-container,
-.commentIconPlusCommentsCount-container
-{
+.commentIconPlusCommentsCount-container {
     display: flex;
     padding-right: 20px;
 }

@@ -13,11 +13,11 @@
 <div class="webPage-container">
     <div th:replace="~{Fragments.html :: header}"></div>
 
-    <div id="main-content-container">
+    <div id="edit-post-main-content-container">
         <div class="topTen-posts-container">
             <div class="posts-preview" id="posts-preview-edit">
                 <div class="verticalColoredLine"></div>
-                <div class="topicContent">
+                <div id="edit-post-topicContent" class="topicContent">
 
                     <form class="edit-post-form" th:object="${postDto}" method="post" th:action="@{__${requestURI}__}">
 
