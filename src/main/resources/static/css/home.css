@@ -8,7 +8,8 @@
 }
 
 #login-and-register-webPage-container,
-#delete-confirmation-webPage-container{
+#delete-confirmation-webPage-container,
+#edit-user-webPage-container{
     background: #3A0090;
 }
 
@@ -94,7 +95,7 @@ translateY()
 }
 
 #user-profile-information-container{
-    /*background-color: #AF00C2;*/
+    background: white;
     padding: 100px;
     border-radius: 20px;
     max-width: 30%;
@@ -106,6 +107,23 @@ translateY()
     word-break: break-all;
     box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.75);
 }
+
+#edit-page-container > #user-profile-information-container{
+    align-items: center;
+}
+
+#user-profile-information-container > form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#user-profile-information-container > #uploadForm{
+    display: flex;
+    flex-direction: row;
+}
+
 #username{
     padding-left: 20px;
     font-weight: bold;
@@ -299,11 +317,16 @@ input#hide-comment:checked ~ div#content-comments{
     justify-content: center;
 }
 
-.register-and-login-general-input {
+.register-and-login-general-input,
+.edit-user-inputFields{
     border-radius: 100px;
-    border: none;
     padding-left: 20px;
     border: 1px solid black;
+}
+.edit-user-inputFields{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 15px;
 }
 
 .register-and-login-general-button {
@@ -342,6 +365,31 @@ input#hide-comment:checked ~ div#content-comments{
     );
 
 }
+
+#edit-page-container{
+    padding-bottom: 50px;
+    padding-top: 50px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(
+            farthest-side at bottom left,
+            #AF00C2,
+            transparent
+    ),
+    radial-gradient(
+            farthest-corner at top right,
+            #900056,
+            transparent
+    ),
+    radial-gradient(
+            #C24700,
+            transparent
+    );
+}
+
+
 #delete-user-form-container{
     padding: 50px;
     border-radius: 20px;
@@ -501,6 +549,14 @@ input#hide-comment:checked ~ div#content-comments{
     font-weight: bold;
     text-align: center;
     padding-bottom: 50px;
+}
+
+#single-post-view-topTen{
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+    padding-top:10px;
+    padding-bottom: 20px;
 }
 
 .expand-less-buttons{
