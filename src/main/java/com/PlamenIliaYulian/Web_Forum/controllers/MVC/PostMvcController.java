@@ -222,6 +222,8 @@ public class PostMvcController {
         try {
             User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
             Post post = postService.getPostById(id);
+            model.addAttribute("loggedInUser", loggedInUser);
+            model.addAttribute("post", post);
             model.addAttribute("commentDto", new CommentDto());
             return "SinglePostAddComment";
         } catch (EntityNotFoundException e) {
@@ -260,7 +262,7 @@ public class PostMvcController {
         }
     }
 
-    @PostMapping("/{postId}/comment/{commentId}/delete")
+    @GetMapping("/{postId}/comments/{commentId}/delete")
     public String removeCommentFromPost(@PathVariable int postId,
                                         @PathVariable int commentId,
                                         HttpSession session,
@@ -270,7 +272,7 @@ public class PostMvcController {
             Post postToRemoveCommentFrom = postService.getPostById(postId);
             Comment commentToBeRemoved = commentService.getCommentById(commentId);
             postService.removeCommentFromPost(postToRemoveCommentFrom, commentToBeRemoved, loggedUser);
-            return "redirect:/posts/{id}";
+            return "redirect:/posts/{postId}";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
         } catch (EntityNotFoundException e) {

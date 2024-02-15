@@ -95,7 +95,7 @@
                         </div>
                     </div>
                     <div class="edit-delete-reply-buttons-container">
-                        <form th:if="${loggedUser.getUserId() == post.getCreatedBy().getUserId()}" action="#"
+                        <form th:if="${loggedUser.getUserId() == post.getCreatedBy().getUserId()} AND ${post.getRelatedComments().isEmpty()}" action="#"
                               th:action="@{/posts/{postId}/edit(postId=${post.getPostId()})}" method="get">
                             <input class="single-user-page-button edit-button" type="submit" value="Edit">
                         </form>

@@ -1,10 +1,145 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>LearnJava | Post</title>
+    <link href="../static/css/reset.css" th:href="@{/css/reset.css}" rel="stylesheet"/>
+    <link href="../static/css/home.css" th:href="@{/css/home.css}" rel="stylesheet"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
 </head>
 <body>
+
+<div class="webPage-container">
+    <div th:replace="~{Fragments.html :: header}"></div>
+
+    <div id="main-content-container">
+        <div class="topTen-posts-container">
+            <div class="posts-preview">
+                <div class="verticalColoredLine"></div>
+                <div class="topicContent">
+                    <div class="post-title-container">
+                        <p th:text="${post.title}">Title Content</p>
+                    </div>
+                    <div class="single-post-content-container">
+                        <p th:text="${post.content}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis
+                            dolore eligendi eum impedit incidunt iusto nam nobis ratione repellat voluptates? Architecto
+                            blanditiis deserunt eum harum minima, pariatur perspiciatis quo! Ab, ad amet animi cum
+                            cupiditate dolor dolorum ea eligendi fuga fugiat harum hic labore laborum nam numquam
+                            obcaecati quis reiciendis repellat rerum sequi similique sit sunt tempora ut vitae
+                            voluptatem voluptates. Aliquid error esse expedita fuga hic illo laudantium nam, neque nihil
+                            nulla obcaecati omnis placeat quo reiciendis rerum, sed soluta tempora tempore, tenetur
+                            velit? Cumque esse, ex expedita ipsam magni nemo nesciunt nisi nulla omnis quaerat ratione
+                            tempore unde?</p>
+                    </div>
+                    <div class="userNameCreationDateLikesTags-container">
+                        <div class="userPlusCreationDate-container">
+                            <div class="userIconPlusUsername-container">
+                                <span class="material-symbols-outlined">account_circle</span>
+                                <p class="userName" th:text="${post.createdBy.getUserName()}">Username</p>
+                            </div>
+                            <div class="calendarIconPlusDate-container">
+                                <span class="material-symbols-outlined">calendar_month</span>
+                                <p class="creationDate" th:text="${post.getCreatedOn()}">24.01.31 07:00:00</p>
+                            </div>
+                            <div class="commentIconPlusCommentsCount-container">
+                                <span class="material-symbols-outlined">comment</span>
+                                <p th:text="${post.getRelatedComments().size()}">10</p>
+                            </div>
+                        </div>
+
+                        <div class="likesPlusTag-container">
+                            <div class="likesIconPlusLikes-container">
+                                <span class="material-symbols-outlined">thumb_up</span>
+                                <p class="likesCount" th:text="${post.getLikes()}">123</p>
+                            </div>
+                            <div class="likesIconPlusLikes-container">
+                                <span class="material-symbols-outlined">thumb_down</span>
+                                <p class="likesCount" th:text="${post.getDislikes()}">123</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="TagsInSinglePost-container">
+                        <div class="TagIconPlusTag-container" th:each="tag : ${post.getTags()}"
+                             th:unless="${post.getTags().isEmpty()}">
+                            <span class="material-symbols-outlined">loyalty</span>
+                            <div class="tag-name-container">
+                                <p class="tagName"
+                                   th:text="${'#'+ tag}">#SomeVeryLongWord</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="line-separator"></div>
+
+        <form class="add-comment-input-box-container" th:object="${commentDto}" method="post" th:action="@{__${requestURI}__}">
+
+            <label th:text="'Comment on post: '" for="add-comment-box"></label>
+            <textarea id="add-comment-box" type="text" th:field="*{comment}" placeholder="Your comment here..."></textarea>
+            <input class="single-user-page-button add-comment-button" type="submit" value="Submit">
+
+        </form>
+
+        <div  class="line-separator"></div>
+
+        <div id="single-post-view-topTen">
+            <p class="">Answers:</p>
+        </div>
+
+        <div class="topTen-posts-container">
+            <div th:each="comment: ${post.getRelatedComments()}" class="posts-preview">
+                <div class="verticalColoredLine-red-orange"></div>
+                <div class="topicContent">
+                    <div class="single-post-content-container">
+                        <p th:text="${comment.content}">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                            Debitis dolore eligendi eum impedit incidunt iusto nam nobis ratione repellat voluptates?
+                            Architecto blanditiis deserunt eum harum minima, pariatur perspiciatis quo! Ab, ad amet
+                            animi cum cupiditate dolor dolorum ea eligendi fuga fugiat harum hic labore laborum nam
+                            numquam obcaecati quis reiciendis repellat rerum sequi similique sit sunt tempora ut vitae
+                            voluptatem voluptates. Aliquid error esse expedita fuga hic illo laudantium nam, neque nihil
+                            nulla obcaecati omnis placeat quo reiciendis rerum, sed soluta tempora tempore, tenetur
+                            velit? Cumque esse, ex expedita ipsam magni nemo nesciunt nisi nulla omnis quaerat ratione
+                            tempore unde?</p>
+                    </div>
+                    <div class="userNameCreationDateLikesTags-container">
+                        <div class="userPlusCreationDate-container">
+                            <div class="userIconPlusUsername-container">
+                                <span class="material-symbols-outlined">account_circle</span>
+                                <p class="userName" th:text="${comment.createdBy.getUserName()}">Username</p>
+                            </div>
+                            <div class="calendarIconPlusDate-container">
+                                <span class="material-symbols-outlined">calendar_month</span>
+                                <p class="creationDate" th:text="${comment.getCreatedOn()}">24.01.31 07:00:00</p>
+                            </div>
+
+                        </div>
+
+                        <div class="likesPlusTag-container">
+                            <div class="likesIconPlusLikes-container">
+                                <span class="material-symbols-outlined">thumb_up</span>
+                                <p class="likesCount" th:text="${comment.getLikes()}">123</p>
+                            </div>
+                            <div class="likesIconPlusLikes-container">
+                                <span class="material-symbols-outlined">thumb_down</span>
+                                <p class="likesCount" th:text="${comment.getDislikes()}">123</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{Fragments.html :: gradient-footer}"></div>
+</div>
 
 </body>
 </html>

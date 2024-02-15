@@ -709,6 +709,35 @@ input#hide-comment:checked ~ div#content-comments{
     padding: 30px;
 }
 
+.add-comment-input-box-container {
+    min-width: 80%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#add-comment-box {
+    min-height: 25vh;
+    min-width: 100%;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
+    margin-bottom: 30px;
+    resize: none;
+    margin-top: 10px;
+}
+
+.add-comment-input-box-container label {
+    font-size: 20px;
+}
+
+.line-separator ~ .add-comment-input-box-container {
+    margin-bottom: 20px ;
+}
+
 /*++++++++++++++++++++++++++++++++++*/
 
 #edit_square_icon_id,

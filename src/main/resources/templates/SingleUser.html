@@ -142,7 +142,7 @@
                         </div>
 
                         <div class="edit-delete-reply-buttons-container">
-                            <form th:if="${loggedInUser.getUserId() == post.getCreatedBy().getUserId()}"
+                            <form th:if="${loggedInUser.getUserId() == post.getCreatedBy().getUserId()} AND ${post.getRelatedComments().isEmpty()}"
                                   action="#"
                                   th:action="@{/posts/{postId}/edit(postId=${post.getPostId()})}" method="get">
                                 <input class="single-user-page-button edit-button" type="submit" value="Edit">
@@ -225,7 +225,15 @@
                                   method="get">
                                 <input class="single-user-page-button edit-button" type="submit" value="Edit">
                             </form>
+
+                            <form th:if="${loggedInUser.getUserId() == comment.getCreatedBy().getUserId()}"
+                                  action="#"
+                                  th:action="@{/posts/__${comment.getOriginalPost().getPostId()}__/comments/__${comment.getCommentId()}__/delete}"
+                                  method="get">
+                                <input class="single-user-page-button delete-button" type="submit" value="Delete">
+                            </form>
                         </div>
+
                     </div>
                 </div>
 
