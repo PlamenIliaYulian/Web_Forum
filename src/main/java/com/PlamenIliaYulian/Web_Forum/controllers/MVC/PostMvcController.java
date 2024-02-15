@@ -60,7 +60,7 @@ public class PostMvcController {
     }
 
     @ModelAttribute("tags")
-    public List<Tag> populateTags(){
+    public List<Tag> populateTags() {
         return tagService.getAllTags();
     }
 
@@ -198,7 +198,7 @@ public class PostMvcController {
             User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
             Post post = modelsMapper.postFromDto(postDto, id);
             postService.updatePost(post, loggedInUser);
-            if(tagDto.getTag() != null && !tagDto.getTag().isEmpty()){
+            if (tagDto.getTag() != null && !tagDto.getTag().isEmpty()) {
                 Tag tag = modelsMapper.tagFromDto(tagDto);
                 postService.addTagToPost(post, tag, loggedInUser);
             }
@@ -388,14 +388,14 @@ public class PostMvcController {
         }
     }
 
-    @PostMapping("/{postId}/like")
+    @GetMapping("/{postId}/like")
     public String likePost(@PathVariable int postId,
                            Model model,
                            HttpSession httpSession) {
         try {
             User loggedUser = authenticationHelper.tryGetUserFromSession(httpSession);
             Post postToBeLiked = postService.getPostById(postId);
-            postService.likePost(postToBeLiked,loggedUser);
+            postService.likePost(postToBeLiked, loggedUser);
             return "redirect:/posts/{postId}";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
@@ -405,18 +405,18 @@ public class PostMvcController {
             return "Error";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
-            return "Error";
+            return "redirect:/posts/{postId}";
         }
     }
 
-    @PostMapping("/{postId}/dislike")
+    @GetMapping("/{postId}/dislike")
     public String dislikePost(@PathVariable int postId,
                               Model model,
                               HttpSession httpSession) {
         try {
             User loggedUser = authenticationHelper.tryGetUserFromSession(httpSession);
             Post postToBeLiked = postService.getPostById(postId);
-            postService.dislikePost(postToBeLiked,loggedUser);
+            postService.dislikePost(postToBeLiked, loggedUser);
             return "redirect:/posts/{postId}";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
@@ -426,7 +426,7 @@ public class PostMvcController {
             return "Error";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
-            return "Error";
+            return "redirect:/posts/{postId}";
         }
     }
 
@@ -437,9 +437,9 @@ public class PostMvcController {
 
     @PostMapping("/{postId}/edit/removeTag/{tagId}")
     public String removeTagToPost(@PathVariable int postId,
-                                   @PathVariable int tagId,
-                                   Model model,
-                                   HttpSession httpSession) {
+                                  @PathVariable int tagId,
+                                  Model model,
+                                  HttpSession httpSession) {
         try {
             User loggedUser = authenticationHelper.tryGetUserFromSession(httpSession);
             Post postToBeEdited = postService.getPostById(postId);
@@ -458,5 +458,50 @@ public class PostMvcController {
         }
     }
 
+    @GetMapping("/{postId}/comments/{commentId}/like")
+    public String likeComment(@PathVariable int postId,
+                              @PathVariable int commentId,
+                              Model model,
+                              HttpSession httpSession) {
+        try {
+            User loggedUser = authenticationHelper.tryGetUserFromSession(httpSession);
+            Post postWithComment = postService.getPostById(postId);
+            Comment commentToBeLiked = commentService.getCommentById(commentId);
+            commentService.likeComment(commentToBeLiked, loggedUser);
+            return "redirect:/posts/{postId}";
+        } catch (AuthenticationException e) {
+            return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "Error";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "redirect:/posts/{postId}";
+        }
+    }
+
+    @GetMapping("/{postId}/comments/{commentId}/dislike")
+    public String dislikeComment(@PathVariable int postId,
+                                 @PathVariable int commentId,
+                                 Model model,
+                                 HttpSession httpSession) {
+        try {
+            User loggedUser = authenticationHelper.tryGetUserFromSession(httpSession);
+            Post postWithComment = postService.getPostById(postId);
+            Comment commentToBeDisliked = commentService.getCommentById(commentId);
+            commentService.dislikeComment(commentToBeDisliked, loggedUser);
+            return "redirect:/posts/{postId}";
+        } catch (AuthenticationException e) {
+            return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "Error";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "redirect:/posts/{postId}";
+        }
+    }
 
 }

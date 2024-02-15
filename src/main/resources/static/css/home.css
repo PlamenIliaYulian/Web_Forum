@@ -654,9 +654,15 @@ input#hide-comment:checked ~ div#content-comments{
 }
 
 .TagsInSinglePost-container {
+    max-width: 100%;
     padding-top: 25px;
     display: flex;
+    flex-wrap: wrap;
     padding-right: 20px;
+}
+
+.like-dislike-link-buttons {
+    color: black;
 }
 
 #content-comments-in-singe-post {
