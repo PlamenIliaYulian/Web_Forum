@@ -230,7 +230,7 @@ public class UserMvcController {
     }
 
     /*TODO Research how to upload Photo.*/
-    @PostMapping("/{id}/edit/UploadAvatar")
+    @PostMapping("/{id}/edit/upload-avatar")
     public String handleEditUserUploadAvatar(@PathVariable int id,
                                              HttpSession session,
                                              Model model) {
@@ -256,7 +256,7 @@ public class UserMvcController {
         }
     }
 
-    @PostMapping("/{id}/edit/RemoveAvatar")
+    @PostMapping("/{id}/edit/remove-avatar")
     public String handleEditUserRemoveAvatar(@PathVariable int id,
                                              HttpSession session,
                                              Model model) {
@@ -280,7 +280,7 @@ public class UserMvcController {
         }
     }
 
-    @PostMapping("/{id}/edit/AddPhoneNumber")
+    @PostMapping("/{id}/edit/add-phone-number")
     public String handleEditUserAddPhoneNumber(@PathVariable int id,
                                                HttpSession session,
                                                Model model,

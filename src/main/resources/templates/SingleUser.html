@@ -13,197 +13,231 @@
 </head>
 <body>
 
-    <div class="webPage-container">
-        <header th:fragment="header" id="header">
-            <div id="header-links-container">
-                <a href="#" th:href="@{/}" th:text="#{homepage.home}">Home</a>
-                <a th:if="${isAuthenticated}" th:text="#{homepage.createPost}" href="#" th:href="@{/posts/new}">Create new post</a>
-                <a th:if="${isAuthenticated}" th:text="#{homepage.browseAllPosts}" href="#" th:href="@{/posts}">Browse post</a>
-                <a th:if="${isAuthenticated}" th:text="#{homepage.browseAllUsers}" href="#" th:href="@{/users}">Browse users</a>
-                <a th:unless="${isAuthenticated}" href="#" th:href="@{/auth/login}" th:text="#{homepage.login}">Login</a>
-                <a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/register}" th:text="#{homepage.register}">Register</a>
-                <a href="#" th:if="${isAdmin}" th:href="@{/admin-panel/main}" th:text="#{homepage.adminPanel}">Admin panel</a>
-                <a href="#" th:href="@{/about}" th:text="#{homepage.about}">About</a>
-                <a href="#" th:if="${isAuthenticated}" th:text="${session.currentUser}" th:href="@{/users/{id}(id=${loggedUser.getUserId()})}">Profile</a>
-                <a href="#" th:if="${isAuthenticated}" th:href="@{/auth/logout}" th:text="#{homepage.logout}">Logout</a>
+<div class="webPage-container">
+    <header th:fragment="header" id="header">
+        <div id="header-links-container">
+            <a href="#" th:href="@{/}" th:text="#{homepage.home}">Home</a>
+            <a th:if="${isAuthenticated}" th:text="#{homepage.createPost}" href="#" th:href="@{/posts/new}">Create new
+                post</a>
+            <a th:if="${isAuthenticated}" th:text="#{homepage.browseAllPosts}" href="#" th:href="@{/posts}">Browse
+                post</a>
+            <a th:if="${isAuthenticated}" th:text="#{homepage.browseAllUsers}" href="#" th:href="@{/users}">Browse
+                users</a>
+            <a th:unless="${isAuthenticated}" href="#" th:href="@{/auth/login}" th:text="#{homepage.login}">Login</a>
+            <a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/register}" th:text="#{homepage.register}">Register</a>
+            <a href="#" th:if="${isAdmin}" th:href="@{/admin-panel/main}" th:text="#{homepage.adminPanel}">Admin
+                panel</a>
+            <a href="#" th:href="@{/about}" th:text="#{homepage.about}">About</a>
+            <a href="#" th:if="${isAuthenticated}" th:text="${session.currentUser}"
+               th:href="@{/users/{id}(id=${loggedUser.getUserId()})}">Profile</a>
+            <a href="#" th:if="${isAuthenticated}" th:href="@{/auth/logout}" th:text="#{homepage.logout}">Logout</a>
+        </div>
+    </header>
+
+    <div id="singleUser-main-content-container">
+
+        <div id="user-profile-information-container">
+            <div id="icon-plus-username-container">
+                <p id="username" th:text="${userById.getUserName()}">Very long username</p>
             </div>
-        </header>
-
-        <div id="singleUser-main-content-container">
-
-            <div id="user-profile-information-container">
-                <div id="icon-plus-username-container">
-                    <p id="username" th:text="${userById.getUserName()}">Very long username</p>
-                </div>
-                <img id="user-picture-container" src="../static/images/images/user_profile_pictures/default_user_profile_picture.png" th:src="${userById.getAvatar().avatar}">
-                <div id="icon-plus-firstname-container">
-                    <span class="material-symbols-outlined">person</span>
-                    <p th:text="${userById.getFirstName()}">First name</p>
-                </div>
-                <div id="icon-plus-lastname-container">
-                    <span class="material-symbols-outlined">person</span>
-                    <p th:text="${userById.getLastName()}">Last name</p>
-                </div>
-                <div id="icon-plus-email-container">
-                    <span class="material-symbols-outlined">email</span>
-                    <p th:text="${userById.getEmail()}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam, error!</p>
-                </div>
-                <div id="icon-plus-role-container">
-                    <span class="material-symbols-outlined">badge</span>
-                    <p th:text="${userById.getRoles().toArray()[0]}">Lorem ipsum.</p>
-                </div>
-                <div th:unless="${userById.getPhoneNumber() == null}" id="icon-plus-phoneNumber-container">
-                    <span class="material-symbols-outlined">settings_phone</span>
-                    <p th:text="${userById.getPhoneNumber()}">Lorem ipsum dolor.</p>
-                </div>
-                <div th:if="${userById.isBlocked()}" id="icon-plus-isBlocked-container">
-                    <span class="material-symbols-outlined">block</span>
-                    <p>Blocked. Beg admins for mercy.</p>
-                </div>
-                <div th:if="${userById.isDeleted()}" id="icon-plus-isDeleted-container">
-                    <span class="material-symbols-outlined">cancel</span>
-                    <p >Inactive</p>
-                </div>
-
-                <div class= "single-user-forms-container"
-                     th:if="${loggedInUser.getUserId()} == ${userById.getUserId()} OR ${isAdmin}">
-                    <form action="#" th:action="@{__${requestURI}__/edit}" method="get">
-                        <input class="single-user-page-button edit-button" type="submit" value="Edit profile" >
-                    </form>
-                    <form action="#" th:action="@{__${requestURI}__/edit/delete}" method="get">
-                        <input class="single-user-page-button delete-button" type="submit" value="Delete profile">
-                    </form>
-                </div>
-
+            <img id="user-picture-container"
+                 src="../static/images/images/user_profile_pictures/default_user_profile_picture.png"
+                 th:src="${userById.getAvatar().avatar}">
+            <div id="icon-plus-firstname-container">
+                <span class="material-symbols-outlined">person</span>
+                <p th:text="${userById.getFirstName()}">First name</p>
+            </div>
+            <div id="icon-plus-lastname-container">
+                <span class="material-symbols-outlined">person</span>
+                <p th:text="${userById.getLastName()}">Last name</p>
+            </div>
+            <div id="icon-plus-email-container">
+                <span class="material-symbols-outlined">email</span>
+                <p th:text="${userById.getEmail()}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam,
+                    error!</p>
+            </div>
+            <div id="icon-plus-role-container">
+                <span class="material-symbols-outlined">badge</span>
+                <p th:text="${userById.getRoles().toArray()[0]}">Lorem ipsum.</p>
+            </div>
+            <div th:unless="${userById.getPhoneNumber() == null}" id="icon-plus-phoneNumber-container">
+                <span class="material-symbols-outlined">settings_phone</span>
+                <p th:text="${userById.getPhoneNumber()}">Lorem ipsum dolor.</p>
+            </div>
+            <div th:if="${userById.isBlocked()}" id="icon-plus-isBlocked-container">
+                <span class="material-symbols-outlined">block</span>
+                <p>Blocked. Beg admins for mercy.</p>
+            </div>
+            <div th:if="${userById.isDeleted()}" id="icon-plus-isDeleted-container">
+                <span class="material-symbols-outlined">cancel</span>
+                <p>Inactive</p>
             </div>
 
-            <div id="user-posts-and-comments-container">
-                <p class="topTen" th:text="${userById.getUserName() + '`s posts:'}">User's posts:</p>
-                <label for="show-post">
-                    <span class="material-symbols-outlined expand-less-buttons">keyboard_double_arrow_down</span>
-                </label>
-                <input type=radio id="show-post" name="group">
-                <label for="hide-post">
-                    <span class="material-symbols-outlined expand-less-buttons" >keyboard_double_arrow_up</span>
-                </label>
-                <input type=radio id="hide-post" name="group">
-                <!--<span id="content">Content</span>-->
-                <div id="content-posts" class="topTen-posts-container" >
-                    <div class="posts-preview" th:each="post : ${userPosts}">
-                        <div class="verticalColoredLine"></div>
-                        <div class="topicContent">
-                            <div class="post-title-container">
-                                <a href="#" th:href="@{/posts/{id}(id=${post.getPostId()})}" th:text="${post.title}">Title Content</a>
-                            </div>
-                            <div class="userNameCreationDateLikesTags-container">
-                                <div class="userPlusCreationDate-container">
-                                    <div class="userIconPlusUsername-container">
-                                        <span class="material-symbols-outlined">account_circle</span>
-                                        <a class="userName" th:text="${post.createdBy.getUserName()}" th:href="@{/users/{id}(id=${post.getCreatedBy().getUserId()})}">Username</a>
-                                    </div>
-                                    <div class="calendarIconPlusDate-container">
-                                        <span class="material-symbols-outlined" >calendar_month</span>
-                                        <p class="creationDate" th:text="${post.getCreatedOn()}">24.01.31 07:00:00</p>
-                                    </div>
-                                    <div class="commentIconPlusCommentsCount-container">
-                                        <span class="material-symbols-outlined" >comment</span>
-                                        <p th:text="${post.getRelatedComments().size()}">10</p>
-                                    </div>
-                                </div>
-
-
-                                <div class="likesPlusTag-container">
-                                    <div class="likesIconPlusLikes-container">
-                                        <span class="material-symbols-outlined">thumb_up</span>
-                                        <p class="likesCount" th:text="${post.getLikes()}">123</p>
-                                    </div>
-                                    <div class="likesIconPlusLikes-container">
-                                        <span class="material-symbols-outlined">thumb_down</span>
-                                        <p class="likesCount" th:text="${post.getDislikes()}">123</p>
-                                    </div>
-                                    <div class="TagIconPlusTag-container">
-                                        <span class="material-symbols-outlined">loyalty</span>
-                                        <div class="tag-name-container">
-                                            <p class="tagName" th:unless="${post.getTags().isEmpty()}" th:text="${'#'+post.getTags().toArray()[0]}">#SomeVeryLongWord</p>
-                                        </div>
-                                    </div>
-
-                                    <form th:if="${loggedInUser.getUserId() == post.getCreatedBy().getUserId()}" action="#" th:action="@{/posts/{postId}/edit(postId=${post.getPostId()})}" method="get">
-                                        <input class="single-user-page-button edit-button" type="submit" value="Edit">
-                                    </form>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="line-separator"></div>
-
-
-                <p class="topTen" th:text="${userById.getUserName() + '`s comments:'}">User's comments:</p>
-
-                <label for="show-comment">
-                    <span class="material-symbols-outlined expand-less-buttons">keyboard_double_arrow_down</span>
-                </label>
-                <input type=radio id="show-comment" name="group">
-                <label for="hide-comment">
-                    <span class="material-symbols-outlined expand-less-buttons" >keyboard_double_arrow_up</span>
-                </label>
-                <input type=radio id="hide-comment" name="group">
-                <div id="content-comments" class="topTen-posts-container" >
-                    <div class="posts-preview" th:each="comment: ${userComments}">
-                        <div class="verticalColoredLine-red-orange"></div>
-                        <div class="topicContent">
-                            <div class="post-title-container">
-                                <a href="#" th:href="@{/posts/{id}(id=${comment.getOriginalPost().getPostId()})}" th:text="'Original post 👉 ' + ${comment.getOriginalPost().getTitle()}">Title Content</a>
-                            </div>
-                            <div class="comment-content-container">
-                                <p th:text="${comment.getContent()}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusantium aliquid amet, asperiores assumenda atque autem blanditiis consectetur consequatur consequuntur cum delectus distinctio ea eligendi ex fugit hic iste maxime minus modi molestiae nesciunt nisi nostrum nulla perferendis perspiciatis placeat praesentium quibusdam quidem quis repellendus reprehenderit ullam voluptatem. Commodi, provident?</p>
-                            </div>
-                            <div class="userNameCreationDateLikesTags-container">
-                                <div class="userPlusCreationDate-container">
-                                    <div class="userIconPlusUsername-container">
-                                        <span class="material-symbols-outlined">account_circle</span>
-                                        <a class="userName" th:text="${comment.createdBy.getUserName()}" th:href="@{/users/{id}(id=${comment.getCreatedBy().getUserId()})}">Username</a>
-                                    </div>
-                                    <div class="calendarIconPlusDate-container">
-                                        <span class="material-symbols-outlined" >calendar_month</span>
-                                        <p class="creationDate" th:text="${comment.getCreatedOn()}">24.01.31 07:00:00</p>
-                                    </div>
-
-                                </div>
-
-
-                                <div class="likesPlusTag-container">
-                                    <div class="likesIconPlusLikes-container">
-                                        <span class="material-symbols-outlined">thumb_up</span>
-                                        <p class="likesCount" th:text="${comment.getLikes()}">123</p>
-                                    </div>
-                                    <div class="likesIconPlusLikes-container">
-                                        <span class="material-symbols-outlined">thumb_down</span>
-                                        <p class="likesCount" th:text="${comment.getDislikes()}">123</p>
-                                    </div>
-                                    <form th:if="${loggedInUser.getUserId() == comment.getCreatedBy().getUserId()}" action="#" th:action="@{/posts/__${comment.getOriginalPost().getPostId()}__/comments/__${comment.getCommentId()}__/edit}" method="get">
-                                        <input class="single-user-page-button edit-button" type="submit" value="Edit">
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+            <div class="single-user-forms-container"
+                 th:if="${loggedInUser.getUserId()} == ${userById.getUserId()} OR ${isAdmin}">
+                <form action="#" th:action="@{__${requestURI}__/edit}" method="get">
+                    <input class="single-user-page-button edit-button" type="submit" value="Edit profile">
+                </form>
+                <form action="#" th:action="@{__${requestURI}__/edit/delete}" method="get">
+                    <input class="single-user-page-button delete-button" type="submit" value="Delete profile">
+                </form>
             </div>
-
-
 
         </div>
 
-        <footer th:fragment="gradient-footer" id="webPage-footer">
-            <p>@Copyright PlamkataIliikataYulkata inc. 2024</p>
-        </footer>
+        <div id="user-posts-and-comments-container">
+            <p class="topTen" th:text="${userById.getUserName() + '`s posts:'}">User's posts:</p>
+            <label for="show-post">
+                <span class="material-symbols-outlined expand-less-buttons">keyboard_double_arrow_down</span>
+            </label>
+            <input type=radio id="show-post" name="group">
+            <label for="hide-post">
+                <span class="material-symbols-outlined expand-less-buttons">keyboard_double_arrow_up</span>
+            </label>
+            <input type=radio id="hide-post" name="group">
+            <!--<span id="content">Content</span>-->
+            <div id="content-posts" class="topTen-posts-container">
+                <div class="posts-preview" th:each="post : ${userPosts}">
+                    <div class="verticalColoredLine"></div>
+                    <div class="topicContent">
+                        <div class="post-title-container">
+                            <a href="#" th:href="@{/posts/{id}(id=${post.getPostId()})}" th:text="${post.title}">Title
+                                Content</a>
+                        </div>
+                        <div class="userNameCreationDateLikesTags-container">
+                            <div class="userPlusCreationDate-container">
+                                <div class="userIconPlusUsername-container">
+                                    <span class="material-symbols-outlined">account_circle</span>
+                                    <a class="userName" th:text="${post.createdBy.getUserName()}"
+                                       th:href="@{/users/{id}(id=${post.getCreatedBy().getUserId()})}">Username</a>
+                                </div>
+                                <div class="calendarIconPlusDate-container">
+                                    <span class="material-symbols-outlined">calendar_month</span>
+                                    <p class="creationDate" th:text="${post.getCreatedOn()}">24.01.31 07:00:00</p>
+                                </div>
+                                <div class="commentIconPlusCommentsCount-container">
+                                    <span class="material-symbols-outlined">comment</span>
+                                    <p th:text="${post.getRelatedComments().size()}">10</p>
+                                </div>
+                            </div>
 
+
+                            <div class="likesPlusTag-container">
+                                <div class="likesIconPlusLikes-container">
+                                    <span class="material-symbols-outlined">thumb_up</span>
+                                    <p class="likesCount" th:text="${post.getLikes()}">123</p>
+                                </div>
+                                <div class="likesIconPlusLikes-container">
+                                    <span class="material-symbols-outlined">thumb_down</span>
+                                    <p class="likesCount" th:text="${post.getDislikes()}">123</p>
+                                </div>
+                                <div class="TagIconPlusTag-container">
+                                    <span class="material-symbols-outlined">loyalty</span>
+                                    <div class="tag-name-container">
+                                        <p class="tagName" th:unless="${post.getTags().isEmpty()}"
+                                           th:text="${'#'+post.getTags().toArray()[0]}">#SomeVeryLongWord</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="edit-delete-reply-buttons-container">
+                            <form th:if="${loggedInUser.getUserId() == post.getCreatedBy().getUserId()}"
+                                  action="#"
+                                  th:action="@{/posts/{postId}/edit(postId=${post.getPostId()})}" method="get">
+                                <input class="single-user-page-button edit-button" type="submit" value="Edit">
+                            </form>
+
+                            <form th:if="${loggedInUser.getUserId() == post.getCreatedBy().getUserId()}"
+                                  action="#"
+                                  th:action="@{/posts/{postId}/delete(postId=${post.getPostId()})}"
+                                  method="get">
+                                <input class="single-user-page-button delete-button" type="submit"
+                                       value="Delete">
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="line-separator"></div>
+
+
+            <p class="topTen" th:text="${userById.getUserName() + '`s comments:'}">User's comments:</p>
+
+            <label for="show-comment">
+                <span class="material-symbols-outlined expand-less-buttons">keyboard_double_arrow_down</span>
+            </label>
+            <input type=radio id="show-comment" name="group">
+            <label for="hide-comment">
+                <span class="material-symbols-outlined expand-less-buttons">keyboard_double_arrow_up</span>
+            </label>
+            <input type=radio id="hide-comment" name="group">
+            <div id="content-comments" class="topTen-posts-container" th:each="comment: ${userComments}">
+                <div class="posts-preview">
+                    <div class="verticalColoredLine-red-orange"></div>
+                    <div class="topicContent">
+                        <div class="post-title-container">
+                            <a href="#" th:href="@{/posts/{id}(id=${comment.getOriginalPost().getPostId()})}"
+                               th:text="'Original post 👉 ' + ${comment.getOriginalPost().getTitle()}">Title Content</a>
+                        </div>
+
+                        <div class="comment-content-container">
+                            <p th:text="${comment.getContent()}">Lorem ipsum dolor sit amet, consectetur adipisicing
+                                elit. Ab accusantium aliquid amet, asperiores assumenda atque autem blanditiis
+                                consectetur consequatur consequuntur cum delectus distinctio ea eligendi ex fugit hic
+                                iste maxime minus modi molestiae nesciunt nisi nostrum nulla perferendis perspiciatis
+                                placeat praesentium quibusdam quidem quis repellendus reprehenderit ullam voluptatem.
+                                Commodi, provident?</p>
+                        </div>
+
+                        <div class="userNameCreationDateLikesTags-container">
+                            <div class="userPlusCreationDate-container">
+                                <div class="userIconPlusUsername-container">
+                                    <span class="material-symbols-outlined">account_circle</span>
+                                    <a class="userName" th:text="${comment.createdBy.getUserName()}"
+                                       th:href="@{/users/{id}(id=${comment.getCreatedBy().getUserId()})}">Username</a>
+                                </div>
+                                <div class="calendarIconPlusDate-container">
+                                    <span class="material-symbols-outlined">calendar_month</span>
+                                    <p class="creationDate" th:text="${comment.getCreatedOn()}">24.01.31 07:00:00</p>
+                                </div>
+
+                            </div>
+
+                            <div class="likesPlusTag-container">
+                                <div class="likesIconPlusLikes-container">
+                                    <span class="material-symbols-outlined">thumb_up</span>
+                                    <p class="likesCount" th:text="${comment.getLikes()}">123</p>
+                                </div>
+                                <div class="likesIconPlusLikes-container">
+                                    <span class="material-symbols-outlined">thumb_down</span>
+                                    <p class="likesCount" th:text="${comment.getDislikes()}">123</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="edit-delete-reply-buttons-container">
+                            <form th:if="${loggedInUser.getUserId() == comment.getCreatedBy().getUserId()}"
+                                  action="#"
+                                  th:action="@{/posts/__${comment.getOriginalPost().getPostId()}__/comments/__${comment.getCommentId()}__/edit}"
+                                  method="get">
+                                <input class="single-user-page-button edit-button" type="submit" value="Edit">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
+
+    <footer th:fragment="gradient-footer" id="webPage-footer">
+        <p>@Copyright PlamkataIliikataYulkata inc. 2024</p>
+    </footer>
+
+</div>
 
 </body>
 </html>

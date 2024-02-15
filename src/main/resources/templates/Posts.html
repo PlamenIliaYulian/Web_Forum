@@ -5,7 +5,8 @@
     <title>Home</title>
     <link href="../static/css/reset.css" th:href="@{/css/reset.css}" rel="stylesheet"/>
     <link href="../static/css/home.css" th:href="@{/css/home.css}" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
 </head>
 <body>
 
@@ -24,9 +25,9 @@
                     <input id="browse-posts-input-title" placeholder="Post name" th:field="*{title}">
                     <input id="browse-posts-input-content" placeholder="Post content" th:field="*{content}">
                     <span id="browse-posts-dislikes-icon" class="material-symbols-outlined">thumb_up</span>
-                    <input id="browse-posts-input-likes" type="number" step="1"  th:field="*{minLikes}" />
+                    <input id="browse-posts-input-likes" type="number" step="1" th:field="*{minLikes}"/>
                     <span id="browse-posts-likes-icon" class="material-symbols-outlined">thumb_down</span>
-                    <input id="browse-posts-input-dislikes" type="number" step="1"  th:field="*{minDislikes}" />
+                    <input id="browse-posts-input-dislikes" type="number" step="1" th:field="*{minDislikes}"/>
                     <select id="browse-posts-input-sortBy" th:field="*{sortBy}">
                         <option value="">Sort By</option>
                         <option value="likes">Likes</option>
@@ -46,33 +47,34 @@
             </div>
         </div>
 
-        <div  class="topTen-container">
+        <div class="topTen-container">
             <p class="topTen" th:text="#{browsePosts.allPosts}">All posts</p>
         </div>
 
-        <div  class="topTen-posts-container" >
+        <div class="topTen-posts-container">
             <div class="posts-preview" th:each="post : ${posts}">
                 <div class="verticalColoredLine"></div>
                 <div class="topicContent">
                     <div class="post-title-container">
-                        <a href="" th:text="${post.title}" th:href="@{/posts/{id}(id=${post.getPostId()})}" >Title Content</a>
+                        <a href="" th:text="${post.title}" th:href="@{/posts/{id}(id=${post.getPostId()})}">Title
+                            Content</a>
                     </div>
                     <div class="userNameCreationDateLikesTags-container">
                         <div class="userPlusCreationDate-container">
                             <div class="userIconPlusUsername-container">
                                 <span class="material-symbols-outlined">account_circle</span>
-                                <a class="userName" th:text="${post.createdBy.getUserName()}" th:href="@{/users/{id}(id=${post.getCreatedBy().getUserId()})}">Username</a>
+                                <a class="userName" th:text="${post.createdBy.getUserName()}"
+                                   th:href="@{/users/{id}(id=${post.getCreatedBy().getUserId()})}">Username</a>
                             </div>
                             <div class="calendarIconPlusDate-container">
-                                <span class="material-symbols-outlined" >calendar_month</span>
+                                <span class="material-symbols-outlined">calendar_month</span>
                                 <p class="creationDate" th:text="${post.getCreatedOn()}">24.01.31 07:00:00</p>
                             </div>
                             <div class="commentIconPlusCommentsCount-container">
-                                <span class="material-symbols-outlined" >comment</span>
+                                <span class="material-symbols-outlined">comment</span>
                                 <p th:text="${post.getRelatedComments().size()}">10</p>
                             </div>
                         </div>
-
 
                         <div class="likesPlusTag-container">
                             <div class="likesIconPlusLikes-container">
@@ -86,25 +88,29 @@
                             <div class="TagIconPlusTag-container">
                                 <span class="material-symbols-outlined">loyalty</span>
                                 <div class="tag-name-container">
-                                    <p class="tagName" th:unless="${post.getTags().isEmpty()}" th:text="${'#'+post.getTags().toArray()[0]}">#SomeVeryLongWord</p>
+                                    <p class="tagName" th:unless="${post.getTags().isEmpty()}"
+                                       th:text="${'#'+post.getTags().toArray()[0]}">#SomeVeryLongWord</p>
                                 </div>
-
                             </div>
                         </div>
+                    </div>
+                    <div class="edit-delete-reply-buttons-container">
+                        <form th:if="${loggedUser.getUserId() == post.getCreatedBy().getUserId()}" action="#"
+                              th:action="@{/posts/{postId}/edit(postId=${post.getPostId()})}" method="get">
+                            <input class="single-user-page-button edit-button" type="submit" value="Edit">
+                        </form>
+
+                        <form th:if="${loggedUser.getUserId() == post.getCreatedBy().getUserId()}" action="#"
+                              th:action="@{/posts/{postId}/delete(postId=${post.getPostId()})}" method="get">
+                            <input class="single-user-page-button delete-button" type="submit" value="Delete">
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-
-
     </div>
 
     <div th:replace="~{Fragments.html :: gradient-footer}"></div>
-
-
-
-
-
 
 </div>
 

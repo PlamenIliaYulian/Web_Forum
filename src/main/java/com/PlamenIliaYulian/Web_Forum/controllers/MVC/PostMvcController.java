@@ -215,35 +215,32 @@ public class PostMvcController {
         }
     }
 
-    /*Plamka*/
-    /*This is the endpoint / page which allows the user to write a new comment*/
-//    @GetMapping("/{id}/comment")
-//    public String showAddCommentForm(@PathVariable int id,
-//                                     Model model,
-//                                     HttpSession session) {
-//        try {
-//            User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
-//            Post post = postService.getPostById(id);
-//            PostDto postDto = modelsMapper.postDtoFromPost(post);
-//            model.addAttribute("postDto", postDto);
-//            return "SinglePost";
-//        } catch (EntityNotFoundException e) {
-//            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-//            model.addAttribute("error", e.getMessage());
-//            return "Error";
-//        } catch (AuthenticationException e) {
-//            return "redirect:/auth/login";
-//        }
-//    }
+    @GetMapping("/{id}/add-comment")
+    public String showAddCommentForm(@PathVariable int id,
+                                     Model model,
+                                     HttpSession session) {
+        try {
+            User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
+            Post post = postService.getPostById(id);
+            model.addAttribute("commentDto", new CommentDto());
+            return "SinglePostAddComment";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "Error";
+        } catch (AuthenticationException e) {
+            return "redirect:/auth/login";
+        }
+    }
 
-    @PostMapping("/{id}/addComment")
+    @PostMapping("/{id}/add-comment")
     public String handleAddCommentToPost(@PathVariable int id,
                                          @Valid @ModelAttribute("commentDto") CommentDto commentDto,
                                          BindingResult errors,
                                          Model model,
                                          HttpSession session) {
         if (errors.hasErrors()) {
-            return "SinglePost";
+            return "SinglePostAddComment";
         }
         try {
             User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
@@ -337,35 +334,8 @@ public class PostMvcController {
         }
     }
 
-    /*Yuli*/
-    /*This is the endpoint which will be taking care of deleting a post.
-     * NOTE - make sure the redirect the user to >>> /posts */
 
     @GetMapping("/{id}/delete")
-    public String showDeletePostPage(@PathVariable int id,
-                                     Model model,
-                                     HttpSession session) {
-        try {
-            User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
-            Post post = postService.getPostById(id);
-            if (!post.getCreatedBy().equals(loggedInUser) && !loggedInUser.getRoles().contains(roleService.getRoleById(1))) {
-                model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
-                model.addAttribute("error", NOT_CREATOR_ERROR);
-                return "Error";
-            }
-            model.addAttribute("post", post);
-            return "PostDelete";
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "Error";
-        } catch (AuthenticationException e) {
-            return "redirect:/auth/login";
-        }
-    }
-
-
-    @PostMapping("/{id}/delete")
     public String handleDeletePost(@PathVariable int id,
                                    Model model,
                                    HttpSession httpSession) {

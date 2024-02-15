@@ -72,11 +72,6 @@
                                 <p class="likesCount" th:text="${post.getDislikes()}">123</p>
                             </div>
 
-                            <form th:if="${loggedInUser.getUserId() == post.getCreatedBy().getUserId()}" action="#"
-                                  th:action="@{/posts/{postId}/edit(postId=${post.getPostId()})}" method="get">
-                                <input class="single-user-page-button edit-button" type="submit" value="Edit">
-                            </form>
-
                         </div>
                     </div>
 
@@ -91,6 +86,26 @@
 
                         </div>
                     </div>
+
+                    <div class="edit-delete-reply-buttons-container">
+                        <form th:if="${loggedInUser.getUserId() == post.getCreatedBy().getUserId()}" action="#"
+                              th:action="@{__${requestURI}__/edit}" method="get">
+                            <input class="single-user-page-button edit-button" type="submit" value="Edit">
+                        </form>
+
+                        <form th:if="${loggedInUser.getUserId() == post.getCreatedBy().getUserId()}" action="#"
+                              th:action="@{__${requestURI}__/delete}" method="get">
+                            <input class="single-user-page-button delete-button" type="submit" value="Delete">
+                        </form>
+
+                        <form action="#"
+                              th:action="@{/posts/__${post.getPostId()}__/add-comment}"
+                              method="get">
+                            <input class="single-user-page-button add-comment-button" type="submit"
+                                   value="Reply">
+                        </form>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -151,7 +166,8 @@
                                 <p class="likesCount" th:text="${comment.getDislikes()}">123</p>
                             </div>
 
-                            <form th:if="${loggedInUser.getUserId() == comment.getCreatedBy().getUserId()}" action="#"
+                            <form th:if="${loggedInUser.getUserId() == comment.getCreatedBy().getUserId()} AND ${post.getRelatedComments().isEmpty()}"
+                                  action="#"
                                   th:action="@{/posts/__${comment.getOriginalPost().getPostId()}__/comments/__${comment.getCommentId()}__/edit}"
                                   method="get">
                                 <input class="single-user-page-button edit-button" type="submit" value="Edit">
