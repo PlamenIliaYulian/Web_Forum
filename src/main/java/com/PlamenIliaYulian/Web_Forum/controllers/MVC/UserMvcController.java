@@ -118,6 +118,7 @@ public class UserMvcController {
             model.addAttribute("userLoggedIn", userLoggedIn);
             model.addAttribute("userMvcAdminChangesDto", userMvcAdminChangesDto);
             model.addAttribute("allRoles", roleService.getAllRoles());
+            model.addAttribute("roleDto", new RoleDto());
 
             return "UserAdministrativeChanges";
         } catch (AuthenticationException e) {
@@ -168,7 +169,7 @@ public class UserMvcController {
         }
     }
 
-    @PostMapping("/{userId}/administrative-changes/add-role/{roleId}")
+    /*@PostMapping("/{userId}/administrative-changes/add-role/{roleId}")
     public String handleAddRoleToUser(@PathVariable int userId,
                                       @PathVariable int roleId,
                                      BindingResult errors,
@@ -195,8 +196,36 @@ public class UserMvcController {
             return "Error";
         }
     }
+*/
+    @PostMapping("/{userId}/administrative-changes/add-role")
+    public String handleAddRoleToUser(@PathVariable int userId,
+                                      @Valid @ModelAttribute("roleDto") RoleDto roleDto,
+                                      BindingResult errors,
+                                      Model model,
+                                      HttpSession session) {
+        if (errors.hasErrors()) {
+            return "UserAdministrativeChanges";
+        }
 
-    @PostMapping("/{userId}/administrative-changes/remove-role/{roleId}")
+        try {
+            User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
+            User userById = userService.getUserById(userId);
+            Role roleToAdd = modelsMapper.roleFromRoleDto(roleDto);
+            userService.addRoleToUser(roleToAdd, userById, loggedInUser);
+            return "redirect:/users/{userId}/administrative-changes";
+        } catch (AuthenticationException e) {
+            return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "Error";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "Error";
+        }
+    }
+
+    @GetMapping("/{userId}/administrative-changes/remove-role/{roleId}")
     public String handleRemoveRoleFromUser(@PathVariable int userId,
                                           @PathVariable int roleId,
                                           Model model,
@@ -205,8 +234,8 @@ public class UserMvcController {
             User loggedUser = authenticationHelper.tryGetUserFromSession(httpSession);
             User userById = userService.getUserById(userId);
             Role roleToBeRemoved = roleService.getRoleById(roleId);
-            postService.removeRoleFromUser(roleToBeRemoved, userById, loggedUser);
-            return "redirect:/{userId}/administrative-changes";
+            userService.removeRoleFromUser(roleToBeRemoved, userById, loggedUser);
+            return "redirect:/users/{userId}/administrative-changes";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
         } catch (EntityNotFoundException e) {

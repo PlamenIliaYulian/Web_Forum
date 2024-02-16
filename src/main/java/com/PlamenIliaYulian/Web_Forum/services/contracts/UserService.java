@@ -1,5 +1,6 @@
 package com.PlamenIliaYulian.Web_Forum.services.contracts;
 
+import com.PlamenIliaYulian.Web_Forum.models.Role;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
 
@@ -32,4 +33,8 @@ public interface UserService {
 
     User deleteAvatar(int id, User userToDoChanges);
     long getAllUsersCount();
+
+    void addRoleToUser(Role roleToAdd, User userById, User loggedInUser);
+
+    void removeRoleFromUser(Role roleToBeRemoved, User userById, User loggedUser);
 }

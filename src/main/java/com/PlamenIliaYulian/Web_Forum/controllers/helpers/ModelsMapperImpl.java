@@ -204,6 +204,11 @@ public class ModelsMapperImpl implements ModelsMapper {
     }
 
     @Override
+    public Role roleFromRoleDto(RoleDto roleDto) {
+        return roleService.getRoleById(roleDto.getDtoRoleId());
+    }
+
+    @Override
     public Post postFromDto(PostDto postDto) {
         Post post = new Post();
         post.setTitle(postDto.getTitle());

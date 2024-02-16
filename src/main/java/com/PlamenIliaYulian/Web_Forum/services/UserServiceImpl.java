@@ -3,6 +3,7 @@ package com.PlamenIliaYulian.Web_Forum.services;
 import com.PlamenIliaYulian.Web_Forum.exceptions.DuplicateEntityException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.models.Avatar;
+import com.PlamenIliaYulian.Web_Forum.models.Role;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.AvatarService;
 import com.PlamenIliaYulian.Web_Forum.services.helpers.PermissionHelper;
 import com.PlamenIliaYulian.Web_Forum.models.User;
@@ -148,6 +149,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public long getAllUsersCount() {
         return userRepository.getAllUsersCount();
+    }
+
+    @Override
+    public void addRoleToUser(Role roleToAdd, User userById, User loggedInUser) {
+        PermissionHelper.isAdmin(loggedInUser, UNAUTHORIZED_OPERATION);
+        userById.getRoles().add(roleToAdd);
+        userRepository.updateUser(userById);
+    }
+
+    @Override
+    public void removeRoleFromUser(Role roleToBeRemoved, User userById, User loggedUser) {
+        PermissionHelper.isAdmin(loggedUser, UNAUTHORIZED_OPERATION);
+        userById.getRoles().remove(roleToBeRemoved);
+        userRepository.updateUser(userById);
     }
 
     private void checkForUniqueUsername(User user) {

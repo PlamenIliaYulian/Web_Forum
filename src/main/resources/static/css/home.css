@@ -121,6 +121,50 @@ translateY()
     box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.75);
 }
 
+#user-admin-changes-container {
+     background: white;
+     padding: 100px;
+     border-radius: 20px;
+     max-width: 30%;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     overflow-wrap: break-word;
+     word-break: break-all;
+     box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.75);
+ }
+
+#user-current-roles-container{
+    display: flex;
+    justify-content: space-evenly;
+}
+#user-admin-changes-container > div{
+    min-width: 100%;
+}
+
+#user-admin-changes-container p{
+    min-width: 100%;
+    font-weight: bold;
+}
+
+#user-current-roles-container > span#user-current-roles-container{
+    color: rgba(0,0,0,0.5);
+}
+
+#user-current-roles-container > p{
+    text-align: center;
+}
+
+#remove-role-from-user{
+    text-align: center;
+    color: white;
+    background: rgba(182, 68, 67, 0.8);
+    font-weight: bold;
+    margin-left: 5px;
+    border-radius: 20px;
+}
+
 #edit-page-container > #user-profile-information-container {
     align-items: center;
 }
@@ -356,6 +400,10 @@ input#hide-comment:checked ~ div#content-comments {
     font-size: 15px;
 }
 
+p.edit-user-inputFields{
+    border: none;
+    word-wrap: break-word;
+}
 .register-and-login-general-button {
     height: 5vh;
     width: 6vw;
@@ -829,6 +877,21 @@ input#hide-comment:checked ~ div#content-comments {
     font-weight: bold;
     background: rgba(190, 199, 67, 0.8);
     box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
+}
+
+.add-role-to-user-button{
+    border: none;
+    border-radius: 60px;
+    padding: 0 5px;
+    font-size: 30px;
+    color: white;
+    font-weight: bold;
+    background: rgba(190, 199, 67, 0.8);
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
+}
+#add-role-to-user{
+    margin-bottom: 30px;
+    margin-top: 30px;
 }
 
 /*-----------------*/

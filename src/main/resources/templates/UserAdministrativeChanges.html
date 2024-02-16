@@ -6,7 +6,7 @@
     <div th:replace="~{Fragments.html::header}"></div>
     <div id="edit-page-container">
 
-        <div id="user-profile-information-container">
+        <div id="user-admin-changes-container">
             <div id="icon-plus-username-container">
                 <p id="username" th:text="${userById.getUserName()}">Very long username</p>
             </div>
@@ -27,38 +27,28 @@
             </br>
             <div id="icon-plus-email-container">
                 <span class="material-symbols-outlined">email</span>
-                <p class="edit-user-inputFields" th:text="${userById.lastName}">
+                <p class="edit-user-inputFields" th:text="${userById.email}">
             </div>
             </br>
+            <div id="user-current-roles-container" th:each="role : ${userById.getRoles()}">
+                <span class="material-symbols-outlined">badge</span>
+                <p th:text="${role.name}"></p>
+                <a href="#" th:href="@{/users/__${userById.getUserId()}__/administrative-changes/remove-role/__${role.getRoleId()}__}">
+                    <span id="remove-role-from-user" class="material-symbols-outlined">remove</span>
+                </a>
+            </div>
 
-
-            <form id="add-role-to-user" action="#" th:action="@{__${requestURI}__/add-role}"
+            <form id="add-role-to-user" action="#" th:action="@{/users/__${userById.getUserId()}__/administrative-changes/add-role}" th:object="${roleDto}"
                   method="post">
-                <select id="add-role-to-user-select" >
+                <select id="add-role-to-user-select" th:field="${roleDto.dtoRoleId}">
                     <option th:each="role : ${allRoles}"
                     th:value="${role.roleId}"
                     th:text="${role.name}">
                         Admin
                     </option>
                 </select>
-                <input class="single-user-page-button add-tag-button" type="submit" value="+">
+                <input class="single-user-page-button add-role-to-user-button" type="submit" value="+">
             </form>
-
-
-        <!--    <form id="add-tag-to-post" action="#" th:action="@{__${requestURI}__/add-tag}" th:object="${tagDto}"
-                  method="post">
-                <input id="add-tag-to-post-input" type="text" th:field="*{tag}"
-                       placeholder="place your tag here">
-                <input class="single-user-page-button add-tag-button" type="submit" value="+">
-            </form>-->
-
-        <!--    <select th:field="*{styleId}">
-                <option th:each="style : ${styles}"
-                        th:value="${style.styleId}"
-                        th:text="${style.name}">
-                    BeerStyleOne
-                </option>
-            </select>-->
 
 
             <form action="#" th:object="${userMvcAdminChangesDto}" th:action="@{__${requestURI}__}" method="post">
