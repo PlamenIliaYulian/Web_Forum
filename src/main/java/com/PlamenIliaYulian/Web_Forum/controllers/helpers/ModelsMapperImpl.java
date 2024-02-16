@@ -188,6 +188,14 @@ public class ModelsMapperImpl implements ModelsMapper {
     }
 
     @Override
+    public UserMvcAdminChangesDto userMvcAdminChangesDtoFromUser(User userById) {
+        UserMvcAdminChangesDto userMvcAdminChangesDto = new UserMvcAdminChangesDto();
+        userMvcAdminChangesDto.setBlocked(userById.isBlocked());
+        userMvcAdminChangesDto.setDeleted(userById.isDeleted());
+        return userMvcAdminChangesDto;
+    }
+
+    @Override
     public Post postFromDto(PostDto postDto) {
         Post post = new Post();
         post.setTitle(postDto.getTitle());

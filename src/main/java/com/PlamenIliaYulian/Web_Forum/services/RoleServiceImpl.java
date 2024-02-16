@@ -6,6 +6,9 @@ import com.PlamenIliaYulian.Web_Forum.services.contracts.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Set;
+
 @Service
 public class RoleServiceImpl implements RoleService {
 
@@ -25,6 +28,11 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role getRoleByName(String name){
         return roleRepository.getRoleByName(name);
+    }
+
+    @Override
+    public List<Role> getAllRoles() {
+        return roleRepository.getAllRoles();
     }
 
 

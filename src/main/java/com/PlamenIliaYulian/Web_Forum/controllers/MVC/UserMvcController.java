@@ -114,10 +114,11 @@ public class UserMvcController {
                 model.addAttribute("error", HttpStatus.FORBIDDEN.getReasonPhrase());
                 return "Error";
             }
-            UserAdministrativeDto userAdministrativeDto = modelsMapper.userAdministrativeDtoFromUser(userById);
+            UserMvcAdminChangesDto userAdministrativeDto = modelsMapper.userMvcAdminChangesDtoFromUser(userById);
             model.addAttribute("userById", userById);
             model.addAttribute("userLoggedIn", userLoggedIn);
             model.addAttribute("userAdministrativeDto", userAdministrativeDto);
+            model.addAttribute("allRoles", roleService.getAllRoles());
 
             return "UserAdministrativeChanges";
         } catch (AuthenticationException e) {
