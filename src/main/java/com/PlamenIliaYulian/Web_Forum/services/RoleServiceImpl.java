@@ -20,6 +20,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
 
+    /*TODO to throw not found exception if not found. - Handle in Rest Controllers and Swagger.*/
     @Override
     public Role getRoleById(int id){
         return roleRepository.getRoleById(id);

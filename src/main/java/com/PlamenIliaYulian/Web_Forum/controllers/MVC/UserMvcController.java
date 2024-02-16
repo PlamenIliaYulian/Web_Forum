@@ -5,9 +5,8 @@ import com.PlamenIliaYulian.Web_Forum.controllers.helpers.contracts.ModelsMapper
 import com.PlamenIliaYulian.Web_Forum.exceptions.AuthenticationException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.DuplicateEntityException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
-import com.PlamenIliaYulian.Web_Forum.models.Role;
-import com.PlamenIliaYulian.Web_Forum.models.User;
-import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
+import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
+import com.PlamenIliaYulian.Web_Forum.models.*;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.*;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -169,6 +168,56 @@ public class UserMvcController {
         }
     }
 
+    @PostMapping("/{userId}/administrative-changes/add-role/{roleId}")
+    public String handleAddRoleToUser(@PathVariable int userId,
+                                      @PathVariable int roleId,
+                                     BindingResult errors,
+                                     Model model,
+                                     HttpSession session) {
+        if (errors.hasErrors()) {
+            return "UserAdministrativeChanges";
+        }
+
+        try {
+            User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
+            User userById = userService.getUserById(userId);
+            Role roleToAdd = roleService.getRoleById(roleId);
+            userService.addRoleToUser(roleToAdd, userById, loggedInUser);
+            return "redirect:/{userId}/administrative-changes";
+        } catch (AuthenticationException e) {
+            return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "Error";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "Error";
+        }
+    }
+
+    @PostMapping("/{userId}/administrative-changes/remove-role/{roleId}")
+    public String handleRemoveRoleFromUser(@PathVariable int userId,
+                                          @PathVariable int roleId,
+                                          Model model,
+                                          HttpSession httpSession) {
+        try {
+            User loggedUser = authenticationHelper.tryGetUserFromSession(httpSession);
+            User userById = userService.getUserById(userId);
+            Role roleToBeRemoved = roleService.getRoleById(roleId);
+            postService.removeRoleFromUser(roleToBeRemoved, userById, loggedUser);
+            return "redirect:/{userId}/administrative-changes";
+        } catch (AuthenticationException e) {
+            return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "Error";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "Error";
+        }
+    }
 
     @GetMapping("/{id}")
     public String showSingleUserPage(@PathVariable int id,
