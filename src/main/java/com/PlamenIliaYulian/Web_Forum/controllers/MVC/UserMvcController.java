@@ -244,7 +244,7 @@ public class UserMvcController {
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "Error";
+            return "redirect:/users/{userId}/administrative-changes";
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("error", e.getMessage());
             return "Error";

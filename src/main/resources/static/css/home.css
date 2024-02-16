@@ -180,6 +180,15 @@ translateY()
     border-radius: 20px;
 }
 
+#remove-role-from-user-member{
+    text-align: center;
+    color: black;
+    font-weight: bold;
+    margin-left: 5px;
+    border-radius: 20px;
+    border: dashed 1px rgba(0,0,0,0.6);
+}
+
 #edit-page-container > #user-profile-information-container {
     align-items: center;
 }
@@ -929,6 +938,9 @@ p.edit-user-inputFields{
     border-radius: 10px;
     margin-right: 10px
 }
+
+
+
 
 /*-----------------*/
 

@@ -36,6 +36,9 @@
                 <a th:unless="${role.getRoleId() == 3}" href="#" th:href="@{/users/__${userById.getUserId()}__/administrative-changes/remove-role/__${role.getRoleId()}__}">
                     <span id="remove-role-from-user" class="material-symbols-outlined">remove</span>
                 </a>
+                <a th:if="${role.getRoleId() == 3}" href="#" >
+                    <span id="remove-role-from-user-member" class="material-symbols-outlined">remove</span>
+                </a>
             </div>
 
             <form id="add-role-to-user" action="#" th:action="@{/users/__${userById.getUserId()}__/administrative-changes/add-role}" th:object="${roleDto}"
