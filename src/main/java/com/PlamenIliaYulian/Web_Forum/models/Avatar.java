@@ -17,6 +17,10 @@ public class Avatar {
     public Avatar() {
     }
 
+    public Avatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     public int getAvatarId() {
         return avatarId;
     }

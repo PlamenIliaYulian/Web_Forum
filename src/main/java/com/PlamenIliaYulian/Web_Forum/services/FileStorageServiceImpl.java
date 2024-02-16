@@ -1,5 +1,6 @@
 package com.PlamenIliaYulian.Web_Forum.services;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.FileAlreadyExistsException;
@@ -8,9 +9,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
+import com.PlamenIliaYulian.Web_Forum.models.Avatar;
+import com.PlamenIliaYulian.Web_Forum.repositories.contracts.AvatarRepository;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.FileStorageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -19,7 +24,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
-    private final Path root = Paths.get("uploads");
+    private final Path root = Paths.get("C:/Developing stuff/Telerik Academy/04. Web/Web_Forum/uploads/");
+
+    private final String pathToFile = "C:/Developing stuff/Telerik Academy/04. Web/Web_Forum/uploads/";
+
+    private final AvatarRepository avatarRepository;
+    @Autowired
+    public FileStorageServiceImpl(AvatarRepository avatarRepository) {
+        this.avatarRepository = avatarRepository;
+    }
 
     @Override
     public void init() {
@@ -35,7 +48,7 @@ public class FileStorageServiceImpl implements FileStorageService {
         try {
 
             Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
-            return file.getOriginalFilename();
+            return root + file.getOriginalFilename();
 
         } catch (Exception e) {
             if (e instanceof FileAlreadyExistsException) {
@@ -74,5 +87,33 @@ public class FileStorageServiceImpl implements FileStorageService {
             throw new RuntimeException("Could not load the files!");
         }
     }
+
+    @Override
+    public Avatar uploadImageToFileSystem(MultipartFile file) {
+
+        String filePath = pathToFile + file.getOriginalFilename();
+
+        Avatar newAvatar = avatarRepository.createAvatar(new Avatar(filePath));
+
+        try {
+            file.transferTo(new File(filePath));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return newAvatar;
+    }
+
+    public byte[] downloadImageFromFileSystem(String name){
+        Optional<Avatar> avatar = avatarRepository.getAvatarByName(name);
+
+
+
+    }
+
+
+
+
+
 }
 

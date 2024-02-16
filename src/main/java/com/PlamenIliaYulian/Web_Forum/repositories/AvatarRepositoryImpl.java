@@ -10,6 +10,7 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class AvatarRepositoryImpl implements AvatarRepository {
@@ -37,7 +38,7 @@ public class AvatarRepositoryImpl implements AvatarRepository {
            session.beginTransaction();
            session.persist(avatar);
            session.getTransaction().commit();
-           return avatar;
+           return getAvatarById(avatar.getAvatarId());
        }
    }
     @Override
@@ -50,5 +51,10 @@ public class AvatarRepositoryImpl implements AvatarRepository {
             }
             return result.get(0);
         }
+    }
+
+    @Override
+    public Optional<Avatar> getAvatarByName(String name) {
+        return Optional.empty();
     }
 }

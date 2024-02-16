@@ -1,5 +1,6 @@
 package com.PlamenIliaYulian.Web_Forum.services.contracts;
 
+import com.PlamenIliaYulian.Web_Forum.models.Avatar;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,5 +17,7 @@ public interface FileStorageService {
     public void deleteAll();
 
     public Stream<Path> loadAll();
+
+    Avatar uploadImageToFileSystem(MultipartFile file);
 
 }

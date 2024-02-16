@@ -244,7 +244,7 @@ public class UserMvcController {
             model.addAttribute("error", e.getMessage());
             return "Error";
         } catch (RuntimeException e) {
-            model.addAttribute("message", e.getMessage());
+            model.addAttribute("error", e.getMessage());
             return "Error";
         }
     }
@@ -439,8 +439,8 @@ public class UserMvcController {
         }
 
         try {
-            String newAvatarPath = fileStorageService.save(file);
-            userService.addAvatar(id, newAvatarPath, authenticationHelper.tryGetUserFromSession(session));
+            Avatar newAvatar = fileStorageService.uploadImageToFileSystem(file);
+            userService.addAvatar(id, newAvatar.getAvatar(), authenticationHelper.tryGetUserFromSession(session));
             message = "Uploaded the file successfully: " + file.getOriginalFilename();
             model.addAttribute("message", message);
             return "redirect:/users/{id}";
@@ -452,5 +452,7 @@ public class UserMvcController {
             return "Error";
         }
     }
+
+
 
 }
