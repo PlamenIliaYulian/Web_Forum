@@ -21,15 +21,15 @@
                 <form action="" th:object="${userFilterOptionsDto}">
                     <br/><br/>
                     <input id="browse-users-input-username" placeholder="Username" th:field="*{username}">
-                    <input id="browse-posts-input-email" placeholder="Email" th:field="*{email}">
-                    <input id="browse-posts-input-first-name" placeholder="First name"  th:field="*{firstName}"/>
-                    <select id="browse-posts-input-sortBy" th:field="*{sortBy}">
+                    <input id="browse-users-input-email" placeholder="Email" th:field="*{email}">
+                    <input id="browse-users-input-first-name" placeholder="First name"  th:field="*{firstName}"/>
+                    <select id="browse-users-input-sortBy" th:field="*{sortBy}">
                         <option value="">Sort By</option>
                         <option value="username">Username</option>
                         <option value="user_email">Email</option>
                         <option value="first_name">First Name</option>
                     </select>
-                    <select id="browse-posts-input-sortORder" th:field="*{sortOrder}">
+                    <select id="browse-users-sortOrder" th:field="*{sortOrder}">
                         <option value="">Sort Order</option>
                         <option value="asc">Ascending</option>
                         <option value="desc">Descending</option>
@@ -71,7 +71,7 @@
                     <div class="edit-delete-reply-buttons-container">
                         <form th:if="${isAdmin}" action="#"
                               th:action="@{/users/__${user.getUserId()}__/administrative-changes}" method="get">
-                            <input class="single-user-page-button administrative-changes-button" type="submit" value="AdministrativeChanges">
+                            <input class="single-user-page-button administrative-changes-button" type="submit" value="Administrative changes">
                         </form>
 
                     </div>

@@ -7,6 +7,25 @@
 
 }
 
+#about-information {
+    max-width: 80%;
+    padding: 30px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
+    font-size: 20px;
+}
+
+#main-content-container-about{
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: linear-gradient(360deg, rgba(93, 2, 112, 1) 0%, rgba(201, 65, 174, 1) 100%);
+}
+
+
 #login-and-register-webPage-container,
 #delete-confirmation-webPage-container,
 #edit-user-webPage-container {
@@ -216,7 +235,7 @@ translateY()
     height: 200px;
     border-radius: 1000px;
     background-position: center;
-    padding: 30px 30px 60px;
+    padding: 10px 20px 10px;
 }
 
 #icon-plus-username-container,
@@ -604,6 +623,20 @@ p.edit-user-inputFields{
     box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
 }
 
+#browse-users-input-username,
+#browse-users-input-email,
+#browse-users-input-first-name,
+#browse-users-input-sortBy,
+#browse-users-sortOrder {
+    margin-right: 10px;
+    padding-bottom: 15px;
+    padding-left: 10px;
+    padding-top: 15px;
+    border-radius: 1000px;
+    border: none;
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.75);
+}
+
 #browse-posts-dislikes-icon,
 #browse-posts-likes-icon {
     color: white;
@@ -796,7 +829,7 @@ p.edit-user-inputFields{
 
 .administrative-changes-button{
     max-width: 100%;
-    background: #dc3c02;
+    background: rgba(205, 116, 86, 0.99);
     border: none;
     color: white;
     border-radius: 100px;
