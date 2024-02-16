@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
-    private final Path root = Paths.get("/src/main/resources/static/images.images/user_profile_pictures");
+    private final Path root = Paths.get("uploads");
 
     @Override
     public void init() {
@@ -33,15 +33,9 @@ public class FileStorageServiceImpl implements FileStorageService {
     @Override
     public String save(MultipartFile file) {
         try {
-            StringBuilder sb2 = new StringBuilder();
-            sb2.append(LocalDateTime.now().toString());
-            sb2.append("___");
-            sb2.append(file.getOriginalFilename());
-            Files.copy(file.getInputStream(), this.root.resolve(Objects.requireNonNull(sb2.toString())));
-            StringBuilder sb = new StringBuilder();
-            sb.append("users_profile_pictures/");
-            sb.append(sb2.toString());
-            return sb.toString();
+
+            Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
+            return file.getOriginalFilename();
 
         } catch (Exception e) {
             if (e instanceof FileAlreadyExistsException) {

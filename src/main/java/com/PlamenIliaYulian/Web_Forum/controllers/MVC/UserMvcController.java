@@ -103,8 +103,8 @@ public class UserMvcController {
 
     @GetMapping("/{id}/administrative-changes")
     public String showUserAdministrativePage(@PathVariable int id,
-                               Model model,
-                               HttpSession session) {
+                                             Model model,
+                                             HttpSession session) {
         try {
             User userLoggedIn = authenticationHelper.tryGetUserFromSession(session);
             User userById = userService.getUserById(id);
@@ -132,10 +132,10 @@ public class UserMvcController {
 
     @PostMapping("/{id}/administrative-changes")
     public String handleUserAdministrativeChanges(@PathVariable int id,
-                                 @Valid @ModelAttribute("userMvcAdminChangesDto") UserMvcAdminChangesDto userMvcAdminChangesDto,
-                                 BindingResult errors,
-                                 HttpSession session,
-                                 Model model) {
+                                                  @Valid @ModelAttribute("userMvcAdminChangesDto") UserMvcAdminChangesDto userMvcAdminChangesDto,
+                                                  BindingResult errors,
+                                                  HttpSession session,
+                                                  Model model) {
 
         User userById;
         try {
@@ -169,34 +169,6 @@ public class UserMvcController {
         }
     }
 
-    /*@PostMapping("/{userId}/administrative-changes/add-role/{roleId}")
-    public String handleAddRoleToUser(@PathVariable int userId,
-                                      @PathVariable int roleId,
-                                     BindingResult errors,
-                                     Model model,
-                                     HttpSession session) {
-        if (errors.hasErrors()) {
-            return "UserAdministrativeChanges";
-        }
-
-        try {
-            User loggedInUser = authenticationHelper.tryGetUserFromSession(session);
-            User userById = userService.getUserById(userId);
-            Role roleToAdd = roleService.getRoleById(roleId);
-            userService.addRoleToUser(roleToAdd, userById, loggedInUser);
-            return "redirect:/{userId}/administrative-changes";
-        } catch (AuthenticationException e) {
-            return "redirect:/auth/login";
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "Error";
-        } catch (UnauthorizedOperationException e) {
-            model.addAttribute("error", e.getMessage());
-            return "Error";
-        }
-    }
-*/
     @PostMapping("/{userId}/administrative-changes/add-role")
     public String handleAddRoleToUser(@PathVariable int userId,
                                       @Valid @ModelAttribute("roleDto") RoleDto roleDto,
@@ -227,14 +199,14 @@ public class UserMvcController {
 
     @GetMapping("/{userId}/administrative-changes/remove-role/{roleId}")
     public String handleRemoveRoleFromUser(@PathVariable int userId,
-                                          @PathVariable int roleId,
-                                          Model model,
-                                          HttpSession httpSession) {
+                                           @PathVariable int roleId,
+                                           Model model,
+                                           HttpSession httpSession) {
         try {
             User loggedUser = authenticationHelper.tryGetUserFromSession(httpSession);
             User userById = userService.getUserById(userId);
             Role roleToBeRemoved = roleService.getRoleById(roleId);
-            if(roleId == 3){
+            if (roleId == 3) {
                 return "redirect:/users/{userId}/administrative-changes";
             }
             userService.removeRoleFromUser(roleToBeRemoved, userById, loggedUser);
@@ -263,6 +235,7 @@ public class UserMvcController {
             model.addAttribute("userPosts", postService.getPostsByCreator(user));
             model.addAttribute("userComments", commentService.getCommentsByCreator(user));
             model.addAttribute("loggedInUser", loggedInUser);
+            model.addAttribute("avatar", fileStorageService.load(user.getAvatar().getAvatar()));
             return "SingleUser";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
@@ -270,47 +243,12 @@ public class UserMvcController {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "Error";
-        }
-    }
-
-    @GetMapping("/{id}/posts")
-    public String showSingleUsersPosts(@PathVariable int id,
-                                       Model model,
-                                       HttpSession session) {
-
-        try {
-            authenticationHelper.tryGetUserFromSession(session);
-            User user = userService.getUserById(id);
-            model.addAttribute("userById", user);
-            model.addAttribute("userPosts", postService.getPostsByCreator(user));
-            return "SingleUserPosts";
-        } catch (AuthenticationException e) {
-            return "redirect:/auth/login";
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
+        } catch (RuntimeException e) {
+            model.addAttribute("message", e.getMessage());
             return "Error";
         }
     }
 
-    @GetMapping("/{id}/comments")
-    public String showSingleUserComments(@PathVariable int id,
-                                         Model model,
-                                         HttpSession session) {
-        try {
-            authenticationHelper.tryGetUserFromSession(session);
-            User user = userService.getUserById(id);
-            model.addAttribute("userById", user);
-            model.addAttribute("userComments", commentService.getCommentsByCreator(user));
-            return "SingleUserComments";
-        } catch (AuthenticationException e) {
-            return "redirect:/auth/login";
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "Error";
-        }
-    }
 
     @GetMapping("/{id}/edit")
     public String showEditPage(@PathVariable int id,
@@ -378,33 +316,6 @@ public class UserMvcController {
         } catch (DuplicateEntityException e) {
             errors.rejectValue("email", "email_exists", e.getMessage());
             return "UserEdit";
-        }
-    }
-
-    /*TODO Research how to upload Photo.*/
-    @PostMapping("/{id}/edit/upload-avatar")
-    public String handleEditUserUploadAvatar(@PathVariable int id,
-                                             HttpSession session,
-                                             Model model) {
-
-        try {
-            User userLoggedIn = authenticationHelper.tryGetUserFromSession(session);
-            User userById = userService.getUserById(id);
-            if (!userLoggedIn.equals(userById)) {
-                model.addAttribute("error", HttpStatus.FORBIDDEN.getReasonPhrase());
-                return "Error";
-            }
-/*
-            userService.addAvatar(id, byte[] avatar, userLoggedIn);
-*/
-            return "redirect:/{id}";
-        } catch (AuthenticationException e) {
-            model.addAttribute("error", HttpStatus.UNAUTHORIZED.getReasonPhrase());
-            return "Error";
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "Error";
         }
     }
 
@@ -513,10 +424,10 @@ public class UserMvcController {
     }
 
     @PostMapping("/{id}/edit/photos/upload")
-    public String uploadFile(@PathVariable int id,
-                             Model model,
-                             @RequestParam("file") MultipartFile file,
-                             HttpSession session) {
+    public String uploadAvatar(@PathVariable int id,
+                               Model model,
+                               @RequestParam("file") MultipartFile file,
+                               HttpSession session) {
         String message = "";
         try {
             User userById = userService.getUserById(id);
@@ -532,13 +443,14 @@ public class UserMvcController {
             userService.addAvatar(id, newAvatarPath, authenticationHelper.tryGetUserFromSession(session));
             message = "Uploaded the file successfully: " + file.getOriginalFilename();
             model.addAttribute("message", message);
+            return "redirect:/users/{id}";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             message = "Could not upload the file: " + file.getOriginalFilename() + ". Error: " + e.getMessage();
             model.addAttribute("message", message);
+            return "Error";
         }
-        return "redirect:/users/{id}";
     }
 
 }
