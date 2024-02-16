@@ -2,7 +2,6 @@ package com.PlamenIliaYulian.Web_Forum.repositories;
 
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.models.Avatar;
-import com.PlamenIliaYulian.Web_Forum.models.Comment;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.AvatarRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -34,13 +33,14 @@ public class AvatarRepositoryImpl implements AvatarRepository {
     }
 
     public Avatar createAvatar(Avatar avatar) {
-       try (Session session = sessionFactory.openSession()) {
-           session.beginTransaction();
-           session.persist(avatar);
-           session.getTransaction().commit();
-           return getAvatarById(avatar.getAvatarId());
-       }
-   }
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.persist(avatar);
+            session.getTransaction().commit();
+            return getAvatarById(avatar.getAvatarId());
+        }
+    }
+
     @Override
     public Avatar getDefaultAvatar() {
         try (Session session = sessionFactory.openSession()) {
@@ -54,7 +54,16 @@ public class AvatarRepositoryImpl implements AvatarRepository {
     }
 
     @Override
-    public Optional<Avatar> getAvatarByName(String name) {
-        return Optional.empty();
+    public Avatar getAvatarByName(String name) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Avatar> query = session.createQuery("from Avatar where avatar = :name", Avatar.class);
+            query.setParameter("name", name);
+
+            List<Avatar> result = query.list();
+            if (result.isEmpty()) {
+                throw new EntityNotFoundException("Avatar", "avatar name", name);
+            }
+            return result.get(0);
+        }
     }
 }

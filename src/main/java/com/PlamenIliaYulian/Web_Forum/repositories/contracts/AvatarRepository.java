@@ -11,5 +11,5 @@ public interface AvatarRepository {
     Avatar createAvatar(Avatar avatar);
     Avatar getDefaultAvatar();
 
-    Optional<Avatar> getAvatarByName(String name);
+    Avatar getAvatarByName(String name);
 }

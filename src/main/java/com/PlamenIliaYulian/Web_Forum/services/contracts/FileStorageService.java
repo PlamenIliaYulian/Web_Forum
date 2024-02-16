@@ -20,4 +20,5 @@ public interface FileStorageService {
 
     Avatar uploadImageToFileSystem(MultipartFile file);
 
+    byte[] getPhotoByName(String fileName);
 }

@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 import com.PlamenIliaYulian.Web_Forum.models.Avatar;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.AvatarRepository;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.FileStorageService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -29,6 +30,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     private final String pathToFile = "C:/Developing stuff/Telerik Academy/04. Web/Web_Forum/uploads/";
 
     private final AvatarRepository avatarRepository;
+
     @Autowired
     public FileStorageServiceImpl(AvatarRepository avatarRepository) {
         this.avatarRepository = avatarRepository;
@@ -103,17 +105,17 @@ public class FileStorageServiceImpl implements FileStorageService {
 
         return newAvatar;
     }
-
-    public byte[] downloadImageFromFileSystem(String name){
-        Optional<Avatar> avatar = avatarRepository.getAvatarByName(name);
-
-
-
+    @Override
+    public byte[] getPhotoByName(String name) {
+        Avatar avatar = avatarRepository.getAvatarByName(name);
+        String filePath = avatar.getAvatar();
+        try {
+            byte[] image = Files.readAllBytes(new File(filePath).toPath());
+            return image;
+        } catch (IOException e) {
+            throw new EntityNotFoundException(e.getMessage());
+        }
     }
-
-
-
-
 
 }
 
