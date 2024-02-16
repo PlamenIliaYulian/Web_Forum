@@ -37,4 +37,5 @@ public interface ModelsMapper {
     User userFromUserAdministrativeDto(UserAdministrativeDto userAdministrativeDto, int id);
 
     UserMvcAdminChangesDto userMvcAdminChangesDtoFromUser(User userById);
+    User userFromUserMvcAdminChangesDto(UserMvcAdminChangesDto userMvcAdminChangesDto, int userId);
 }

@@ -114,10 +114,10 @@ public class UserMvcController {
                 model.addAttribute("error", HttpStatus.FORBIDDEN.getReasonPhrase());
                 return "Error";
             }
-            UserMvcAdminChangesDto userAdministrativeDto = modelsMapper.userMvcAdminChangesDtoFromUser(userById);
+            UserMvcAdminChangesDto userMvcAdminChangesDto = modelsMapper.userMvcAdminChangesDtoFromUser(userById);
             model.addAttribute("userById", userById);
             model.addAttribute("userLoggedIn", userLoggedIn);
-            model.addAttribute("userAdministrativeDto", userAdministrativeDto);
+            model.addAttribute("userMvcAdminChangesDto", userMvcAdminChangesDto);
             model.addAttribute("allRoles", roleService.getAllRoles());
 
             return "UserAdministrativeChanges";
@@ -132,7 +132,7 @@ public class UserMvcController {
 
     @PostMapping("/{id}/administrative-changes")
     public String handleUserAdministrativeChanges(@PathVariable int id,
-                                 @Valid @ModelAttribute("userAdministrativeDto") UserAdministrativeDto userAdministrativeDto,
+                                 @Valid @ModelAttribute("userMvcAdminChangesDto") UserMvcAdminChangesDto userMvcAdminChangesDto,
                                  BindingResult errors,
                                  HttpSession session,
                                  Model model) {
@@ -157,7 +157,7 @@ public class UserMvcController {
                 model.addAttribute("error", HttpStatus.FORBIDDEN.getReasonPhrase());
                 return "Error";
             }
-            User userUpdated = modelsMapper.userFromUserAdministrativeDto(userAdministrativeDto, id);
+            User userUpdated = modelsMapper.userFromUserMvcAdminChangesDto(userMvcAdminChangesDto, id);
             userService.updateUser(userUpdated, userLoggedIn);
             return "redirect:/users/search";
         } catch (AuthenticationException e) {

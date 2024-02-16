@@ -103,6 +103,10 @@ translateY()
     flex-direction: column;
 }
 
+#user-roles-admin-changes-container{
+
+}
+
 #user-profile-information-container {
     background: white;
     padding: 100px;

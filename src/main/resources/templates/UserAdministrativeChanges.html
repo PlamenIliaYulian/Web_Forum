@@ -5,8 +5,9 @@
 <div id="edit-user-webPage-container" class="webPage-container">
     <div th:replace="~{Fragments.html::header}"></div>
     <div id="edit-page-container">
+        <div id="user-roles-admin-changes-container">
 
-
+        </div>
         <div id="user-profile-information-container">
             <div id="icon-plus-username-container">
                 <p id="username" th:text="${userById.getUserName()}">Very long username</p>
@@ -17,7 +18,7 @@
             </br>
             </br>
 
-            <form action="#" th:object="${userAdministrativeDto}" th:action="@{__${requestURI}__}" method="post">
+            <form action="#" th:object="${userMvcAdminChangesDto}" th:action="@{__${requestURI}__}" method="post">
                 <div id="icon-plus-firstname-container">
                     <span class="material-symbols-outlined">person</span>
                     <p class="edit-user-inputFields" th:text="${userById.firstName}">
