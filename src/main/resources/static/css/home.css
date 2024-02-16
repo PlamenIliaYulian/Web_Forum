@@ -153,8 +153,23 @@ translateY()
 }
 
 #user-current-roles-container > p{
-    text-align: center;
+    padding-left: 10px;
 }
+
+#user-current-roles-container > .material-symbols-outlined{
+    padding-left: 10px;
+    color: rgba(0,0,0,0.5);
+}
+
+#user-add-role-button{
+
+
+}
+
+#user-add-role-button-span{
+
+}
+
 
 #remove-role-from-user{
     text-align: center;
@@ -882,8 +897,9 @@ p.edit-user-inputFields{
 .add-role-to-user-button{
     border: none;
     border-radius: 60px;
-    padding: 0 5px;
+    padding: 0 10px;
     font-size: 30px;
+    margin-left: 20px;
     color: white;
     font-weight: bold;
     background: rgba(190, 199, 67, 0.8);
@@ -892,6 +908,26 @@ p.edit-user-inputFields{
 #add-role-to-user{
     margin-bottom: 30px;
     margin-top: 30px;
+}
+
+.user-administrative-changes-fieldset{
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#user-admin-changes-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+#add-role-to-user-select{
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 10px;
+    margin-right: 10px
 }
 
 /*-----------------*/

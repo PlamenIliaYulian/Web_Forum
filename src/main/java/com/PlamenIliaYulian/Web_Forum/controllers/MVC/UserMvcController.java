@@ -234,6 +234,9 @@ public class UserMvcController {
             User loggedUser = authenticationHelper.tryGetUserFromSession(httpSession);
             User userById = userService.getUserById(userId);
             Role roleToBeRemoved = roleService.getRoleById(roleId);
+            if(roleId == 3){
+                return "redirect:/users/{userId}/administrative-changes";
+            }
             userService.removeRoleFromUser(roleToBeRemoved, userById, loggedUser);
             return "redirect:/users/{userId}/administrative-changes";
         } catch (AuthenticationException e) {

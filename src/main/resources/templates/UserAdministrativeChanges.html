@@ -33,7 +33,7 @@
             <div id="user-current-roles-container" th:each="role : ${userById.getRoles()}">
                 <span class="material-symbols-outlined">badge</span>
                 <p th:text="${role.name}"></p>
-                <a href="#" th:href="@{/users/__${userById.getUserId()}__/administrative-changes/remove-role/__${role.getRoleId()}__}">
+                <a th:unless="${role.getRoleId() == 3}" href="#" th:href="@{/users/__${userById.getUserId()}__/administrative-changes/remove-role/__${role.getRoleId()}__}">
                     <span id="remove-role-from-user" class="material-symbols-outlined">remove</span>
                 </a>
             </div>
@@ -47,27 +47,32 @@
                         Admin
                     </option>
                 </select>
-                <input class="single-user-page-button add-role-to-user-button" type="submit" value="+">
+                <!--<button id="user-add-role-button" type="submit" >
+                    <span id="user-add-role-button-span" class="material-symbols-outlined">add</span>
+                </button>-->
+                <input class="single-user-page-button add-tag-button" type="submit" value="+">
             </form>
 
 
-            <form action="#" th:object="${userMvcAdminChangesDto}" th:action="@{__${requestURI}__}" method="post">
-                <fieldset>
-                    <legend>Set blocked or unblocked:</legend>
+            <form id="user-admin-changes-form" action="#" th:object="${userMvcAdminChangesDto}" th:action="@{__${requestURI}__}" method="post">
+                <fieldset class="user-administrative-changes-fieldset">
+                    <legend>Block or unblock user:</legend>
                     <div>
-                        <label th:text="#{user.blocked}"></label>
-                        <input type="radio" th:name="'false'" th:field="*{blocked}" th:value="false" checked>
-                        <input type="radio" th:name="'true'" th:field="*{blocked}" th:value="true">
+                        <input type="radio" th:name="'false'" th:field="*{blocked}" th:value="false" th:text="#{user.blocked}" checked>
+                        <br>
+                        <input type="radio" th:name="'true'" th:field="*{blocked}" th:value="true" th:text="#{user.unblocked}">
                     </div>
                 </fieldset>
-                <fieldset>
-                    <legend>Set deleted or not:</legend>
+                <br>
+                <fieldset class="user-administrative-changes-fieldset">
+                    <legend>Delete or activate user:</legend>
                     <div>
-                        <label th:text="#{user.deleted}"></label>
-                        <input type="radio" th:name="'false'" th:field="*{deleted}" th:value="false" checked>
-                        <input type="radio" th:name="'true'" th:field="*{deleted}" th:value="true">
+                        <input type="radio" th:name="'false'" th:field="*{deleted}" th:value="false" checked th:text="#{user.deleted}">
+                        <br>
+                        <input type="radio" th:name="'true'" th:field="*{deleted}" th:value="true" th:text="#{user.active}">
                     </div>
                 </fieldset>
+                <br>
                     <input class="register-and-login-general-button" type="submit" th:value="Save" id="login-button"
                            value="Save">
             </form>
