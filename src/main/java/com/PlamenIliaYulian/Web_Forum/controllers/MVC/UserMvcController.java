@@ -95,6 +95,7 @@ public class UserMvcController {
             if (loggedUser.getRoles().contains(adminRole)) {
                 UserFilterOptions userFilterOptions = modelsMapper.userFilterOptionsFromDto(userFilterOptionsDto);
                 model.addAttribute("users", userService.getAllUsers(userFilterOptions));
+                model.addAttribute("userFilterOptionsDto", userFilterOptionsDto);
                 return "AllUsers";
             }
             model.addAttribute("error", HttpStatus.FORBIDDEN.getReasonPhrase());

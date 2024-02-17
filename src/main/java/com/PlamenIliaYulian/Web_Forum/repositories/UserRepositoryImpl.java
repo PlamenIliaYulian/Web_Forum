@@ -53,17 +53,17 @@ public class UserRepositoryImpl implements UserRepository {
             Map<String, Object> params = new HashMap<>();
 
             userFilterOptions.getUsername().ifPresent(value -> {
-                filters.add("userName like :username");
+                filters.add("userName like :username ");
                 params.put("username", String.format("%%%s%%", value));
             });
 
             userFilterOptions.getEmail().ifPresent(value -> {
-                filters.add("email like :email");
+                filters.add("email like :email ");
                 params.put("email", String.format("%%%s%%", value));
             });
 
             userFilterOptions.getFirstName().ifPresent(value -> {
-                filters.add("firstName like :firstName");
+                filters.add("firstName like :firstName ");
                 params.put("firstName", String.format("%%%s%%", value));
             });
 
@@ -100,6 +100,8 @@ public class UserRepositoryImpl implements UserRepository {
             case "firstName":
                 orderBy = "first_name";
                 break;
+            default:
+                return "";
         }
 
         orderBy = String.format(" order by %s", orderBy);
