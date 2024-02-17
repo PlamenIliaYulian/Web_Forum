@@ -20,17 +20,17 @@
                    <p>Home</p>
             </a>
 
-        <a th:if="${isAuthenticated} AND !${isBlocked}"  href="#" th:href="@{/posts/new}">
+        <a th:unless="${isBlocked}"  href="#" th:href="@{/posts/new}">
             <span class="material-symbols-outlined">post_add</span>
             <p>Create new post</p>
         </a>
 
-        <a th:if="${isAuthenticated}"  href="#" th:href="@{/posts}">
+        <a th:unless="${isBlocked}"  href="#" th:href="@{/posts}">
             <span class="material-symbols-outlined">search</span>
             <p>Browse posts</p>
         </a>
 
-        <a th:if="${isAuthenticated} and ${isAdmin}"  href="#" th:href="@{/users/search}">
+        <a th:if="${isAdmin}"  href="#" th:href="@{/users/search}">
             <span class="material-symbols-outlined">group</span>
             <p>Users</p>
         </a>
