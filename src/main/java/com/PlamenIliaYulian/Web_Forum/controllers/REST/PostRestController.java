@@ -254,7 +254,67 @@ public class PostRestController {
         }
     }
 
-    /*TODO Swagger Plamkata*/
+    @Operation(
+            summary = "View all posts published in the forum with the option to filter and sort them.",
+            description = "Get a list of all posts. Also you can filter out beers and sort them.",
+            parameters = {
+                    @Parameter(
+                            name = "minLikes",
+                            description = "Get posts that are liked equal or more than a certain integer number",
+                            example = "20"),
+                    @Parameter(
+                            name = "minDislikes",
+                            description = "Get posts that are disliked equal or more than a certain integer number",
+                            example = "20"),
+                    @Parameter(
+                            name = "title",
+                            description = "If the post's title consist the text provided in the 'title' parameter.",
+                            example = "hibernate"),
+                    @Parameter(
+                            name = "content",
+                            description = "If the post's content consist the text provided in the 'title' parameter.",
+                            example = "Performance optimization"),
+                    @Parameter(
+                            name = "createdBefore",
+                            description = "Get posts that are created before a certain date provided in the 'createdBefore' parameter",
+                            example = "2024-02-16 22:55:20"),
+                    @Parameter(
+                            name = "createdAfter",
+                            description = "Get posts that are created after a certain date provided in the 'createdAfter' parameter",
+                            example = "2024-02-16 22:55:20"),
+                    @Parameter(
+                            name = "createdBy",
+                            description = "If the post creator's username consist the text provided in the 'createdBy' parameter.",
+                            example = "desc"),
+                    @Parameter(
+                            name = "sortBy",
+                            description = "You can choose to sort the posts list by 'likes', 'dislikes', 'title', 'content', 'createdOn' or 'createdBy'.",
+                            example = "desc"),
+                    @Parameter(
+                            name = "sortOrder",
+                            description = "You can choose to sort the posts list in descending order by typing 'desc'. The default is an ascending order.",
+                            example = "desc")
+
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success Response"
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Missing Authentication.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(
+                                                    name = "Not authenticated", value = "The requested resource requires authentication.",
+                                                    description = "You need to be authenticated to view the list of all posts.")
+                                    },
+                                    mediaType = "Plain text")
+                    )
+            })
+    @SecurityRequirement(name = "Authorization")
+
     @GetMapping("/search")
     public List<Post> getAllPosts(@RequestHeader HttpHeaders headers,
                                   @RequestParam(required = false) Integer minLikes,
