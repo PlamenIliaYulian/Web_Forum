@@ -7,11 +7,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Stream;
-
 import com.PlamenIliaYulian.Web_Forum.models.Avatar;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.AvatarRepository;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.FileStorageService;
@@ -22,21 +18,19 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
+import com.cloudinary.*;
+import com.cloudinary.utils.ObjectUtils;
+import java.util.Map;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.stream.Stream;
+
 
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
     private final Path root = Paths.get("C:/Developing stuff/Telerik Academy/04. Web/Web_Forum/uploads/");
 
     private final String pathToFile = "C:/Developing stuff/Telerik Academy/04. Web/Web_Forum/uploads/";
+
+    private final String CLOUDINARY_URL = "cloudinary://242857587276945:B5ODyO381gN-4aFLKDNVcrAFzxM@dol3hflxs";
 
     private final AvatarRepository avatarRepository;
 
@@ -123,6 +117,31 @@ public class FileStorageServiceImpl implements FileStorageService {
             return image;
         } catch (IOException e) {
             throw new EntityNotFoundException(e.getMessage());
+        }
+    }
+
+    @Override
+    public String uploadPictureToCloudinary(File file){
+        Cloudinary cloudinary = new Cloudinary(CLOUDINARY_URL);
+        cloudinary.config.secure = true;
+        System.out.println(cloudinary.config.cloudName);
+
+        try {
+            Map params1 = ObjectUtils.asMap(
+                    "use_filename", true,
+                    "unique_filename", false,
+                    "overwrite", true
+            );
+
+
+            return cloudinary
+                    .uploader()
+                    .upload("https://cloudinary-devs.github.io/cld-docs-assets/assets/images/coffee_cup.jpg", params1)
+                    .get("secure_url")
+                    .toString();
+        }
+        catch (IOException e){
+            throw new RuntimeException(e.getMessage());
         }
     }
 

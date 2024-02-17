@@ -11,7 +11,7 @@
                 <div id="icon-plus-username-container">
                     <p id="username" th:text="${userById.getUserName()}">Very long username</p>
                 </div>
-                <img id="user-picture-container" th:src="@{/images/Default_profile_picture.PNG}">
+                <img id="user-picture-container" th:src="${userById.avatar.avatar}">
 
                 <form id="uploadForm" method="post" th:action="@{__${requestURI}__/photos/upload}" enctype="multipart/form-data">
                     <input id="input-file" type="file" name="file" />

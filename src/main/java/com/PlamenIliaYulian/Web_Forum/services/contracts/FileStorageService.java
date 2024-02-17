@@ -4,6 +4,7 @@ import com.PlamenIliaYulian.Web_Forum.models.Avatar;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
@@ -21,4 +22,6 @@ public interface FileStorageService {
     Avatar uploadImageToFileSystem(MultipartFile file);
 
     byte[] getPhotoByName(String fileName);
+
+    String uploadPictureToCloudinary(File file);
 }
