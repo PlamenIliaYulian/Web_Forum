@@ -4,6 +4,7 @@ import com.PlamenIliaYulian.Web_Forum.models.Avatar;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.AvatarRepository;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.AvatarService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class AvatarServiceImpl implements AvatarService {
@@ -24,5 +25,8 @@ public class AvatarServiceImpl implements AvatarService {
         return avatarRepository.getDefaultAvatar();
     }
 
-
+    @Override
+    public String uploadPictureToCloudinary(MultipartFile multipartFile) {
+        return avatarRepository.uploadPictureToCloudinary(multipartFile);
+    }
 }

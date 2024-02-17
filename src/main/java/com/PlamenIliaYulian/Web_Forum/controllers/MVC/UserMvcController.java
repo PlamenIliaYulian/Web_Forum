@@ -34,21 +34,21 @@ public class UserMvcController {
     private final CommentService commentService;
     private final RoleService roleService;
 
-    private final FileStorageService fileStorageService;
+    private final AvatarService avatarService;
 
     public UserMvcController(AuthenticationHelper authenticationHelper,
                              ModelsMapper modelsMapper,
                              UserService userService,
                              PostService postService,
                              CommentService commentService,
-                             RoleService roleService, FileStorageService fileStorageService) {
+                             RoleService roleService, AvatarService avatarService) {
         this.authenticationHelper = authenticationHelper;
         this.modelsMapper = modelsMapper;
         this.userService = userService;
         this.postService = postService;
         this.commentService = commentService;
         this.roleService = roleService;
-        this.fileStorageService = fileStorageService;
+        this.avatarService = avatarService;
     }
 
     @ModelAttribute("requestURI")
@@ -57,7 +57,7 @@ public class UserMvcController {
     }
 
     @ModelAttribute("isBlocked")
-    public boolean populateIsBlocked(HttpSession httpSession){
+    public boolean populateIsBlocked(HttpSession httpSession) {
         return (httpSession.getAttribute("currentUser") != null &&
                 authenticationHelper
                         .tryGetUserFromSession(httpSession)
@@ -248,7 +248,6 @@ public class UserMvcController {
             model.addAttribute("userPosts", postService.getPostsByCreator(user));
             model.addAttribute("userComments", commentService.getCommentsByCreator(user));
             model.addAttribute("loggedInUser", loggedInUser);
-            model.addAttribute("avatar", fileStorageService.load(user.getAvatar().getAvatar()));
             return "SingleUser";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
@@ -452,21 +451,17 @@ public class UserMvcController {
         }
 
         try {
-            Avatar newAvatar = fileStorageService.uploadImageToFileSystem(file);
-            userService.addAvatar(id, newAvatar.getAvatar(), authenticationHelper.tryGetUserFromSession(session));
+            String newAvatar = avatarService.uploadPictureToCloudinary(file);
+            userService.addAvatar(id, newAvatar, authenticationHelper.tryGetUserFromSession(session));
             message = "Uploaded the file successfully: " + file.getOriginalFilename();
             model.addAttribute("message", message);
             return "redirect:/users/{id}";
         } catch (AuthenticationException e) {
             return "redirect:/auth/login";
         } catch (RuntimeException e) {
-            message = "Could not upload the file: " + file.getOriginalFilename() + ". Error: " + e.getMessage();
-            model.addAttribute("message", message);
+            model.addAttribute("message", e.getMessage());
             return "Error";
         }
     }
-
-
-
 
 }
