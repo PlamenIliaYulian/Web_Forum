@@ -436,7 +436,52 @@ public class PostRestController {
         }
     }
 
-    /*TODO Swagger Yuli*/
+    @Operation(
+            summary = "Like specific post.",
+            description = "Used to Like a post by given id in the system.",
+            parameters = {
+                    @Parameter(name = "id",
+                            description = "Specific id to search in the system",
+                            example = "2"),
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success response.",
+                            content = @Content(schema = @Schema(implementation = Post.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Username and password provided in the 'Authorization' header do not match any user in the database",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Invalid authentication.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "There is no post with this 'ID'.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Post with title 'Java Basics' not found.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "User trying to execute the request must not be the user that created the post.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Unauthorized operation.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+            })
+    @SecurityRequirement(name = "Authorization")
     @PutMapping("/{id}/likes")
     public Post likePost(@RequestHeader HttpHeaders headers,
                          @PathVariable int id) {
@@ -480,7 +525,7 @@ public class PostRestController {
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "There is no post with this 'title'.",
+                            description = "There is no post with this 'ID'.",
                             content = {
                                     @Content(examples = {
                                             @ExampleObject(value = "Post with title 'Java Basics' not found.")
@@ -743,7 +788,60 @@ public class PostRestController {
         }
     }
 
-    /*TODO Swagger Plamkata*/
+    @Operation(
+            summary = "Remove comment from a certain Post by numeric IDs",
+            description = "Used to find a post by given Id and remove a certain comment by Id from it.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Body consists of the content of the comment."),
+            parameters = {
+                    @Parameter(name = "postId",
+                            description = "Numeric Id to select the post with the comment to be removed.",
+                            example = "3"),
+                    @Parameter(name = "commentId",
+                            description = "Numeric Id to select the comment from the post that has to be removed.",
+                            example = "10; 3/comments/10"),
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success response.",
+                            content = @Content(schema = @Schema(implementation = Post.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "Username and password provided in the 'Authorization' header do not match any user in the database",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Invalid authentication.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Not Found status.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(
+                                                    name = "Missing post", value = "Post with ID '200' not found.",
+                                                    description = "There is no such post with the provided ID."),
+                                            @ExampleObject(name = "Missing comment", value = "Comment with ID '150' not found.",
+                                                    description = "There is no such comment with the provided ID.")
+                                    },
+                                    mediaType = "Plain text")
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "User trying to execute the request must be either admin OR the same user to which the profile belongs.",
+                            content = {
+                                    @Content(examples = {
+                                            @ExampleObject(value = "Unauthorized operation.")
+                                    },
+                                            mediaType = "plain text")
+                            }
+                    )
+            })
+    @SecurityRequirement(name = "Authorization")
     @DeleteMapping("/{postId}/comments/{commentId}")
     public Post removeCommentFromPost(@RequestHeader HttpHeaders headers,
                                       @PathVariable int postId,
