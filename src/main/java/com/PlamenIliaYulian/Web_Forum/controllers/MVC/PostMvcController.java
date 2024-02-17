@@ -10,7 +10,10 @@ import com.PlamenIliaYulian.Web_Forum.models.dtos.CommentDto;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.PostDto;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.PostFilterOptionsDto;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.TagDto;
-import com.PlamenIliaYulian.Web_Forum.services.contracts.*;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.PostService;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.RoleService;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -21,7 +24,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/posts")

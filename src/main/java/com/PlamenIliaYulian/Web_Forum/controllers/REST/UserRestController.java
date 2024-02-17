@@ -1,21 +1,19 @@
 package com.PlamenIliaYulian.Web_Forum.controllers.REST;
 
+import com.PlamenIliaYulian.Web_Forum.controllers.helpers.AuthenticationHelper;
+import com.PlamenIliaYulian.Web_Forum.controllers.helpers.contracts.ModelsMapper;
 import com.PlamenIliaYulian.Web_Forum.exceptions.AuthenticationException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
-import com.PlamenIliaYulian.Web_Forum.controllers.helpers.AuthenticationHelper;
-import com.PlamenIliaYulian.Web_Forum.controllers.helpers.contracts.ModelsMapper;
 import com.PlamenIliaYulian.Web_Forum.models.User;
+import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.PhoneNumberDto;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.UserAdministrativeDto;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.UserDto;
-import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.UserDtoUpdate;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;

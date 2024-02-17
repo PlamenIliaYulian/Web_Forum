@@ -1,12 +1,12 @@
 package com.PlamenIliaYulian.Web_Forum.services;
 
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
-import com.PlamenIliaYulian.Web_Forum.services.helpers.PermissionHelper;
 import com.PlamenIliaYulian.Web_Forum.models.Post;
 import com.PlamenIliaYulian.Web_Forum.models.Tag;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.TagRepository;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
+import com.PlamenIliaYulian.Web_Forum.services.helpers.PermissionHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,8 +45,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void deleteTag(Tag tag, User userToCheckIfBlocked) {
-        PermissionHelper.isAdmin(userToCheckIfBlocked, UNAUTHORIZED_OPERATION);
+    public void deleteTag(Tag tag, User userToCheckIfAdmin) {
+        PermissionHelper.isAdmin(userToCheckIfAdmin, UNAUTHORIZED_OPERATION);
         Set<Post> relatedPosts = tag.getRelatedPosts();
         relatedPosts.clear();
         tag.setDeleted(true);

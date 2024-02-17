@@ -1,6 +1,5 @@
 package com.PlamenIliaYulian.Web_Forum.repositories.contracts;
 
-import com.PlamenIliaYulian.Web_Forum.models.Avatar;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
 

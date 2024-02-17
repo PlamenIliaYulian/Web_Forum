@@ -1,9 +1,5 @@
 package com.PlamenIliaYulian.Web_Forum.models.dtos;
 
-import com.PlamenIliaYulian.Web_Forum.models.Role;
-
-import java.util.Set;
-
 public class  UserMvcAdminChangesDto{
 
     private boolean isDeleted;

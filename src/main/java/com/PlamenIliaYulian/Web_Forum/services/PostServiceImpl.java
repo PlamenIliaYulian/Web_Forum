@@ -1,16 +1,14 @@
 package com.PlamenIliaYulian.Web_Forum.services;
 
-import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.InvalidOperationException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.InvalidUserInputException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
-import com.PlamenIliaYulian.Web_Forum.services.helpers.PermissionHelper;
 import com.PlamenIliaYulian.Web_Forum.models.*;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.PostRepository;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.CommentService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.PostService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
-import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
+import com.PlamenIliaYulian.Web_Forum.services.helpers.PermissionHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,14 +26,14 @@ public class PostServiceImpl implements PostService {
     static final String MULTIPLE_LIKE_ERROR = "You have already liked this comment";
     static final String MULTIPLE_DISLIKE_ERROR = "You have already disliked this comment";
     private final TagService tagService;
-    private final UserService userService;
     private final CommentService commentService;
     private final PostRepository postRepository;
 
     @Autowired
-    public PostServiceImpl(TagService tagService, UserService userService, CommentService commentService, PostRepository postRepository) {
+    public PostServiceImpl(TagService tagService,
+                           CommentService commentService,
+                           PostRepository postRepository) {
         this.tagService = tagService;
-        this.userService = userService;
         this.commentService = commentService;
         this.postRepository = postRepository;
     }

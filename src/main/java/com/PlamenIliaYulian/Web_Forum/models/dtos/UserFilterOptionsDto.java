@@ -1,7 +1,5 @@
 package com.PlamenIliaYulian.Web_Forum.models.dtos;
 
-import java.util.Optional;
-
 public class UserFilterOptionsDto {
     private String username;
     private String email;

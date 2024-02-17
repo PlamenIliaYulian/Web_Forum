@@ -2,7 +2,6 @@ package com.PlamenIliaYulian.Web_Forum.repositories;
 
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.models.Tag;
-import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.TagRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Set;
 
 @Repository
 public class TagRepositoryImpl implements TagRepository {
@@ -23,7 +21,6 @@ public class TagRepositoryImpl implements TagRepository {
         this.sessionFactory = sessionFactory;
     }
 
-    /*Ilia*/
     @Override
     public Tag getTagByName(String name) {
         try (Session session = sessionFactory.openSession();) {
@@ -47,7 +44,6 @@ public class TagRepositoryImpl implements TagRepository {
         return tag;
     }
 
-    /*Ilia*/
     @Override
     public Tag updateTag(Tag tag) {
         try (Session session = sessionFactory.openSession()) {

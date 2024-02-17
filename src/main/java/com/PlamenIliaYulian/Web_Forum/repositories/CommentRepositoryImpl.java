@@ -1,7 +1,9 @@
 package com.PlamenIliaYulian.Web_Forum.repositories;
 
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
-import com.PlamenIliaYulian.Web_Forum.models.*;
+import com.PlamenIliaYulian.Web_Forum.models.Comment;
+import com.PlamenIliaYulian.Web_Forum.models.CommentFilterOptions;
+import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.CommentRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -36,7 +38,6 @@ public class CommentRepositoryImpl implements CommentRepository {
         }
     }
 
-    /*Ilia*/
     @Override
     public Comment getCommentByContent(String content) {
         try (Session session = sessionFactory.openSession()) {

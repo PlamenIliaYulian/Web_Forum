@@ -1,7 +1,6 @@
 package com.PlamenIliaYulian.Web_Forum.services;
 
 import com.PlamenIliaYulian.Web_Forum.helpers.TestHelpers;
-import com.PlamenIliaYulian.Web_Forum.models.Comment;
 import com.PlamenIliaYulian.Web_Forum.models.Role;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.RoleRepository;
 import org.junit.jupiter.api.Assertions;

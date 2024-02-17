@@ -2,7 +2,6 @@ package com.PlamenIliaYulian.Web_Forum.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Fetch;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

@@ -1,7 +1,5 @@
 package com.PlamenIliaYulian.Web_Forum.models.dtos;
 
-import java.util.Optional;
-
 public class PostFilterOptionsDto {
     private int minLikes;
     private int minDislikes;
@@ -12,8 +10,18 @@ public class PostFilterOptionsDto {
     private String createdBy;
     private String sortBy;
     private String sortOrder;
+    private String tag;
 
-    public PostFilterOptionsDto(int minLikes, int minDislikes, String title, String content, String createdBefore, String createdAfter, String createdBy, String sortBy, String sortOrder) {
+    public PostFilterOptionsDto(int minLikes,
+                                int minDislikes,
+                                String title,
+                                String content,
+                                String createdBefore,
+                                String createdAfter,
+                                String createdBy,
+                                String sortBy,
+                                String sortOrder,
+                                String tag) {
         this.minLikes = minLikes;
         this.minDislikes = minDislikes;
         this.title = title;
@@ -23,9 +31,18 @@ public class PostFilterOptionsDto {
         this.createdBy = createdBy;
         this.sortBy = sortBy;
         this.sortOrder = sortOrder;
+        this.tag = tag;
     }
 
     public PostFilterOptionsDto() {
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public int getMinLikes() {

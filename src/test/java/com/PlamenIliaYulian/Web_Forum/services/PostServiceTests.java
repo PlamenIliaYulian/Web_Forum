@@ -1,6 +1,5 @@
 package com.PlamenIliaYulian.Web_Forum.services;
 
-import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.InvalidOperationException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.InvalidUserInputException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;

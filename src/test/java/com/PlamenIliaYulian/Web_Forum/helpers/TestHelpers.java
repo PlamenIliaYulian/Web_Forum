@@ -8,7 +8,6 @@ import java.util.TreeSet;
 
 public class TestHelpers {
 
-    /*Yuli*/
     public static User createMockAdminUser() {
         Set<Role> roles = new TreeSet<>();
         roles.add(createMockRoleAdmin());
@@ -30,7 +29,6 @@ public class TestHelpers {
         return mockUser;
     }
 
-    /*Yuli*/
     public static User createMockNoAdminUser() {
         Set<Role> roles = new TreeSet<>(Set.of(createMockRoleMember()));
         User mockUser = new User();
@@ -48,14 +46,8 @@ public class TestHelpers {
         return mockUser;
     }
 
-    /*Yuli*/
     public static Tag createMockTag() {
         Tag mockTag = new Tag();
-        /*Setting relatedPosts to null, because the method createTag_Should_Pass_When_TagCreatorIsNotBlocked
-        * in "TagServiceTests" falls into stackOverflow...
-        *
-        *  Set<Post> relatedPosts = new TreeSet<>();
-        relatedPosts.add(createMockPost1());*/
         mockTag.setTagId(777);
         mockTag.setTag("#luckyNumber");
         mockTag.setDeleted(false);
@@ -63,7 +55,6 @@ public class TestHelpers {
         return mockTag;
     }
 
-    /*Yuli*/
     public static Post createMockPost1() {
         Set<Comment> relatedComments = new TreeSet<>();
         Set<Tag> relatedTags = new TreeSet<>();
@@ -95,7 +86,6 @@ public class TestHelpers {
         return mockPost;
     }
 
-    /*Yuli*/
     public static Post createMockPost2() {
         Set<Comment> relatedComments = new TreeSet<>();
         Set<Tag> relatedTags = new TreeSet<>();
@@ -127,31 +117,27 @@ public class TestHelpers {
         return mockPost;
     }
 
-    /*Yuli*/
     public static Role createMockRoleAdmin() {
         Role mockRole = new Role();
         mockRole.setRoleId(1);
-        mockRole.setName("ROLE_ADMIN");
+        mockRole.setName("ADMIN");
         return mockRole;
     }
 
-    /*Yuli*/
     public static Role createMockRoleStaffMember() {
         Role mockRole = new Role();
         mockRole.setRoleId(3);
-        mockRole.setName("ROLE_STAFF_MEMBER");
+        mockRole.setName("STAFF_MEMBER");
         return mockRole;
     }
 
-    /*Yuli*/
     public static Role createMockRoleMember() {
         Role mockRole = new Role();
         mockRole.setRoleId(2);
-        mockRole.setName("ROLE_MEMBER");
+        mockRole.setName("MEMBER");
         return mockRole;
     }
 
-    /*Yuli*/
     public static Comment createMockComment1() {
         Comment mockComment = new Comment();
         Set<User> usersWhoLikedTheComment = new TreeSet<>();
@@ -173,13 +159,12 @@ public class TestHelpers {
         return new PostFilterOptions(
                 0,
                 0,
-                0,
-                0,
                 "Test title",
                 "Test content",
                 "2024-01-31 00:00:00",
                 "2024-01-31 00:00:00",
                 "Test User",
+                null,
                 null,
                 null
         );

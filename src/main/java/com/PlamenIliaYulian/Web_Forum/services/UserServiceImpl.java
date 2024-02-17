@@ -4,18 +4,16 @@ import com.PlamenIliaYulian.Web_Forum.exceptions.DuplicateEntityException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.models.Avatar;
 import com.PlamenIliaYulian.Web_Forum.models.Role;
-import com.PlamenIliaYulian.Web_Forum.services.contracts.AvatarService;
-import com.PlamenIliaYulian.Web_Forum.services.helpers.PermissionHelper;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.UserRepository;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.AvatarService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
+import com.PlamenIliaYulian.Web_Forum.services.helpers.PermissionHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @Service
@@ -40,8 +38,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.createUser(user);
     }
 
-
-    /*Ilia*/
     @Override
     public void deleteUser(User userToBeDeleted, User userIsAuthorized) {
         PermissionHelper.isAdminOrSameUser(userToBeDeleted, userIsAuthorized, UNAUTHORIZED_OPERATION);
@@ -68,7 +64,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.getAllUsers(userFilterOptions);
     }
 
-    /*Ilia*/
     @Override
     public User getUserByFirstName(String firstName, User userIsAdmin) {
         PermissionHelper.isAdmin(userIsAdmin, UNAUTHORIZED_OPERATION);
@@ -86,7 +81,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.getUserByEmail(email);
     }
 
-    /*Ilia*/
     @Override
     public User getUserById(int id) {
         return userRepository.getUserById(id);
@@ -108,30 +102,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addPhoneNumber(User userToBeUpdated, String phoneNumber, User userIsAuthorized) {
-        /*Unique phone number validation.*/
         PermissionHelper.isAdmin(userToBeUpdated, UNAUTHORIZED_OPERATION);
-        /*Check if the two users are one and the same. If not - throw exception.
-         * If we want to let the admin set phone number to another admin we can set
-         * it in administrative changes.*/
-
-        /*Ilia -The validations has to be moved to a separate method in this class.
-        Otherwise, it is hard to read and to understand the logic behind the code*/
-
-        boolean duplicateExists = true;
-
-        try {
-            userRepository.getUserByPhoneNumber(userToBeUpdated.getPhoneNumber());
-        } catch (EntityNotFoundException e) {
-            duplicateExists = false;
-        }
-
-        if (duplicateExists) {
-            throw new DuplicateEntityException("User", "Phone number", userToBeUpdated.getPhoneNumber());
-        }
-
+        checkIfPhoneNumberUnique(userToBeUpdated);
         userToBeUpdated.setPhoneNumber(phoneNumber);
         return userRepository.updateUser(userToBeUpdated);
     }
+
+
 
     @Override
     public User makeAdministrativeChanges(User userToMakeUpdates, User userToBeUpdated) {
@@ -151,6 +128,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.getAllUsersCount();
     }
 
+    /*TODO test*/
     @Override
     public void addRoleToUser(Role roleToAdd, User userById, User loggedInUser) {
         PermissionHelper.isAdmin(loggedInUser, UNAUTHORIZED_OPERATION);
@@ -158,6 +136,7 @@ public class UserServiceImpl implements UserService {
         userRepository.updateUser(userById);
     }
 
+    /*TODO test*/
     @Override
     public void removeRoleFromUser(Role roleToBeRemoved, User userById, User loggedUser) {
         PermissionHelper.isAdmin(loggedUser, UNAUTHORIZED_OPERATION);
@@ -170,6 +149,7 @@ public class UserServiceImpl implements UserService {
 
         try {
             userRepository.getUserByUsername(user.getUserName());
+
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
@@ -194,6 +174,22 @@ public class UserServiceImpl implements UserService {
 
         if (duplicateExists) {
             throw new DuplicateEntityException("User", "email", user.getEmail());
+        }
+    }
+    private void checkIfPhoneNumberUnique(User userToBeUpdated) {
+        boolean duplicateExists = true;
+
+        try {
+            User user = userRepository.getUserByPhoneNumber(userToBeUpdated.getPhoneNumber());
+            if (user.getUserId() == userToBeUpdated.getUserId()) {
+                duplicateExists = false;
+            }
+        } catch (EntityNotFoundException e) {
+            duplicateExists = false;
+        }
+
+        if (duplicateExists) {
+            throw new DuplicateEntityException("User", "Phone number", userToBeUpdated.getPhoneNumber());
         }
     }
 }

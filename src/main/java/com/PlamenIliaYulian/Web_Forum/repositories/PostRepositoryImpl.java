@@ -3,25 +3,20 @@ package com.PlamenIliaYulian.Web_Forum.repositories;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.models.Post;
 import com.PlamenIliaYulian.Web_Forum.models.PostFilterOptions;
-import com.PlamenIliaYulian.Web_Forum.models.Tag;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.PostRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.datetime.standard.TemporalAccessorParser;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAccessor;
-import java.util.*;
-
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public class PostRepositoryImpl implements PostRepository {
@@ -43,7 +38,6 @@ public class PostRepositoryImpl implements PostRepository {
         return getPostByTitle(post.getTitle());
     }
 
-    /*Ilia - I did not implement this method*/
     @Override
     public Post updatePost(Post post) {
         try (Session session = sessionFactory.openSession()) {
@@ -64,7 +58,6 @@ public class PostRepositoryImpl implements PostRepository {
         return post;
     }
 
-    /*TODO tags*/
     @Override
     public List<Post> getAllPosts(PostFilterOptions postFilterOptions) {
 
@@ -74,23 +67,23 @@ public class PostRepositoryImpl implements PostRepository {
 
 
             postFilterOptions.getMinLikes().ifPresent(value ->{
-                filters.add(" likes >=: minLikes ");
+                filters.add(" post.likes >=: minLikes ");
                 parameters.put("minLikes", value);
             });
 
 
             postFilterOptions.getMinDislikes().ifPresent(value ->{
-                filters.add(" dislikes >=: minDislikes ");
+                filters.add(" post.dislikes >=: minDislikes ");
                 parameters.put("minDislikes", value);
             });
 
 
             postFilterOptions.getTitle().ifPresent(value -> {
-                filters.add(" title like :title ");
+                filters.add(" post.title like :title ");
                 parameters.put("title", String.format("%%%s%%", value));
             });
             postFilterOptions.getContent().ifPresent(value -> {
-                filters.add(" content like :content ");
+                filters.add(" post.content like :content ");
                 parameters.put("content", String.format("%%%s%%", value));
             });
 
@@ -98,7 +91,7 @@ public class PostRepositoryImpl implements PostRepository {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 LocalDateTime date = LocalDateTime.parse(value, formatter);
 
-                filters.add(" createdOn < :createdBefore ");
+                filters.add(" post.createdOn < :createdBefore ");
                 parameters.put("createdBefore", date);
             });
 
@@ -107,19 +100,23 @@ public class PostRepositoryImpl implements PostRepository {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 LocalDateTime date = LocalDateTime.parse(value, formatter);
 
-                filters.add(" createdOn > :createdAfter ");
+                filters.add(" post.createdOn > :createdAfter ");
                 parameters.put("createdAfter", date);
             });
 
 
             postFilterOptions.getCreatedBy().ifPresent(value -> {
-                filters.add(" createdBy.userName like :createdBy ");
+                filters.add(" post.createdBy.userName like :createdBy ");
                 parameters.put("createdBy", String.format("%%%s%%", value));
             });
 
-            filters.add(" isDeleted = false ");
-            parameters.put("isDeleted", false);
-            StringBuilder queryString = new StringBuilder("FROM Post ");
+            postFilterOptions.getTag().ifPresent(value -> {
+                filters.add(" t.tag like :tag ");
+                parameters.put("tag", String.format("%%%s%%", value));
+            });
+
+            filters.add(" post.isDeleted = false ");
+            StringBuilder queryString = new StringBuilder("FROM Post AS post JOIN post.tags t ");
             queryString.append(" WHERE ")
                     .append(String.join(" AND ", filters));
 
@@ -144,7 +141,6 @@ public class PostRepositoryImpl implements PostRepository {
         }
     }
 
-    /*Ilia*/
     @Override
     public Post getPostById(int id) {
         try (Session session = sessionFactory.openSession();) {

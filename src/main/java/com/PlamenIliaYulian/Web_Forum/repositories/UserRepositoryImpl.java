@@ -1,19 +1,19 @@
 package com.PlamenIliaYulian.Web_Forum.repositories;
 
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
-import com.PlamenIliaYulian.Web_Forum.models.Avatar;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.UserRepository;
-import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.object.SqlQuery;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -111,7 +111,6 @@ public class UserRepositoryImpl implements UserRepository {
         return orderBy;
     }
 
-    /*Ilia*/
     @Override
     public User getUserByFirstName(String firstName) {
         try (Session session = sessionFactory.openSession()) {
@@ -151,7 +150,6 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    /*Ilia*/
     @Override
     public User getUserById(int id) {
         try (Session session = sessionFactory.openSession()) {

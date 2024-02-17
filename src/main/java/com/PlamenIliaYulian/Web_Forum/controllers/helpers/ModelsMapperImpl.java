@@ -123,7 +123,8 @@ public class ModelsMapperImpl implements ModelsMapper {
                 dto.getCreatedAfter(),
                 dto.getCreatedBy(),
                 dto.getSortBy(),
-                dto.getSortOrder()
+                dto.getSortOrder(),
+                dto.getTag()
         );
     }
 

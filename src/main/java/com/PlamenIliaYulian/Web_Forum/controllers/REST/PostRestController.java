@@ -1,12 +1,12 @@
 package com.PlamenIliaYulian.Web_Forum.controllers.REST;
 
 
+import com.PlamenIliaYulian.Web_Forum.controllers.helpers.AuthenticationHelper;
+import com.PlamenIliaYulian.Web_Forum.controllers.helpers.contracts.ModelsMapper;
 import com.PlamenIliaYulian.Web_Forum.exceptions.AuthenticationException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.InvalidUserInputException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
-import com.PlamenIliaYulian.Web_Forum.controllers.helpers.AuthenticationHelper;
-import com.PlamenIliaYulian.Web_Forum.controllers.helpers.contracts.ModelsMapper;
 import com.PlamenIliaYulian.Web_Forum.models.*;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.CommentDto;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.PostDto;
@@ -16,7 +16,6 @@ import com.PlamenIliaYulian.Web_Forum.services.contracts.PostService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.TagService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -30,7 +29,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import com.PlamenIliaYulian.Web_Forum.models.Tag;
 
 import java.util.List;
 
@@ -293,6 +291,10 @@ public class PostRestController {
                     @Parameter(
                             name = "sortOrder",
                             description = "You can choose to sort the posts list in descending order by typing 'desc'. The default is an ascending order.",
+                            example = "desc"),
+                    @Parameter(
+                            name = "tag",
+                            description = "You can choose to filter all post by a certain tag.",
                             example = "desc")
 
             },
@@ -325,11 +327,12 @@ public class PostRestController {
                                   @RequestParam(required = false) String createdAfter,
                                   @RequestParam(required = false) String createdBy,
                                   @RequestParam(required = false) String sortBy,
-                                  @RequestParam(required = false) String sortOrder) {
+                                  @RequestParam(required = false) String sortOrder,
+                                  @RequestParam(required = false) String tag) {
         try {
             User userExecutingTheRequest = authenticationHelper.tryGetUser(headers);
             PostFilterOptions postFilterOptions =
-                    new PostFilterOptions(minLikes, minDislikes,title, content, createdBefore, createdAfter, createdBy, sortBy, sortOrder);
+                    new PostFilterOptions(minLikes, minDislikes,title, content, createdBefore, createdAfter, createdBy, sortBy, sortOrder, tag);
             return postService.getAllPosts(userExecutingTheRequest, postFilterOptions);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
@@ -978,4 +981,5 @@ public class PostRestController {
     public List<Post> getMostRecentlyCreatedPosts() {
         return postService.getMostCommentedPosts();
     }
+
 }

@@ -12,14 +12,15 @@ public class PostFilterOptions {
     private Optional<String> createdBy;
     private Optional<String> sortBy;
     private Optional<String> sortOrder;
+    private Optional<String> tag;
+
 
     public PostFilterOptions(Integer minLikes, Integer minDislikes, String title,
                              String content, String createdBefore, String createdAfter, String createdBy,
-                             String sortBy, String sortOrder) {
+                             String sortBy, String sortOrder, String tag) {
+
         this.minLikes = Optional.ofNullable(minLikes);
-
         this.minDislikes = Optional.ofNullable(minDislikes);
-
         this.title = Optional.ofNullable(title);
         this.content = Optional.ofNullable(content);
         this.createdBefore = Optional.ofNullable(createdBefore);
@@ -27,6 +28,11 @@ public class PostFilterOptions {
         this.createdBy = Optional.ofNullable(createdBy);
         this.sortBy = Optional.ofNullable(sortBy);
         this.sortOrder = Optional.ofNullable(sortOrder);
+        this.tag = Optional.ofNullable(tag);
+    }
+
+    public Optional<String> getTag() {
+        return tag;
     }
 
     public Optional<String> getCreatedAfter() {

@@ -2,7 +2,6 @@ package com.PlamenIliaYulian.Web_Forum.controllers.MVC;
 
 import com.PlamenIliaYulian.Web_Forum.controllers.helpers.AuthenticationHelper;
 import com.PlamenIliaYulian.Web_Forum.models.User;
-import com.PlamenIliaYulian.Web_Forum.models.dtos.PostFilterOptionsDto;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.PostService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.RoleService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
@@ -53,7 +52,7 @@ public class HomeMvcController {
 
     @ModelAttribute("loggedUser")
     public User populateLoggedUser(HttpSession httpSession) {
-        if(httpSession.getAttribute("currentUser") != null){
+        if (httpSession.getAttribute("currentUser") != null) {
             return authenticationHelper.tryGetUserFromSession(httpSession);
         }
         return new User();

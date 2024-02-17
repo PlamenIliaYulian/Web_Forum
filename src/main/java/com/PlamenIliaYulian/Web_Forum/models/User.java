@@ -1,7 +1,6 @@
 package com.PlamenIliaYulian.Web_Forum.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.*;
 
 import java.util.Objects;
