@@ -66,13 +66,13 @@ public class PostRepositoryImpl implements PostRepository {
             Map<String, Object> parameters = new HashMap<>();
 
 
-            postFilterOptions.getMinLikes().ifPresent(value ->{
+            postFilterOptions.getMinLikes().ifPresent(value -> {
                 filters.add(" post.likes >=: minLikes ");
                 parameters.put("minLikes", value);
             });
 
 
-            postFilterOptions.getMinDislikes().ifPresent(value ->{
+            postFilterOptions.getMinDislikes().ifPresent(value -> {
                 filters.add(" post.dislikes >=: minDislikes ");
                 parameters.put("minDislikes", value);
             });
@@ -110,15 +110,25 @@ public class PostRepositoryImpl implements PostRepository {
                 parameters.put("createdBy", String.format("%%%s%%", value));
             });
 
-            postFilterOptions.getTag().ifPresent(value -> {
-                filters.add(" t.tag like :tag ");
-                parameters.put("tag", String.format("%%%s%%", value));
-            });
 
             filters.add(" post.isDeleted = false ");
-            StringBuilder queryString = new StringBuilder("FROM Post AS post JOIN post.tags t ");
-            queryString.append(" WHERE ")
-                    .append(String.join(" AND ", filters));
+
+            StringBuilder queryString;
+            if (!postFilterOptions.getTag().isPresent() || postFilterOptions.getTag().get().isEmpty()) {
+                queryString = new StringBuilder("FROM Post AS post ");
+                queryString.append(" WHERE ")
+                        .append(String.join(" AND ", filters));
+
+            } else {
+                postFilterOptions.getTag().ifPresent(value -> {
+                    filters.add(" t.tag like :tag ");
+                    parameters.put("tag", String.format("%%%s%%", value));
+                });
+
+                queryString = new StringBuilder("FROM Post AS post JOIN post.tags t ");
+                queryString.append(" WHERE ")
+                        .append(String.join(" AND ", filters));
+            }
 
             queryString.append(generateOrderBy(postFilterOptions));
             Query<Post> query = session.createQuery(queryString.toString(), Post.class);
@@ -177,6 +187,7 @@ public class PostRepositoryImpl implements PostRepository {
             return query.list();
         }
     }
+
     @Override
     public List<Post> getMostRecentlyCreatedPosts() {
         try (Session session = sessionFactory.openSession()) {

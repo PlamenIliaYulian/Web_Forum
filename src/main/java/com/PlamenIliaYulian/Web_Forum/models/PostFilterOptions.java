@@ -15,9 +15,16 @@ public class PostFilterOptions {
     private Optional<String> tag;
 
 
-    public PostFilterOptions(Integer minLikes, Integer minDislikes, String title,
-                             String content, String createdBefore, String createdAfter, String createdBy,
-                             String sortBy, String sortOrder, String tag) {
+    public PostFilterOptions(Integer minLikes,
+                             Integer minDislikes,
+                             String title,
+                             String content,
+                             String createdBefore,
+                             String createdAfter,
+                             String createdBy,
+                             String sortBy,
+                             String sortOrder,
+                             String tag) {
 
         this.minLikes = Optional.ofNullable(minLikes);
         this.minDislikes = Optional.ofNullable(minDislikes);
