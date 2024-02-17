@@ -56,6 +56,15 @@ public class UserMvcController {
         return request.getRequestURI();
     }
 
+    @ModelAttribute("isBlocked")
+    public boolean populateIsBlocked(HttpSession httpSession){
+        return (httpSession.getAttribute("currentUser") != null &&
+                authenticationHelper
+                        .tryGetUserFromSession(httpSession)
+                        .isBlocked()
+        );
+    }
+
     @ModelAttribute("isAdmin")
     public boolean populateIsLoggedAndAdmin(HttpSession httpSession) {
         return (httpSession.getAttribute("currentUser") != null &&

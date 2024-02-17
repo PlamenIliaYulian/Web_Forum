@@ -52,7 +52,7 @@
 
                         <div class="likesPlusTag-container">
                             <div class="likesIconPlusLikes-container">
-                                <a class="like-dislike-link-buttons"
+                                <a class="thumbs-up-button"
                                    th:if="${loggedInUser.getUserId() != post.createdBy.userId}"
                                    th:href="@{__${requestURI}__/like}">
                                     <span class="material-symbols-outlined">thumb_up</span>
@@ -62,7 +62,7 @@
                                 <p class="likesCount" th:text="${post.getLikes()}">123</p>
                             </div>
                             <div class="likesIconPlusLikes-container">
-                                <a class="like-dislike-link-buttons"
+                                <a class="thumbs-down-button"
                                    th:if="${loggedInUser.getUserId() != post.createdBy.userId}"
                                    th:href="@{__${requestURI}__/dislike}">
                                     <span class="material-symbols-outlined">thumb_down</span>
@@ -88,7 +88,7 @@
                     </div>
 
                     <div class="edit-delete-reply-buttons-container">
-                        <form th:if="${loggedInUser.getUserId() == post.getCreatedBy().getUserId()}" action="#"
+                        <form th:if="${loggedInUser.getUserId() == post.getCreatedBy().getUserId()} OR ${isAdmin}" th:unless="${isBlocked}" action="#"
                               th:action="@{__${requestURI}__/edit}" method="get">
                             <input class="single-user-page-button edit-button" type="submit" value="Edit">
                         </form>
@@ -99,6 +99,7 @@
                         </form>
 
                         <form action="#"
+                              th:unless="${isBlocked}"
                               th:action="@{/posts/__${post.getPostId()}__/add-comment}"
                               method="get">
                             <input class="single-user-page-button add-comment-button" type="submit"
@@ -146,7 +147,7 @@
 
                         <div class="likesPlusTag-container">
                             <div class="likesIconPlusLikes-container">
-                                <a class="like-dislike-link-buttons"
+                                <a class="thumbs-up-button"
                                    th:if="${loggedInUser.getUserId() != comment.createdBy.userId}"
                                    th:href="@{__${requestURI}__/comments/__${comment.getCommentId()}__/like}">
                                     <span class="material-symbols-outlined">thumb_up</span>
@@ -156,7 +157,7 @@
                                 <p class="likesCount" th:text="${comment.getLikes()}">123</p>
                             </div>
                             <div class="likesIconPlusLikes-container">
-                                <a class="like-dislike-link-buttons"
+                                <a class="thumbs-down-button"
                                    th:if="${loggedInUser.getUserId() != comment.createdBy.userId}"
                                    th:href="@{__${requestURI}__/comments/__${comment.getCommentId()}__/dislike}">
                                     <span class="material-symbols-outlined">thumb_down</span>
@@ -170,6 +171,7 @@
 
                     <div class="edit-delete-reply-buttons-container">
                         <form th:if="${loggedInUser.getUserId() == comment.getCreatedBy().getUserId()}"
+                              th:unless="${isBlocked}"
                               action="#"
                               th:action="@{/posts/__${comment.getOriginalPost().getPostId()}__/comments/__${comment.getCommentId()}__/edit}"
                               method="get">

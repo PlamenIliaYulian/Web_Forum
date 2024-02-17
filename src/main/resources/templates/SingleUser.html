@@ -124,7 +124,8 @@
                         </div>
 
                         <div class="edit-delete-reply-buttons-container">
-                            <form th:if="${loggedInUser.getUserId() == post.getCreatedBy().getUserId()}"
+                            <form th:if="${loggedInUser.getUserId() == post.getCreatedBy().getUserId()} OR ${isAdmin}"
+                                  th:unless="${isBlocked}"
                                   action="#"
                                   th:action="@{/posts/{postId}/edit(postId=${post.getPostId()})}" method="get">
                                 <input class="single-user-page-button edit-button" type="submit" value="Edit">
@@ -202,6 +203,7 @@
 
                         <div class="edit-delete-reply-buttons-container">
                             <form th:if="${loggedInUser.getUserId() == comment.getCreatedBy().getUserId()}"
+                                  th:unless="${isBlocked}"
                                   action="#"
                                   th:action="@{/posts/__${comment.getOriginalPost().getPostId()}__/comments/__${comment.getCommentId()}__/edit}"
                                   method="get">

@@ -36,6 +36,15 @@ public class AuthenticationMvcController {
         this.roleService = roleService;
     }
 
+    @ModelAttribute("isBlocked")
+    public boolean populateIsBlocked(HttpSession httpSession){
+        return (httpSession.getAttribute("currentUser") != null &&
+                authenticationHelper
+                        .tryGetUserFromSession(httpSession)
+                        .isBlocked()
+        );
+    }
+
     @ModelAttribute("requestURI")
     public String requestURI(final HttpServletRequest request) {
         return request.getRequestURI();

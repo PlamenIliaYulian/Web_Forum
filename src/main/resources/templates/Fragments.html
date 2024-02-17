@@ -20,7 +20,7 @@
                    <p>Home</p>
             </a>
 
-        <a th:if="${isAuthenticated}" href="#" th:href="@{/posts/new}">
+        <a th:if="${isAuthenticated} AND !${isBlocked}"  href="#" th:href="@{/posts/new}">
             <span class="material-symbols-outlined">post_add</span>
             <p>Create new post</p>
         </a>

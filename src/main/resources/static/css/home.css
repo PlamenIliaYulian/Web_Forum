@@ -815,6 +815,14 @@ p.edit-user-inputFields{
     color: black;
 }
 
+.thumbs-up-button{
+    color:rgba(110, 180, 110, 0.8);
+}
+
+.thumbs-down-button{
+    color: rgba(182, 68, 67, 0.8);
+}
+
 #content-comments-in-singe-post {
     min-width: 80%;
     max-width: 80%;

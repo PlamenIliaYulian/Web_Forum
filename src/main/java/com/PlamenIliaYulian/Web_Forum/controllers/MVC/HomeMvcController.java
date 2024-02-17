@@ -50,6 +50,15 @@ public class HomeMvcController {
                         .contains(roleService.getRoleById(1)));
     }
 
+    @ModelAttribute("isBlocked")
+    public boolean populateIsBlocked(HttpSession httpSession){
+        return (httpSession.getAttribute("currentUser") != null &&
+                authenticationHelper
+                        .tryGetUserFromSession(httpSession)
+                        .isBlocked()
+        );
+    }
+
     @ModelAttribute("loggedUser")
     public User populateLoggedUser(HttpSession httpSession) {
         if (httpSession.getAttribute("currentUser") != null) {

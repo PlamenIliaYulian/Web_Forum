@@ -56,6 +56,15 @@ public class PostMvcController {
         this.roleService = roleService;
     }
 
+    @ModelAttribute("isBlocked")
+    public boolean populateIsBlocked(HttpSession httpSession){
+        return (httpSession.getAttribute("currentUser") != null &&
+                authenticationHelper
+                        .tryGetUserFromSession(httpSession)
+                        .isBlocked()
+        );
+    }
+
 
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession httpSession) {
