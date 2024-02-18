@@ -67,7 +67,13 @@ public class ModelsMapperImpl implements ModelsMapper {
         User user = userService.getUserById(id);
         user.setBlocked(userAdministrativeDto.isBlocked());
         user.setDeleted(userAdministrativeDto.isDeleted());
-        user.setRoles(userAdministrativeDto.getRoles());
+        if (userAdministrativeDto.getRoles() != null && !userAdministrativeDto.getRoles().isEmpty()) {
+            user.setRoles(userAdministrativeDto.getRoles());
+        } else {
+            Set<Role> roleSet = new HashSet<>();
+            roleSet.add(roleService.getRoleById(3));
+            user.setRoles(roleSet);
+        }
         return user;
     }
 

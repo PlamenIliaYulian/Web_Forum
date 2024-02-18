@@ -3,6 +3,7 @@ package com.PlamenIliaYulian.Web_Forum.controllers.REST;
 import com.PlamenIliaYulian.Web_Forum.controllers.helpers.AuthenticationHelper;
 import com.PlamenIliaYulian.Web_Forum.controllers.helpers.contracts.ModelsMapper;
 import com.PlamenIliaYulian.Web_Forum.exceptions.AuthenticationException;
+import com.PlamenIliaYulian.Web_Forum.exceptions.DuplicateEntityException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
 import com.PlamenIliaYulian.Web_Forum.models.User;
@@ -11,6 +12,7 @@ import com.PlamenIliaYulian.Web_Forum.models.dtos.PhoneNumberDto;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.UserAdministrativeDto;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.UserDto;
 import com.PlamenIliaYulian.Web_Forum.models.dtos.UserDtoUpdate;
+import com.PlamenIliaYulian.Web_Forum.services.contracts.AvatarService;
 import com.PlamenIliaYulian.Web_Forum.services.contracts.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -25,8 +27,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.File;
 import java.util.List;
 
 @RestController
@@ -37,11 +41,16 @@ public class UserRestController {
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
     private final ModelsMapper modelsMapper;
+    private final AvatarService avatarService;
 
-    public UserRestController(UserService userService, AuthenticationHelper authenticationHelper, ModelsMapper modelsMapper) {
+    public UserRestController(UserService userService,
+                              AuthenticationHelper authenticationHelper,
+                              ModelsMapper modelsMapper,
+                              AvatarService avatarService) {
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
         this.modelsMapper = modelsMapper;
+        this.avatarService = avatarService;
     }
 
     @Operation(
@@ -51,16 +60,34 @@ public class UserRestController {
                     description = "Body consists of the username, password, first name, last name and the email of the user."),
             responses = {
                     @ApiResponse(
-                            responseCode = "200",
+                            responseCode = "201",
                             content = @Content(schema = @Schema(implementation = User.class), mediaType = MediaType.APPLICATION_JSON_VALUE)
+                    ),
+                    @ApiResponse(
+                            responseCode = "409",
+                            description = "Conflict.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(name = "Username", value = "Duplication exist.",
+                                                    description = "User with provided username already exists."),
+                                            @ExampleObject(name = "Email", value = "Duplication exist.",
+                                                    description = "User with provided email already exists.")
+
+                                    },
+                                    mediaType = "Plain text")
                     )
             }
     )
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public User createUser(@RequestBody @Valid UserDto userDto) {
-        User user = modelsMapper.userFromDto(userDto);
-        return userService.createUser(user);
+
+        try {
+            User user = modelsMapper.userFromDto(userDto);
+            return userService.createUser(user);
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
     }
 
     @Operation(
@@ -180,6 +207,17 @@ public class UserRestController {
                                     },
                                             mediaType = "plain text")
                             }
+                    ),
+                    @ApiResponse(
+                            responseCode = "409",
+                            description = "Conflict.",
+                            content = @Content(
+                                    examples = {
+                                            @ExampleObject(name = "Email", value = "Duplication exist.",
+                                                    description = "User with provided email already exists.")
+
+                                    },
+                                    mediaType = "Plain text")
                     )
             })
     @SecurityRequirement(name = "Authorization")
@@ -197,6 +235,8 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 
@@ -414,13 +454,15 @@ public class UserRestController {
                             }
                     )
             })
-    /*TODO - fix method to upload file, save to directory and use filepath.*/
     @SecurityRequirement(name = "Authorization")
-    @PutMapping("/{id}/avatar")
-    public User updateAvatar(@PathVariable int id, @RequestBody String avatar, @RequestHeader HttpHeaders headers) {
+    @PutMapping(value = "/{id}/avatar")
+    public User updateAvatar(@PathVariable int id,
+                             @RequestParam("avatar") MultipartFile file,
+                             @RequestHeader HttpHeaders headers) {
         try {
             User userToDoChanges = authenticationHelper.tryGetUser(headers);
-            return userService.addAvatar(id, avatar, userToDoChanges);
+            String newAvatar = avatarService.uploadPictureToCloudinary(file);
+            return userService.addAvatar(id, newAvatar, userToDoChanges);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -542,7 +584,7 @@ public class UserRestController {
                     )
             })
     @SecurityRequirement(name = "Authorization")
-    @PutMapping("/{id}/PhoneNumber")
+    @PutMapping("/{id}/phone-number")
     public User addPhoneNumber(@PathVariable int id,
                                @RequestBody PhoneNumberDto phoneNumberDto,
                                @RequestHeader HttpHeaders headers) {
