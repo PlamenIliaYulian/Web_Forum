@@ -237,10 +237,21 @@ translateY()
     width: 200px;
     height: 200px;
     border-radius: 1000px;
+    border: solid rgba(0, 0, 0, 0.5) 1px;
+    margin-bottom: 22px;
     background-position: center;
     padding: 10px 20px 10px;
 }
 
+#user-picture-container-in-all-users {
+    width: 100px;
+    height: 100px;
+    border-radius: 1000px;
+    border: solid rgba(0, 0, 0, 0.5) 1px;
+    background-position: center;
+    padding: 10px 20px 10px;
+    margin-right: 18px;
+}
 
 #icon-plus-username-container,
 #icon-plus-firstname-container,

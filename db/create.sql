@@ -2,7 +2,7 @@ create table avatars
 (
     avatar_id int auto_increment
         primary key,
-    avatar    mediumblob not null
+    avatar    varchar(500) not null
 );
 
 create table roles
@@ -30,9 +30,7 @@ create table users
     last_name  varchar(32)          not null,
     is_deleted tinyint(1) default 0 not null,
     is_blocked tinyint(1) default 0 not null,
-    username   varchar(20)          not null,
-    constraint users_uk
-        unique (user_email)
+    username   varchar(20)          not null
 );
 
 create table avatars_users
