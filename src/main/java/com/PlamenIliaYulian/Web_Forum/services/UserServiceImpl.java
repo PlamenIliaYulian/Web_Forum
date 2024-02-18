@@ -128,7 +128,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.getAllUsersCount();
     }
 
-    /*TODO test*/
     @Override
     public void addRoleToUser(Role roleToAdd, User userById, User loggedInUser) {
         PermissionHelper.isAdmin(loggedInUser, UNAUTHORIZED_OPERATION);
@@ -136,7 +135,6 @@ public class UserServiceImpl implements UserService {
         userRepository.updateUser(userById);
     }
 
-    /*TODO test*/
     @Override
     public void removeRoleFromUser(Role roleToBeRemoved, User userById, User loggedUser) {
         PermissionHelper.isAdmin(loggedUser, UNAUTHORIZED_OPERATION);

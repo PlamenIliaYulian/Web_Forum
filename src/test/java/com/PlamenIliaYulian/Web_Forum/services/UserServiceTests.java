@@ -5,6 +5,7 @@ import com.PlamenIliaYulian.Web_Forum.exceptions.EntityNotFoundException;
 import com.PlamenIliaYulian.Web_Forum.exceptions.UnauthorizedOperationException;
 import com.PlamenIliaYulian.Web_Forum.helpers.TestHelpers;
 import com.PlamenIliaYulian.Web_Forum.models.Avatar;
+import com.PlamenIliaYulian.Web_Forum.models.Role;
 import com.PlamenIliaYulian.Web_Forum.models.User;
 import com.PlamenIliaYulian.Web_Forum.models.UserFilterOptions;
 import com.PlamenIliaYulian.Web_Forum.repositories.contracts.UserRepository;
@@ -66,24 +67,6 @@ public class UserServiceTests {
 
         Mockito.verify(userRepository, Mockito.times(1))
                 .getUserByUsername(mockUserNameByWhichWeSearchUser);
-    }
-
-    /*TODO fix - to accept String, not byte[]*/
-    @Test
-    public void addAvatar_Should_AddAvatar_When_TheCorrectUserIsTryingToUpdateTheAvatar() {
-        /*User userToUpdateAvatarTo = TestHelpers.createMockNoAdminUser();
-        byte[] mockAvatarByte = new byte[5];
-
-        Mockito.when(userRepository.getUserById(userToUpdateAvatarTo.getUserId()))
-                .thenReturn(userToUpdateAvatarTo);
-
-        Mockito.when(userRepository.updateUser(userToUpdateAvatarTo))
-                .thenReturn(userToUpdateAvatarTo);
-
-        userService.addAvatar(userToUpdateAvatarTo.getUserId(), mockAvatarByte, userToUpdateAvatarTo);
-
-        Mockito.verify(userRepository, Mockito.times(1))
-                .updateUser(userToUpdateAvatarTo);*/
     }
 
     @Test
@@ -259,7 +242,12 @@ public class UserServiceTests {
     public void addPhoneNumber_Should_Throw_When_PhoneNumberExists() {
         User userToBeUpdated = TestHelpers.createMockAdminUser();
         User userToDoUpdates = TestHelpers.createMockAdminUser();
+        User userExistingAlready = TestHelpers.createMockNoAdminUser();
+        userExistingAlready.setPhoneNumber("0891234567");
         String phoneNumber = "0891234567";
+
+        Mockito.when(userRepository.getUserByPhoneNumber(phoneNumber))
+                        .thenReturn(userExistingAlready);
 
         Assertions.assertThrows(DuplicateEntityException.class,
                 () -> userService.addPhoneNumber(userToBeUpdated, phoneNumber, userToDoUpdates));
@@ -362,5 +350,49 @@ public class UserServiceTests {
 
         Mockito.verify(userRepository, Mockito.times(1))
                 .getUserByEmail(email);
+    }
+
+    @Test
+    public void addRoleToUser_Should_Throw_When_UserIsNotAdmin() {
+        User user = TestHelpers.createMockNoAdminUser();
+        Role role = TestHelpers.createMockRoleAdmin();
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> userService.addRoleToUser(role, user, user));
+
+    }
+
+    @Test
+    public void addRoleToUser_Should_CallRepository() {
+        User user = TestHelpers.createMockNoAdminUser();
+        User admin = TestHelpers.createMockAdminUser();
+        Role role = TestHelpers.createMockRoleAdmin();
+
+        userService.addRoleToUser(role, user, admin);
+
+        Mockito.verify(userRepository, Mockito.times(1))
+                .updateUser(user);
+    }
+
+    @Test
+    public void removeRoleFromUser_Should_Throw_When_UserIsNotAdmin() {
+        User user = TestHelpers.createMockNoAdminUser();
+        Role role = TestHelpers.createMockRoleAdmin();
+
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> userService.removeRoleFromUser(role, user, user));
+
+    }
+
+    @Test
+    public void removeRoleFromUser_Should_CallRepository() {
+        User user = TestHelpers.createMockNoAdminUser();
+        User admin = TestHelpers.createMockAdminUser();
+        Role role = TestHelpers.createMockRoleAdmin();
+
+        userService.removeRoleFromUser(role, user, admin);
+
+        Mockito.verify(userRepository, Mockito.times(1))
+                .updateUser(user);
     }
 }

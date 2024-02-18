@@ -9,6 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
 public class AvatarServiceTests {
@@ -41,4 +43,15 @@ public class AvatarServiceTests {
         Mockito.verify(avatarRepository, Mockito.times(1))
                 .getDefaultAvatar();
     }
+
+    @Test
+    public void uploadPictureToCloudinary__Should_CallAvatarRepositoryAndPass() {
+        MultipartFile multipartFile = TestHelpers.createMultipartFile();
+
+        avatarService.uploadPictureToCloudinary(multipartFile);
+
+        Mockito.verify(avatarRepository, Mockito.times(1))
+                .uploadPictureToCloudinary(multipartFile);
+    }
+
 }

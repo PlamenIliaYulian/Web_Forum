@@ -113,16 +113,26 @@
                                     <span class="material-symbols-outlined">thumb_down</span>
                                     <p class="likesCount" th:text="${post.getDislikes()}">123</p>
                                 </div>
-                                <div class="TagIconPlusTag-container">
+                               <!-- <div class="TagIconPlusTag-container">
                                     <span class="material-symbols-outlined">loyalty</span>
                                     <div class="tag-name-container">
                                         <p class="tagName" th:unless="${post.getTags().isEmpty()}"
                                            th:text="${'#'+post.getTags().toArray()[0]}">#SomeVeryLongWord</p>
                                     </div>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
+                        <div class="TagsInSinglePost-container">
+                            <div class="TagIconPlusTag-container" th:each="tag : ${post.getTags()}"
+                                 th:unless="${post.getTags().isEmpty()}">
+                                <span class="material-symbols-outlined">loyalty</span>
+                                <div class="tag-name-container">
+                                    <p class="tagName"
+                                       th:text="${'#'+ tag}">#SomeVeryLongWord</p>
+                                </div>
 
+                            </div>
+                        </div>
                         <div class="edit-delete-reply-buttons-container">
                             <form th:if="${loggedInUser.getUserId() == post.getCreatedBy().getUserId()} OR ${isAdmin}"
                                   th:unless="${isBlocked}"

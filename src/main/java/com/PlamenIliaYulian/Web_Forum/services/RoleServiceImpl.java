@@ -28,7 +28,6 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.getRoleByName(name);
     }
 
-    /*TODO test*/
     @Override
     public List<Role> getAllRoles() {
         return roleRepository.getAllRoles();

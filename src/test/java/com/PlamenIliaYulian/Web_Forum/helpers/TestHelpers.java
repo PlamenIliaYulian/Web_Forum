@@ -1,6 +1,8 @@
 package com.PlamenIliaYulian.Web_Forum.helpers;
 
 import com.PlamenIliaYulian.Web_Forum.models.*;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -196,4 +198,7 @@ public class TestHelpers {
         return avatar;
     }
 
+    public static MultipartFile createMultipartFile() {
+        return new MockMultipartFile("sourceFile.tmp", "Hello World".getBytes());
+    }
 }

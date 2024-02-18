@@ -16,7 +16,6 @@ public class UserDtoUpdate {
     @Email(message = "Email is invalid.")
     private String email;
 
-    /*TODO how to implement regex validation*/
     @Size(min = 6, max = 20, message = "Password should be between 6 and 20 symbols.")
     private String password;
 
