@@ -37,18 +37,20 @@ The REST API documentation is available through Swagger. It provides detailed in
  
 Learn-SpringBoot offers a robust platform for community engagement and knowledge sharing, empowering users to connect, learn, and grow together.
 
-· Link to the Swagger documentation: http://www.learn-springboot.com/swagger-ui/index.html
+## Link to the Swagger documentation: 
+- http://www.learn-springboot.com/swagger-ui/index.html
 
-· Link to the hosted project: http://www.learn-springboot.com/
+## Link to the hosted project: 
+- http://www.learn-springboot.com/
 
-· Instructions on how to setup and run the project locally: 
+## Instructions on how to setup and run the project locally: 
 
-1. Clone the repository from GitHub.
-2. Set up the database by executing the provided database creation script.
-3. Configure the application properties file with database connection details.
-4. Build and deploy the application using your preferred development environment or server.
+- Clone the repository from GitHub.
+- Set up the database by executing the provided database creation script.
+- Configure the application properties file with database connection details.
+- Build and deploy the application using your preferred development environment or server.
 
-· Images of the database relations: 
+## Images of the database relations: 
 ![FORUM_DIAGRAM](https://github.com/PlamenIliaYulian/Web_Forum/assets/140453324/e4185e56-c39b-44d4-b2e1-7b792fccbdc1)
 
 
