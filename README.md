@@ -1,11 +1,9 @@
-· Project description: 
-
 # Learn-SpringBoot
  
-## Description
+## Description:
 Learn-SpringBoot is a dynamic forum system designed to facilitate discussions, sharing of ideas, and interaction among users on various topics. The platform allows users to create posts, add comments, and upvote/downvote content based on their preferences. Whether it's discussing automotive trends, learning Java programming techniques, exploring cryptocurrency trading strategies, or sharing fashion tips, Learn-SpringBoot offers a centralized space for enthusiasts to connect and engage with like-minded individuals.
  
-## Key Features
+## Key Features:
 - User Registration: Users can register with their first and last name, email, username, and password.
 - Authentication: Secure login and logout functionality for registered users.
 - Post Creation: Users can create posts with titles, content, and tags related to the topic of discussion.
@@ -16,7 +14,7 @@ Learn-SpringBoot is a dynamic forum system designed to facilitate discussions, s
 - Public and Private Access: Public access allows anonymous users to view core features, while private access requires authentication for full functionality.
 - Tagging System (Optional): Users can tag posts for easier navigation and topic identification.
  
-## Usage Guidelines
+## Usage Guidelines:
 1. Register or log in to access the full features of the platform.
 2. Explore the home page to discover trending topics and recent posts.
 3. Use the search bar to find posts by specific keywords or tags.
@@ -24,10 +22,10 @@ Learn-SpringBoot is a dynamic forum system designed to facilitate discussions, s
 5. Update your profile information and upload a profile photo to personalize your account.
 6. Administrators can manage users, delete posts, and perform other administrative tasks through the admin panel.
  
-## REST API Documentation
+## REST API Documentation:
 The REST API documentation is available through Swagger. It provides detailed information on endpoints, request parameters, and response payloads for seamless integration with other services.
  
-## Technical Specifications
+## Technical Specifications:
 - Object-Oriented Design: Follows OOP principles for code organization and maintenance.
 - RESTful Architecture: Adheres to REST API design best practices for clear and efficient communication.
 - Test Coverage: Service layer maintains at least 80% unit test code coverage to ensure reliability and functionality.
@@ -44,7 +42,6 @@ Learn-SpringBoot offers a robust platform for community engagement and knowledge
 - http://www.learn-springboot.com/
 
 ## Instructions on how to setup and run the project locally: 
-
 - Clone the repository from GitHub.
 - Set up the database by executing the provided database creation script.
 - Configure the application properties file with database connection details.
