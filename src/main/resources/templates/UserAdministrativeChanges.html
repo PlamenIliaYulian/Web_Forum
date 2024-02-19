@@ -61,18 +61,18 @@
                 <fieldset class="user-administrative-changes-fieldset">
                     <legend>Block or unblock user:</legend>
                     <div>
-                        <input type="radio" th:name="'false'" th:field="*{blocked}" th:value="false" th:text="#{user.blocked}">
+                        <input type="radio" th:name="'true'" th:field="*{blocked}" th:value="true" th:text="#{user.blocked}">
                         <br>
-                        <input type="radio" th:name="'true'" th:field="*{blocked}" th:value="true" th:text="#{user.unblocked}" checked>
+                        <input type="radio" th:name="'false'" th:field="*{blocked}" th:value="false" th:text="#{user.unblocked}" checked>
                     </div>
                 </fieldset>
                 <br>
                 <fieldset class="user-administrative-changes-fieldset">
                     <legend>Delete or activate user:</legend>
                     <div>
-                        <input type="radio" th:name="'false'" th:field="*{deleted}" th:value="false" th:text="#{user.deleted}">
+                        <input type="radio" th:name="'true'" th:field="*{deleted}" th:value="true" th:text="#{user.deleted}">
                         <br>
-                        <input type="radio" th:name="'true'" th:field="*{deleted}" th:value="true" th:text="#{user.active}" checked>
+                        <input type="radio" th:name="'false'" th:field="*{deleted}" th:value="false" th:text="#{user.active}" checked>
                     </div>
                 </fieldset>
                 <br>
